@@ -9,28 +9,16 @@ import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
 const mockWallpapers = [
   {
     id: "1",
-    title: "Portrait Photography",
-    imageUrl: "https://ik.imagekit.io/starknight/default-image.jpg",
-    category: "Photography",
+    title: "First-Image",
+    imageUrl: "https://ik.imagekit.io/starknight/default-image.jpg", 
+    category: "Potrait",
   },
-  // {
-  //   id: "2",
-  //   title: "Mountain Landscape",
-  //   imageUrl: "https://ik.imagekit.io/starknight/mountain.jpg",
-  //   category: "Nature",
-  // },
-  // {
-  //   id: "3",
-  //   title: "City Skyline",
-  //   imageUrl: "https://ik.imagekit.io/starknight/city.jpg",
-  //   category: "Urban",
-  // },
-  // {
-  //   id: "4",
-  //   title: "Abstract Art",
-  //   imageUrl: "https://ik.imagekit.io/starknight/abstract.jpg",
-  //   category: "Abstract",
-  // },
+  {
+    id: "2",
+    title: "First-Image",
+    imageUrl: "https://ik.imagekit.io/starknight/Girl-thinking.jpg", 
+    category: "Girl",
+  },
 ]
 
 const categories = ["Photography", "Nature", "Urban", "Abstract", "Minimalist", "Colorful"]
@@ -43,13 +31,35 @@ interface Wallpaper {
 }
 
 export default function Page() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+
+  const filteredWallpapers = selectedCategory
+    ? mockWallpapers.filter(w => w.category === selectedCategory)
+    : mockWallpapers
+
+  const handlePreview = (wallpaper: Wallpaper) => {
+    setSelectedWallpaper(wallpaper)
+    setIsPreviewOpen(true)
+  }
 
   return (
     <main className="container mx-auto py-6">
+      <h1 className="text-2xl font-bold mb-6">Wallpapers</h1>
+      <CategoryFilter
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
       <WallpaperGrid 
-        wallpapers={mockWallpapers} 
-        onPreview={setSelectedWallpaper} 
+        wallpapers={filteredWallpapers} 
+        onPreview={handlePreview}
+      />
+      <WallpaperPreviewModal
+        wallpaper={selectedWallpaper}
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
       />
     </main>
   )
