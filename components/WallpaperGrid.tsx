@@ -1,16 +1,11 @@
-import WallpaperCard from "./WallpaperCard"
-
-interface Wallpaper {
-  id: string
-  title: string
-  imageUrl: string
-  category: string
-}
+import { Wallpaper } from "@/types/wallpaper"
 
 interface WallpaperGridProps {
   wallpapers: Wallpaper[]
   onPreview: (wallpaper: Wallpaper) => void
 }
+
+import WallpaperCard from "./WallpaperCard"
 
 export default function WallpaperGrid({ wallpapers, onPreview }: WallpaperGridProps) {
   return (
