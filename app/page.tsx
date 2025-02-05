@@ -6,6 +6,7 @@ import CategoryFilter from "@/components/CategoryFilter"
 import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
 import { Wallpaper, WallpaperCategory } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
+import Hero from "@/components/Hero"
 
 // Updated mock data with ImageKit URLs
 const mockWallpapers = [
@@ -31,10 +32,16 @@ export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredWallpapers = selectedCategory
-    ? mockWallpapers.filter(w => w.category === selectedCategory)
-    : mockWallpapers
+  const filteredWallpapers = mockWallpapers
+    .filter(w => {
+      const matchesCategory = !selectedCategory || w.category === selectedCategory
+      const matchesSearch = !searchQuery || 
+        w.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        w.description.toLowerCase().includes(searchQuery.toLowerCase())
+      return matchesCategory && matchesSearch
+    })
 
   const handlePreview = (wallpaper: Wallpaper) => {
     setSelectedWallpaper(wallpaper)
@@ -42,24 +49,11 @@ export default function Page() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Hero Section */}
-      <section className="text-center py-12 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Wallpaperz</h1>
-        <p className="text-lg max-w-2xl mx-auto mb-6">
-          Discover and download beautiful high-quality wallpapers for your desktop and mobile devices.
-          Browse through our carefully curated collection across various categories.
-        </p>
-        <div className="flex justify-center gap-4">
-          <Button variant="secondary">Browse Categories</Button>
-          <Button variant="outline" className="bg-white hover:bg-gray-100">
-            Latest Wallpapers
-          </Button>
-        </div>
-      </section>
-
+    <div className="space-y-12">
+      <Hero />
+      
       {/* Categories Section */}
-      <section>
+      <section className="container mx-auto px-4">
         <h2 className="text-2xl font-bold mb-6">Browse Categories</h2>
         <CategoryFilter
           categories={categories}
@@ -69,7 +63,7 @@ export default function Page() {
       </section>
 
       {/* Featured Wallpapers */}
-      <section>
+      <section className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Featured Wallpapers</h2>
           <Button variant="link">View All</Button>
