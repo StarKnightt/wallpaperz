@@ -7,23 +7,37 @@ import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
 import { Wallpaper, WallpaperCategory } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
 import Hero from "@/components/Hero"
+import { useSearch } from "@/context/SearchContext"
 
-// Updated mock data with ImageKit URLs
-const mockWallpapers = [
+const mockWallpapers: Wallpaper[] = [
   {
     id: "1",
-    title: "First-Image",
+    title: "First Image",
     imageUrl: "https://ik.imagekit.io/starknight/default-image.jpg",
-    category: "Potrait",
-    description: "A beautiful portrait showcasing natural light and composition",
+    category: "Photography",
+    description: "A beautiful portrait showcasing natural light and composition"
   },
   {
     id: "2",
-    title: "First-Image",
+    title: "Girl Sitting",
     imageUrl: "https://ik.imagekit.io/starknight/Girl-thinking.jpg",
-    category: "Girl",
-    description: "Capturing a moment of deep contemplation and emotion",
+    category: "Photography",
+    description: "Capturing a moment of deep contemplation and emotion"
   },
+  {
+    id: "3",
+    title: "Stay Balanced",
+    imageUrl: "https://ik.imagekit.io/starknight/Motivation/stay-balanced.png",
+    category: "Minimalist",
+    description: "A motivational wallpaper to keep you going"
+  },
+  {
+    id: "4",
+    title: "Discipline",
+    imageUrl: "https://ik.imagekit.io/starknight/Motivation/motivation.png",
+    category: "Minimalist",
+    description: "Discipline is the bridge between goals and accomplishment"
+  }
 ]
 
 const categories: WallpaperCategory[] = ["Photography", "Nature", "Urban", "Abstract", "Minimalist", "Colorful"]
@@ -32,14 +46,15 @@ export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const { searchQuery } = useSearch()
 
   const filteredWallpapers = mockWallpapers
     .filter(w => {
       const matchesCategory = !selectedCategory || w.category === selectedCategory
       const matchesSearch = !searchQuery || 
         w.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        w.description.toLowerCase().includes(searchQuery.toLowerCase())
+        w.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        w.category.toLowerCase().includes(searchQuery.toLowerCase())
       return matchesCategory && matchesSearch
     })
 

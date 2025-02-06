@@ -13,15 +13,16 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
   const optimizedImageUrl = getImageKitUrl(wallpaper.imageUrl, 300, 200)
 
   return (
-    <Card className="overflow-hidden cursor-pointer" onClick={() => onPreview(wallpaper)}>
+    <Card className="overflow-hidden cursor-pointer group" onClick={() => onPreview(wallpaper)}>
       <CardContent className="p-0">
         <div className="relative aspect-video">
           <Image
             src={optimizedImageUrl || "/placeholder.svg"}
             alt={wallpaper.title}
             fill
-            className="object-cover"
+            className="object-cover transition-transform group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
           />
         </div>
         <div className="p-4">

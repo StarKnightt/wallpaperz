@@ -2,7 +2,7 @@ export interface Wallpaper {
   id: string
   title: string
   imageUrl: string
-  category: string
+  category: WallpaperCategory
   description: string
 }
 
