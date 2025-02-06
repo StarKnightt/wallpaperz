@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-grid-white/10 bg-grid animate-grid-fade" />
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 relative">
         <div className="absolute inset-0 bg-slate-900/10 dark:bg-slate-900/30" />
