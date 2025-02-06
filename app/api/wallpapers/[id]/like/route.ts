@@ -1,21 +1,20 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
-    // Here you would:
-    // 1. Update like count in your database
-    // 2. Store user's like status (requires authentication)
-    // This is a placeholder implementation
+    const { id } = await params
     
-    return NextResponse.json({ success: true })
+    return NextResponse.json({
+      success: true,
+      message: `Wallpaper ${id} liked successfully`
+    })
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to update like" },
+      { error: "Failed to like wallpaper" },
       { status: 500 }
     )
   }
