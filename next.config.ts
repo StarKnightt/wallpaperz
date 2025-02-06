@@ -9,9 +9,6 @@ const nextConfig: NextConfig = {
         pathname: '/starknight/**'
       }
     ]
-  },
-  eslint: {
-    ignoreDuringBuilds: true, // This will ignore ESLint errors during build
   }
 }
 
