@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Download, Image as ImageIcon } from "lucide-react"
 import { motion } from "framer-motion"
+import Image from 'next/image'
 
 export default function Hero() {
   return (
@@ -61,18 +62,24 @@ export default function Hero() {
                     className="rounded-lg overflow-hidden shadow-lg transform translate-y-8 hover:shadow-2xl transition-all duration-300"
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
-                    <img src="https://ik.imagekit.io/starknight/default-image.jpg" 
-                         alt="Sample wallpaper" 
-                         className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500" 
+                    <Image
+                      src="https://ik.imagekit.io/starknight/default-image.jpg"
+                      alt="Sample wallpaper"
+                      width={500}
+                      height={300}
+                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                   <motion.div 
                     className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
-                    <img src="https://ik.imagekit.io/starknight/Girl-thinking.jpg" 
-                         alt="Sample wallpaper" 
-                         className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500" 
+                    <Image
+                      src="https://ik.imagekit.io/starknight/Girl-thinking.jpg"
+                      alt="Sample wallpaper"
+                      width={500}
+                      height={300}
+                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                 </div>
@@ -81,18 +88,24 @@ export default function Hero() {
                     className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
-                    <img src="https://ik.imagekit.io/starknight/Motivation/stay-balanced.png" 
-                         alt="Sample wallpaper" 
-                         className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500" 
+                    <Image
+                      src="https://ik.imagekit.io/starknight/Motivation/stay-balanced.png"
+                      alt="Sample wallpaper"
+                      width={500}
+                      height={300}
+                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                   <motion.div 
                     className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
-                    <img src="https://ik.imagekit.io/starknight/Motivation/motivation.png" 
-                         alt="Sample wallpaper" 
-                         className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500" 
+                    <Image
+                      src="https://ik.imagekit.io/starknight/Motivation/motivation.png"
+                      alt="Sample wallpaper"
+                      width={500}
+                      height={300}
+                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                 </div>
