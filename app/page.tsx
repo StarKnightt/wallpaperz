@@ -92,7 +92,7 @@ export default function Page() {
         />
 
         {hasMore && (
-          <div className="flex justify-center mt-12 mb-8"> {/* Increased vertical margins */}
+          <div className="flex justify-center mt-10 mb-1">
             <Button 
               onClick={loadMore} 
               disabled={loading}
