@@ -64,7 +64,7 @@ export default function Hero() {
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
                     <Image
-                      src="https://ik.imagekit.io/starknight/default-image.jpg"
+                      src="https://ik.imagekit.io/starknight/Anime/2.jpeg?updatedAt=1738950341390"
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
@@ -76,7 +76,7 @@ export default function Hero() {
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
                     <Image
-                      src="https://ik.imagekit.io/starknight/Girl-thinking.jpg"
+                      src="https://ik.imagekit.io/starknight/Anime/3.jpeg?updatedAt=1738950341010"
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
@@ -90,7 +90,7 @@ export default function Hero() {
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
                     <Image
-                      src="https://ik.imagekit.io/starknight/Motivation/stay-balanced.png"
+                      src="https://ik.imagekit.io/starknight/Art/1.jpg?updatedAt=1738950598212"
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
@@ -102,7 +102,7 @@ export default function Hero() {
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
                     <Image
-                      src="https://ik.imagekit.io/starknight/Motivation/motivation.png"
+                      src="https://ik.imagekit.io/starknight/Art/5.jpg?updatedAt=1738950784247"
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
