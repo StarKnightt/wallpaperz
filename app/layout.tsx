@@ -26,7 +26,9 @@ export default function RootLayout({
           <SearchProvider>
             <div className="min-h-screen flex flex-col">
               <Header />
-              <main className="flex-grow">{children}</main>
+              <main className="flex-grow w-full max-w-[1920px] mx-auto">
+                {children}
+              </main>
               <Footer />
             </div>
           </SearchProvider>

@@ -9,41 +9,12 @@ import { Button } from "@/components/ui/button"
 import Hero from "@/components/Hero"
 import { useSearch } from "@/context/SearchContext"
 import { Loader2 } from "lucide-react"
-
-const mockWallpapers: Wallpaper[] = [
-  {
-    id: "1",
-    title: "First Image",
-    imageUrl: "https://ik.imagekit.io/starknight/default-image.jpg",
-    category: "Photography",
-    description: "A beautiful portrait showcasing natural light and composition"
-  },
-  {
-    id: "2",
-    title: "Girl Sitting",
-    imageUrl: "https://ik.imagekit.io/starknight/Girl-thinking.jpg",
-    category: "Photography",
-    description: "Capturing a moment of deep contemplation and emotion"
-  },
-  {
-    id: "3",
-    title: "Stay Balanced",
-    imageUrl: "https://ik.imagekit.io/starknight/Motivation/stay-balanced.png",
-    category: "Minimalist",
-    description: "A motivational wallpaper to keep you going"
-  },
-  {
-    id: "4",
-    title: "Discipline",
-    imageUrl: "https://ik.imagekit.io/starknight/Motivation/motivation.png",
-    category: "Minimalist",
-    description: "Discipline is the bridge between goals and accomplishment"
-  }
-]
-
-const categories: WallpaperCategory[] = ["Photography", "Nature", "Urban", "Abstract", "Minimalist", "Colorful"]
+import { allWallpapers } from "@/data/wallpapers"
 
 const ITEMS_PER_PAGE = 8
+
+// Get unique categories from allWallpapers
+const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
 
 export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -54,7 +25,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
 
-  const filteredWallpapers = mockWallpapers
+  const filteredWallpapers = allWallpapers
     .filter(w => {
       const matchesCategory = !selectedCategory || w.category === selectedCategory
       const matchesSearch = !searchQuery || 
@@ -68,13 +39,12 @@ export default function Page() {
   
   const loadMore = async () => {
     setLoading(true)
-    // Simulate loading delay
     await new Promise(resolve => setTimeout(resolve, 1000))
     setPage(prev => prev + 1)
     setLoading(false)
     
-    // Check if we've reached the end
-    if (paginatedWallpapers.length >= filteredWallpapers.length) {
+    // Only hide button if we've loaded all wallpapers
+    if ((page + 1) * ITEMS_PER_PAGE >= filteredWallpapers.length) {
       setHasMore(false)
     }
   }
@@ -85,7 +55,7 @@ export default function Page() {
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 pb-20"> {/* Added bottom padding */}
       <Hero />
       
       {/* Categories Section */}
@@ -105,13 +75,13 @@ export default function Page() {
 
       {/* Wallpapers Grid */}
       <section className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-8"> {/* Increased margin bottom */}
           <div>
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-bold mb-2"> {/* Added margin to subtitle */}
               {selectedCategory || "All Wallpapers"}
             </h2>
             <p className="text-muted-foreground">
-              {paginatedWallpapers.length} wallpapers found
+              {filteredWallpapers.length} wallpapers total • Showing {paginatedWallpapers.length} {/* Improved count display */}
             </p>
           </div>
         </div>
@@ -122,12 +92,12 @@ export default function Page() {
         />
 
         {hasMore && (
-          <div className="flex justify-center mt-12">
+          <div className="flex justify-center mt-12 mb-8"> {/* Increased vertical margins */}
             <Button 
               onClick={loadMore} 
               disabled={loading}
               size="lg"
-              className="min-w-[200px]"
+              className="min-w-[160px]" // Reduced button width
             >
               {loading ? (
                 <>
@@ -141,6 +111,15 @@ export default function Page() {
           </div>
         )}
       </section>
+
+      {/* No results message */}
+      {filteredWallpapers.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-xl text-muted-foreground">
+            No wallpapers found for your search. Try different keywords or categories.
+          </p>
+        </div>
+      )}
 
       <WallpaperPreviewModal
         wallpaper={selectedWallpaper}

@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden rounded-xl">
+    <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-white/10 bg-grid animate-grid-fade" />
       {/* Add animated gradient background */}
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 relative animate-gradient-x">
