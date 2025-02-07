@@ -7,17 +7,18 @@ export default function Hero() {
   return (
     <section className="relative overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-grid-white/10 bg-grid animate-grid-fade" />
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 relative">
-        <div className="absolute inset-0 bg-slate-900/10 dark:bg-slate-900/30" />
+      {/* Add animated gradient background */}
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 relative animate-gradient-x">
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
         <div className="container mx-auto px-4 py-16 md:py-24 relative">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <motion.div 
               className="text-white space-y-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <h1 className="text-3xl md:text-5xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-100">
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-300 animate-text-shimmer">
                 Find Your Perfect <span className="text-yellow-400">Wallpaper</span>
               </h1>
               <p className="text-lg md:text-xl opacity-90">
@@ -54,7 +55,7 @@ export default function Hero() {
               className="hidden md:block relative"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
             >
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">

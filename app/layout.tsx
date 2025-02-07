@@ -26,7 +26,7 @@ export default function RootLayout({
           <SearchProvider>
             <div className="min-h-screen flex flex-col">
               <Header />
-              <main className="container mx-auto px-4 py-8 flex-grow">{children}</main>
+              <main className="flex-grow">{children}</main>
               <Footer />
             </div>
           </SearchProvider>

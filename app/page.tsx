@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import WallpaperGrid from "@/components/WallpaperGrid"
 import CategoryFilter from "@/components/CategoryFilter"
 import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
@@ -8,6 +8,7 @@ import { Wallpaper, WallpaperCategory } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
 import Hero from "@/components/Hero"
 import { useSearch } from "@/context/SearchContext"
+import { Loader2 } from "lucide-react"
 
 const mockWallpapers: Wallpaper[] = [
   {
@@ -42,11 +43,16 @@ const mockWallpapers: Wallpaper[] = [
 
 const categories: WallpaperCategory[] = ["Photography", "Nature", "Urban", "Abstract", "Minimalist", "Colorful"]
 
+const ITEMS_PER_PAGE = 8
+
 export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const { searchQuery } = useSearch()
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
 
   const filteredWallpapers = mockWallpapers
     .filter(w => {
@@ -57,6 +63,21 @@ export default function Page() {
         w.category.toLowerCase().includes(searchQuery.toLowerCase())
       return matchesCategory && matchesSearch
     })
+
+  const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
+  
+  const loadMore = async () => {
+    setLoading(true)
+    // Simulate loading delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    setPage(prev => prev + 1)
+    setLoading(false)
+    
+    // Check if we've reached the end
+    if (paginatedWallpapers.length >= filteredWallpapers.length) {
+      setHasMore(false)
+    }
+  }
 
   const handlePreview = (wallpaper: Wallpaper) => {
     setSelectedWallpaper(wallpaper)
@@ -69,24 +90,56 @@ export default function Page() {
       
       {/* Categories Section */}
       <section className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6">Browse Categories</h2>
-        <CategoryFilter
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-2xl font-bold">Browse Categories</h2>
+            <p className="text-muted-foreground">Filter wallpapers by category</p>
+          </div>
+          <CategoryFilter
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
+        </div>
       </section>
 
-      {/* Featured Wallpapers */}
+      {/* Wallpapers Grid */}
       <section className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Featured Wallpapers</h2>
-          <Button variant="link">View All</Button>
+          <div>
+            <h2 className="text-2xl font-bold">
+              {selectedCategory || "All Wallpapers"}
+            </h2>
+            <p className="text-muted-foreground">
+              {paginatedWallpapers.length} wallpapers found
+            </p>
+          </div>
         </div>
+
         <WallpaperGrid 
-          wallpapers={filteredWallpapers} 
+          wallpapers={paginatedWallpapers} 
           onPreview={handlePreview}
         />
+
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <Button 
+              onClick={loadMore} 
+              disabled={loading}
+              size="lg"
+              className="min-w-[200px]"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                'Load More'
+              )}
+            </Button>
+          </div>
+        )}
       </section>
 
       <WallpaperPreviewModal
