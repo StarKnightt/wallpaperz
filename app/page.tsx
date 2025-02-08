@@ -25,18 +25,31 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
 
-  const filteredWallpapers = allWallpapers
+  // Separate search results from regular wallpapers
+  const searchResults = searchQuery ? allWallpapers
     .filter(w => {
-      const matchesCategory = !selectedCategory || w.category === selectedCategory
-      const matchesSearch = !searchQuery || 
-        w.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        w.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        w.category.toLowerCase().includes(searchQuery.toLowerCase())
-      return matchesCategory && matchesSearch
-    })
+      const searchableText = [
+        w.title,
+        w.category,
+        w.description
+      ].join(' ').toLowerCase()
+      return searchableText.includes(searchQuery.toLowerCase())
+    }) : []
+
+  // Regular filtered wallpapers (excluding search)
+  const filteredWallpapers = searchQuery ? [] : allWallpapers
+    .filter(w => !selectedCategory || w.category === selectedCategory)
 
   const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
-  
+
+  // Scroll to search results when query changes
+  useEffect(() => {
+    if (searchQuery) {
+      const searchSection = document.getElementById('search-results')
+      searchSection?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [searchQuery])
+
   const loadMore = async () => {
     setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -58,59 +71,93 @@ export default function Page() {
     <div className="space-y-12 pb-20"> {/* Added bottom padding */}
       <Hero />
       
-      {/* Categories Section */}
-      <section className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h2 className="text-2xl font-bold">Browse Categories</h2>
-            <p className="text-muted-foreground">Filter wallpapers by category</p>
+      {/* Search Results Section */}
+      {searchQuery && (
+        <section id="search-results" className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">
+                Search Results for "{searchQuery}"
+              </h2>
+              <p className="text-muted-foreground">
+                Found {searchResults.length} wallpapers
+              </p>
+            </div>
           </div>
-          <CategoryFilter
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
+
+          <WallpaperGrid 
+            wallpapers={searchResults} 
+            onPreview={handlePreview}
           />
-        </div>
-      </section>
 
-      {/* Wallpapers Grid */}
-      <section className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8"> {/* Increased margin bottom */}
-          <div>
-            <h2 className="text-2xl font-bold mb-2"> {/* Added margin to subtitle */}
-              {selectedCategory || "All Wallpapers"}
-            </h2>
-            <p className="text-muted-foreground">
-              {filteredWallpapers.length} wallpapers total • Showing {paginatedWallpapers.length} {/* Improved count display */}
-            </p>
-          </div>
-        </div>
+          {searchResults.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-xl text-muted-foreground">
+                No wallpapers found for "{searchQuery}". Try different keywords.
+              </p>
+            </div>
+          )}
+        </section>
+      )}
 
-        <WallpaperGrid 
-          wallpapers={paginatedWallpapers} 
-          onPreview={handlePreview}
-        />
+      {/* Show regular content only when not searching */}
+      {!searchQuery && (
+        <>
+          {/* Categories Section */}
+          <section className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+              <div>
+                <h2 className="text-2xl font-bold">Browse Categories</h2>
+                <p className="text-muted-foreground">Filter wallpapers by category</p>
+              </div>
+              <CategoryFilter
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onSelectCategory={setSelectedCategory}
+              />
+            </div>
+          </section>
 
-        {hasMore && (
-          <div className="flex justify-center mt-10 mb-1">
-            <Button 
-              onClick={loadMore} 
-              disabled={loading}
-              size="lg"
-              className="min-w-[160px]" // Reduced button width
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                'Load More'
-              )}
-            </Button>
-          </div>
-        )}
-      </section>
+          {/* Wallpapers Grid */}
+          <section className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-8"> {/* Increased margin bottom */}
+              <div>
+                <h2 className="text-2xl font-bold mb-2"> {/* Added margin to subtitle */}
+                  {selectedCategory || "All Wallpapers"}
+                </h2>
+                <p className="text-muted-foreground">
+                  {filteredWallpapers.length} wallpapers total • Showing {paginatedWallpapers.length} {/* Improved count display */}
+                </p>
+              </div>
+            </div>
+
+            <WallpaperGrid 
+              wallpapers={paginatedWallpapers} 
+              onPreview={handlePreview}
+            />
+
+            {hasMore && (
+              <div className="flex justify-center mt-10 mb-1">
+                <Button 
+                  onClick={loadMore} 
+                  disabled={loading}
+                  size="lg"
+                  className="min-w-[160px]" // Reduced button width
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    'Load More'
+                  )}
+                </Button>
+              </div>
+            )}
+          </section>
+        </>
+      )}
 
       {/* No results message */}
       {filteredWallpapers.length === 0 && (

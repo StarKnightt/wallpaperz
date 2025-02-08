@@ -6,14 +6,26 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, Moon, Sun } from "lucide-react"
 import { useSearch } from "@/context/SearchContext"
+import { useRouter } from "next/navigation"
+import { FormEvent } from "react"
 
 export default function Header() {
   const { searchQuery, setSearchQuery } = useSearch()
   const { theme, setTheme } = useTheme()
+  const router = useRouter()
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    // The search is now real-time, so we don't need additional logic here
+    if (searchQuery.trim()) {
+      router.push('/#search-results')
+    }
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+    if (!e.target.value) {
+      router.push('/')
+    }
   }
 
   return (
@@ -34,17 +46,21 @@ export default function Header() {
               <span className="sr-only">Toggle theme</span>
             </Button>
           </div>
-          <form onSubmit={handleSearch} className="flex w-full sm:w-[400px] gap-2">
-            <Input 
-              type="search" 
-              placeholder="Search wallpapers..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
+          <form 
+            onSubmit={handleSubmit}
+            className="relative max-w-sm flex items-center"
+          >
+            <Search 
+              size={20} 
+              className="absolute left-3 text-muted-foreground" 
             />
-            <Button type="submit" size="icon">
-              <Search className="h-4 w-4" />
-            </Button>
+            <Input
+              type="search"
+              placeholder="Search wallpapers..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="pl-10 w-full"
+            />
           </form>
         </div>
       </div>
