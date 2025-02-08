@@ -10,7 +10,7 @@ interface WallpaperGridProps {
 export default function WallpaperGrid({ wallpapers, onPreview }: WallpaperGridProps) {
   return (
     <motion.div 
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 p-4" // Changed grid and spacing
     >
       {wallpapers.map((wallpaper, index) => (
         <motion.div
@@ -19,8 +19,9 @@ export default function WallpaperGrid({ wallpapers, onPreview }: WallpaperGridPr
           animate={{ opacity: 1, y: 0 }}
           transition={{ 
             duration: 0.4,
-            delay: (index % 8) * 0.1 // Only animate new items
+            delay: (index % 6) * 0.1
           }}
+          className="bg-white/5 dark:bg-white/5 backdrop-blur-sm p-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300" // Added premium border effect
         >
           <WallpaperCard 
             wallpaper={wallpaper}
