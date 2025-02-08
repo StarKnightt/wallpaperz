@@ -26,7 +26,7 @@ export const allWallpapers: Wallpaper[] = [
     id: "5",
     title: "Finally Fantasty Rebirth",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/3.jpeg?updatedAt=1738950341010",
-    category: "Abstract",
+    category: "Anime",
     description: "An abstract flower wallpaper" 
   },
   {

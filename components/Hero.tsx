@@ -1,17 +1,29 @@
 import { Button } from "@/components/ui/button"
 import { Download, Image as ImageIcon } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import Image from 'next/image'
+import { useState, useEffect } from 'react'
+
+const words = ["Perfect", "Best", "exact", "Pretty", "Cute"]
 
 export default function Hero() {
+  const [wordIndex, setWordIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWordIndex(prev => (prev + 1) % words.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [])
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-white/10 bg-grid animate-grid-fade" />
-      {/* Add animated gradient background */}
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 relative animate-gradient-x">
         <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
         <div className="container mx-auto px-4 py-16 md:py-24 relative">
           <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Text content */}
             <motion.div 
               className="text-white space-y-6"
               initial={{ opacity: 0, y: 20 }}
@@ -19,13 +31,27 @@ export default function Hero() {
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
               <h1 className="text-4xl md:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-300 animate-text-shimmer">
-                Find Your Perfect <span className="text-yellow-400">Wallpaper</span>
+                Find Your{" "}
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={words[wordIndex]}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    className="inline-block text-yellow-400"
+                  >
+                    {words[wordIndex]}
+                  </motion.span>
+                </AnimatePresence>
+                {" "}Wallpaper
               </h1>
-              <p className="text-lg md:text-xl opacity-90">
+
+              <motion.p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-xl">
                 Discover thousands of stunning wallpapers for your desktop and mobile devices. 
                 Free downloads, high quality, and new additions daily.
-              </p>
-              <div className="flex flex-wrap gap-4">
+              </motion.p>
+
+              <motion.div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" variant="secondary" className="gap-2">
                   <ImageIcon size={20} />
                   Browse Collection
@@ -34,8 +60,9 @@ export default function Hero() {
                   <Download size={20} />
                   Popular Downloads
                 </Button>
-              </div>
-              <div className="flex gap-8 pt-4">
+              </motion.div>
+
+              <motion.div className="grid grid-cols-2 sm:flex sm:gap-8 gap-4 pt-4">
                 <div>
                   <p className="text-3xl font-bold">1000+</p>
                   <p className="text-sm opacity-75">Wallpapers</p>
@@ -48,9 +75,10 @@ export default function Hero() {
                   <p className="text-3xl font-bold">100+</p>
                   <p className="text-sm opacity-75">Categories</p>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
 
+            {/* Image grid - maintaining original layout */}
             <motion.div 
               className="hidden md:block relative"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -60,7 +88,7 @@ export default function Hero() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <motion.div 
-                    className="rounded-lg overflow-hidden shadow-lg transform translate-y-8 hover:shadow-2xl transition-all duration-300"
+                    className="rounded-lg overflow-hidden shadow-lg transform translate-y-8"
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
                     <Image
@@ -68,7 +96,7 @@ export default function Hero() {
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
-                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
+                      className="w-full h-40 xl:h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                   <motion.div 
@@ -80,7 +108,7 @@ export default function Hero() {
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
-                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
+                      className="w-full h-40 xl:h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                 </div>
@@ -94,7 +122,7 @@ export default function Hero() {
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
-                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
+                      className="w-full h-40 xl:h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                   <motion.div 
@@ -106,7 +134,7 @@ export default function Hero() {
                       alt="Sample wallpaper"
                       width={500}
                       height={300}
-                      className="w-full h-48 object-cover hover:scale-110 transition-transform duration-500"
+                      className="w-full h-40 xl:h-48 object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </motion.div>
                 </div>
