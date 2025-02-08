@@ -43,6 +43,13 @@ export const allWallpapers: Wallpaper[] = [
     category: "Abstract",
     description: "A programmer with god wallpaper" 
   },
+  {
+    id: "7",
+    title: "A boy drinking smoothie",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/2.jpeg?updatedAt=1738950341390",
+    category: "Anime",
+    description: "Boy drinking smoothie with his pet" 
+  },
   // Add more wallpapers...
 ]
 
