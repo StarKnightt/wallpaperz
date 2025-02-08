@@ -77,7 +77,7 @@ export default function Page() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h2 className="text-2xl font-bold mb-2">
-                Search Results for "{searchQuery}"
+                Search Results for &quot;{searchQuery}&quot;
               </h2>
               <p className="text-muted-foreground">
                 Found {searchResults.length} wallpapers
@@ -93,7 +93,7 @@ export default function Page() {
           {searchResults.length === 0 && (
             <div className="text-center py-16">
               <p className="text-xl text-muted-foreground">
-                No wallpapers found for "{searchQuery}". Try different keywords.
+                No wallpapers found for &quot;{searchQuery}&quot;. Try different keywords.
               </p>
             </div>
           )}
