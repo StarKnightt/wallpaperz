@@ -30,6 +30,7 @@ const containerVariants = {
 
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
+  const particleCount = 8; // Was 15 before
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -42,19 +43,18 @@ export default function Hero() {
     <section className="relative overflow-hidden">
       {/* Background with both pulse and particles */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20 animate-pulse-glow" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20" />
         
-        {/* Floating particles */}
-        {[...Array(15)].map((_, i) => (
+        {/* Reduced particle count */}
+        {[...Array(particleCount)].map((_, i) => (
           <div
             key={i}
             className="particle rounded-full bg-white/10"
             style={{
-              width: `${Math.random() * 4 + 2}px`,
-              height: `${Math.random() * 4 + 2}px`,
+              width: `${Math.random() * 3 + 2}px`,
+              height: `${Math.random() * 3 + 2}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
             }}
           />
         ))}

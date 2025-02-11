@@ -74,7 +74,7 @@ body {
 @layer utilities {
   .animate-gradient-x {
     background-size: 200% 200%;
-    animation: gradient-x 15s ease infinite;
+    animation: gradient-x 20s ease infinite; /* Slower animation */
   }
   
   .animate-text-shimmer {
@@ -188,20 +188,18 @@ body {
   /* Floating particles background */
   .particle {
     position: absolute;
-    opacity: 0;
-    animation: particle-float 6s infinite linear;
+    opacity: 0.5;
+    animation: particle-float 8s infinite linear;
+    will-change: transform; /* Optimize transform animations */
   }
 
   @keyframes particle-float {
     0% {
-      transform: translateY(0) translateX(0) rotate(0deg);
-      opacity: 0;
-    }
-    50% {
-      opacity: 0.5;
+      transform: translateY(0);
+      opacity: 0.2;
     }
     100% {
-      transform: translateY(-100px) translateX(100px) rotate(360deg);
+      transform: translateY(-100px);
       opacity: 0;
     }
   }
