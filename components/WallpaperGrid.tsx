@@ -36,14 +36,15 @@ export default function WallpaperGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 max-w-6xl mx-auto w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 px-2 md:px-4 max-w-6xl mx-auto w-full">
       {wallpapers.map((wallpaper) => (
         <motion.div
           key={wallpaper.id}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="bg-white/5 dark:bg-white/5 backdrop-blur-sm p-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+          className="bg-white/5 dark:bg-white/5 backdrop-blur-sm p-2 rounded-lg md:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+          layout // Add this for smooth transitions
         >
           <WallpaperCard 
             wallpaper={wallpaper}

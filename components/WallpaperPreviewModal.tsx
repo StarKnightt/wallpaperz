@@ -6,6 +6,7 @@ import Image from "next/image"
 import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
 import { useState } from "react"
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
 interface WallpaperPreviewModalProps {
   wallpaper: Wallpaper | null
@@ -39,7 +40,10 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl w-full p-0 overflow-hidden">
-        {/* Loading indicator */}
+        <DialogHeader className="sr-only">
+          <DialogTitle>{wallpaper.title}</DialogTitle>
+        </DialogHeader>
+
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-10">
             <div className="text-center space-y-2">
@@ -49,7 +53,7 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
           </div>
         )}
 
-        <div className="relative aspect-video w-full">
+        <div className="relative aspect-[16/9] w-full">
           <Image 
             src={wallpaper.imageUrl || "/placeholder.svg"} 
             alt={wallpaper.title} 
@@ -58,18 +62,19 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
             onLoadingComplete={() => setIsLoading(false)}
             onLoad={() => setIsLoading(false)}
             priority
-            sizes="(max-width: 1024px) 100vw, 1024px"
+            sizes="100vw"
+            loading="eager"
           />
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 space-y-4">
           <div>
             <h3 className="text-xl font-semibold mb-2">{wallpaper.title}</h3>
-            <p className="text-muted-foreground">{wallpaper.description}</p>
+            <p className="text-muted-foreground text-sm">{wallpaper.description}</p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -98,6 +103,7 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
 
             <Button 
               size="sm"
+              className="w-full sm:w-auto"
               onClick={async () => {
                 try {
                   const response = await fetch(wallpaper.imageUrl);
