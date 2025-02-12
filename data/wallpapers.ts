@@ -50,6 +50,73 @@ export const allWallpapers: Wallpaper[] = [
     category: "Anime",
     description: "Boy drinking smoothie with his pet" 
   },
+  {
+    id: "8",
+    title: "A Hot Air Balloon In the sky",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/8.jpg?updatedAt=1739367163746",
+    category: "Abstract",
+    description: "A beautiful wallpaper of hot air balloon" 
+  },
+  {
+    id: "9",
+    title: "Night on an island",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/11.jpg?updatedAt=1739366813575",
+    category: "Abstract",
+    description: "A Scary and thriling view of night on an island" 
+  },
+  {
+    id: "10",
+    title: "Nature beauty reflected in the sky mountains and water",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/9.jpg?updatedAt=1739366820464",
+    category: "Abstract",
+    description: "Nature's beauty is incredible" 
+  },
+  {
+    id: "11",
+    title: "Mountain forest jungle trees cartoon background",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/12.jpg?updatedAt=1739366820811",
+    category: "Abstract",
+    description: "Mountain forest jungles are always beautiful" 
+  },
+  {
+    id: "12",
+    title: "Futuristic half-robot tiger",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/15.jpg?updatedAt=1739366821818",
+    category: "Abstract",
+    description: "half-robot tiger wallpaper" 
+  },
+  {
+    id: "13",
+    title: "Nature beauty reflected in the sky mountains and water",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/10.jpg?updatedAt=1739366822955",
+    category: "Abstract",
+    description: "Nature's beauty is truly fanstastic." 
+  },
+  {
+    id: "14",
+    title: "3d flower boho render",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/14.jpg?updatedAt=1739366823814",
+    category: "Abstract",
+    description: "Flower's can be rendered on 3D" 
+  },
+  {
+    id: "15",
+    title: "Half-robot tiger in a garden",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/16.jpg?updatedAt=1739366825731",
+    category: "Abstract",
+    description: "A futuristic tiger walking on red garden." 
+  },
+  {
+    id: "16",
+    title: "Fantasy fish made of plastic",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/17.jpg?updatedAt=1739366827501",
+    category: "Abstract",
+    description: "A fish which is from future." 
+  },
+
+
+
+
   // Add more wallpapers...
 ]
 

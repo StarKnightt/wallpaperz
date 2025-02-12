@@ -88,6 +88,7 @@ export default function Page() {
           <WallpaperGrid 
             wallpapers={searchResults} 
             onPreview={handlePreview}
+            isLoading={loading}
           />
 
           {searchResults.length === 0 && (
@@ -134,6 +135,7 @@ export default function Page() {
             <WallpaperGrid 
               wallpapers={paginatedWallpapers} 
               onPreview={handlePreview}
+              isLoading={loading}
             />
 
             {hasMore && (
