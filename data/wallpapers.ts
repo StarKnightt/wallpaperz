@@ -181,7 +181,21 @@ export const allWallpapers: Wallpaper[] = [
     title: "Beautiful scenery of mountains",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/29.jpg?updatedAt=1739467893864",
     category: "Anime",
-    description: "Anime girl on a moon night" 
+    description: "An artistic view of mountains" 
+  },
+  {
+    id: "28",
+    title: "An beautiful painting of two illusion",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/26.jpg?updatedAt=1739467894107",
+    category: "Anime",
+    description: "Realistic painting of two illusion" 
+  },
+  {
+    id: "29",
+    title: "Celebrating Birthday party",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/30.jpg?updatedAt=1739467894167",
+    category: "Anime",
+    description: "Birthday party celebration" 
   },
 
 
