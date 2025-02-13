@@ -113,6 +113,20 @@ export const allWallpapers: Wallpaper[] = [
     category: "Abstract",
     description: "A fish which is from future." 
   },
+  {
+    id: "18",
+    title: "A girl walking on the road alone",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/18.jpg?updatedAt=1739463580903",
+    category: "Anime",
+    description: "Girl walking on the road alone in a forest" 
+  },
+  {
+    id: "19",
+    title: "A van is going on a mountain",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/22.jpg?updatedAt=1739463581145",
+    category: "Anime",
+    description: "Van is going the mountain" 
+  },
 
 
 
