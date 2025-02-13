@@ -1,7 +1,19 @@
+"use client"
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, Github } from "lucide-react"
+import ComingSoonModal from "./ComingSoonModal"
+import { useState } from "react"
 
 export default function Footer() {
+  const [showComingSoon, setShowComingSoon] = useState(false)
+  const [comingSoonFeature, setComingSoonFeature] = useState("")
+
+  const handleComingSoonClick = (e: React.MouseEvent<HTMLAnchorElement>, feature: string) => {
+    e.preventDefault()
+    setComingSoonFeature(feature)
+    setShowComingSoon(true)
+  }
+
   return (
     <footer className="bg-background border-t">
       <div className="container mx-auto px-4 py-12">
@@ -32,7 +44,11 @@ export default function Footer() {
             <ul className="space-y-2">
               {["Nature", "Abstract", "Minimal", "Urban", "Space"].map((item) => (
                 <li key={item}>
-                  <Link href="#" className="text-muted-foreground hover:text-primary">
+                  <Link 
+                    href="#" 
+                    className="text-muted-foreground hover:text-primary"
+                    onClick={(e) => handleComingSoonClick(e, item)}
+                  >
                     {item}
                   </Link>
                 </li>
@@ -45,7 +61,11 @@ export default function Footer() {
             <ul className="space-y-2">
               {["Popular", "Latest", "Collections", "Request"].map((item) => (
                 <li key={item}>
-                  <Link href="#" className="text-muted-foreground hover:text-primary">
+                  <Link 
+                    href="#" 
+                    className="text-muted-foreground hover:text-primary"
+                    onClick={(e) => handleComingSoonClick(e, item)}
+                  >
                     {item}
                   </Link>
                 </li>
@@ -58,7 +78,11 @@ export default function Footer() {
             <ul className="space-y-2">
               {["About Us", "Privacy Policy", "Terms", "Contact"].map((item) => (
                 <li key={item}>
-                  <Link href="#" className="text-muted-foreground hover:text-primary">
+                  <Link 
+                    href="#" 
+                    className="text-muted-foreground hover:text-primary"
+                    onClick={(e) => handleComingSoonClick(e, item)}
+                  >
                     {item}
                   </Link>
                 </li>
@@ -76,6 +100,11 @@ export default function Footer() {
           </p>
         </div>
       </div>
+      <ComingSoonModal
+        isOpen={showComingSoon}
+        onClose={() => setShowComingSoon(false)}
+        feature={comingSoonFeature}
+      />
     </footer>
   )
 }

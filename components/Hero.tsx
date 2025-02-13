@@ -3,6 +3,7 @@ import { Download, Image as ImageIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import ComingSoonModal from "./ComingSoonModal"
 
 const words = ["Perfect", "Best", "Exact", "Pretty", "Cute"]
 
@@ -31,6 +32,13 @@ const containerVariants = {
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
   const particleCount = 8; // Was 15 before
+  const [showComingSoon, setShowComingSoon] = useState(false)
+  const [comingSoonFeature, setComingSoonFeature] = useState("")
+
+  const handleComingSoonClick = (feature: string) => {
+    setComingSoonFeature(feature)
+    setShowComingSoon(true)
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -105,11 +113,21 @@ export default function Hero() {
               </motion.p>
 
               <motion.div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" variant="secondary" className="gap-2">
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  className="gap-2"
+                  onClick={() => handleComingSoonClick("Browse Collection")}
+                >
                   <ImageIcon size={20} />
                   Browse Collection
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2 bg-white/10 hover:bg-white/20">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="gap-2 bg-white/10 hover:bg-white/20"
+                  onClick={() => handleComingSoonClick("Popular Downloads")}
+                >
                   <Download size={20} />
                   Popular Downloads
                 </Button>
@@ -200,6 +218,11 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <ComingSoonModal
+        isOpen={showComingSoon}
+        onClose={() => setShowComingSoon(false)}
+        feature={comingSoonFeature}
+      />
     </section>
   )
 }
