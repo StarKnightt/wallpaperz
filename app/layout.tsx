@@ -10,8 +10,34 @@ import { SearchProvider } from "@/context/SearchContext"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Wallpaperz - HD Wallpapers for Your Desktop",
-  description: "Download high-quality wallpapers for your desktop and mobile devices. Browse through our collection of HD wallpapers across various categories.",
+  title: 'Wallpaperz',
+  description: 'Discover and download high-quality wallpapers',
+  icons: {
+    icon: [
+      {
+        url: '/favicon.png',
+        sizes: '32x32',
+        type: 'image/ico',
+      },
+      {
+        url: '/favicon.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        url: '/favicon-512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+    ],
+    apple: [
+      {
+        url: '/favicon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
+  },
 }
 
 export default function RootLayout({
