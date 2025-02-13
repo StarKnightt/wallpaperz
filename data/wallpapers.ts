@@ -197,10 +197,6 @@ export const allWallpapers: Wallpaper[] = [
     category: "Anime",
     description: "Birthday party celebration" 
   },
-
-
-
-
   // Add more wallpapers...
 ]
 
