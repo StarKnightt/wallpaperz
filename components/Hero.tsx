@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Download, Image as ImageIcon } from "lucide-react"
+import { Download, Image as ImageIcon, ArrowDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
@@ -34,6 +34,11 @@ export default function Hero() {
   const particleCount = 8; // Was 15 before
   const [showComingSoon, setShowComingSoon] = useState(false)
   const [comingSoonFeature, setComingSoonFeature] = useState("")
+
+  const scrollToWallpapers = () => {
+    const wallpapersSection = document.getElementById('wallpapers-section')
+    wallpapersSection?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const handleComingSoonClick = (feature: string) => {
     setComingSoonFeature(feature)
@@ -70,8 +75,8 @@ export default function Hero() {
 
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 relative animate-gradient-x">
         <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
-        <div className="container mx-auto px-4 py-16 md:py-24 relative">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="container mx-auto px-4 py-24 md:py-32 relative"> {/* Increased vertical padding */}
+          <div className="grid md:grid-cols-2 gap-12 items-center"> {/* Increased gap */}
             {/* Text content with enhanced animations */}
             <motion.div 
               className="text-white space-y-6"
@@ -116,20 +121,14 @@ export default function Hero() {
                 <Button 
                   size="lg" 
                   variant="secondary" 
-                  className="gap-2"
-                  onClick={() => handleComingSoonClick("Browse Collection")}
+                  className="gap-4 px-8 font-semibold relative pl-12" // Increased gap-4 and pl-12
+                  onClick={scrollToWallpapers}
                 >
-                  <ImageIcon size={20} />
-                  Browse Collection
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="gap-2 bg-white/10 hover:bg-white/20"
-                  onClick={() => handleComingSoonClick("Popular Downloads")}
-                >
-                  <Download size={20} />
-                  Popular Downloads
+                  <ArrowDown 
+                    className="w-5 h-5 animate-bounce absolute left-5" // Changed left-4 to left-5
+                    strokeWidth={2.5}
+                  />
+                  Explore Wallpapers
                 </Button>
               </motion.div>
 

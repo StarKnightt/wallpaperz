@@ -127,6 +127,62 @@ export const allWallpapers: Wallpaper[] = [
     category: "Anime",
     description: "Van is going the mountain" 
   },
+  {
+    id: "20",
+    title: "Beautiful scenery of a mountain",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/21.jpg?updatedAt=1739463581980",
+    category: "Anime",
+    description: "Wonderful image of a ground" 
+  },
+  {
+    id: "21",
+    title: "A girl sitting with her pet",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/27.jpg?updatedAt=1739463585340",
+    category: "Anime",
+    description: "Pet is with her owner" 
+  },
+  {
+    id: "22",
+    title: "A Couple",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/23.jpg?updatedAt=1739463588576",
+    category: "Anime",
+    description: "Couples are sitting" 
+  },
+  {
+    id: "23",
+    title: "A girl is looking",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/28.jpg?updatedAt=1739463589857",
+    category: "Anime",
+    description: "A girl on the sky" 
+  },
+  {
+    id: "24",
+    title: "A Samurai is looking",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/24.jpg?updatedAt=1739467842606",
+    category: "Anime",
+    description: "A dark samurai" 
+  },
+  {
+    id: "25",
+    title: "An Anime girl on a festival",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/25.jpg?updatedAt=1739467861774",
+    category: "Anime",
+    description: "Anime girl is on festival" 
+  },
+  {
+    id: "26",
+    title: "An girl is looking at the moon",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/20.jpg?updatedAt=1739467877193",
+    category: "Anime",
+    description: "Anime girl on a moon night" 
+  },
+  {
+    id: "27",
+    title: "Beautiful scenery of mountains",
+    imageUrl: "https://ik.imagekit.io/starknight/Anime/29.jpg?updatedAt=1739467893864",
+    category: "Anime",
+    description: "Anime girl on a moon night" 
+  },
 
 
 

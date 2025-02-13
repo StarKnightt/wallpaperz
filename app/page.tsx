@@ -68,7 +68,7 @@ export default function Page() {
   }
 
   return (
-    <div className="space-y-12 pb-20"> {/* Added bottom padding */}
+    <div className="space-y-16 pb-24"> {/* Increased spacing between sections and bottom padding */}
       <Hero />
       
       {/* Search Results Section */}
@@ -106,7 +106,7 @@ export default function Page() {
         <>
           {/* Categories Section */}
           <section className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10"> {/* Increased gaps */}
               <div>
                 <h2 className="text-2xl font-bold">Browse Categories</h2>
                 <p className="text-muted-foreground">Filter wallpapers by category</p>
@@ -120,8 +120,8 @@ export default function Page() {
           </section>
 
           {/* Wallpapers Grid */}
-          <section className="container mx-auto px-4">
-            <div className="flex justify-between items-center mb-8"> {/* Increased margin bottom */}
+          <section id="wallpapers-section" className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-10"> {/* Increased margin */}
               <div>
                 <h2 className="text-2xl font-bold mb-2"> {/* Added margin to subtitle */}
                   {selectedCategory || "All Wallpapers"}
@@ -139,7 +139,7 @@ export default function Page() {
             />
 
             {hasMore && (
-              <div className="flex justify-center mt-10 mb-1">
+              <div className="flex justify-center mt-12 mb-2"> {/* Increased margins */}
                 <Button 
                   onClick={loadMore} 
                   disabled={loading}

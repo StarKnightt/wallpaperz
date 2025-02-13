@@ -16,7 +16,7 @@ export default function WallpaperGrid({
 }: WallpaperGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 max-w-6xl mx-auto w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 px-4 max-w-6xl mx-auto w-full"> {/* Increased gap */}
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
@@ -36,7 +36,7 @@ export default function WallpaperGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 px-2 md:px-4 max-w-6xl mx-auto w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 px-2 md:px-4 max-w-6xl mx-auto w-full"> {/* Increased gap */}
       {wallpapers.map((wallpaper) => (
         <motion.div
           key={wallpaper.id}
