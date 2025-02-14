@@ -7,6 +7,7 @@ import { Toaster } from "sonner"
 import type React from "react" // Added import for React
 import { SearchProvider } from "@/context/SearchContext"
 import { Analytics } from "@vercel/analytics/react"
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -77,6 +78,7 @@ export default function RootLayout({
           </SearchProvider>
           <Toaster position="top-center" />
           <Analytics />
+          <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
         </ThemeProvider>
       </body>
     </html>

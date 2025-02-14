@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@next/third-parties": "^15.1.7",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-visually-hidden": "^1.1.2",
