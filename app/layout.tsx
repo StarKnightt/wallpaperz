@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "sonner"
 import type React from "react" // Added import for React
 import { SearchProvider } from "@/context/SearchContext"
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -74,6 +75,7 @@ export default function RootLayout({
             </div>
           </SearchProvider>
           <Toaster position="top-center" />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
