@@ -40,7 +40,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
           <Button 
             size="sm" 
             variant="secondary" 
-            className="flex-1 bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
+            className="flex-1 bg-white dark:bg-white/20 text-gray-800 dark:text-white backdrop-blur-sm hover:bg-gray-200 dark:hover:bg-white/30 transition-all duration-300"
             onClick={(e) => {
               e.preventDefault()
               onPreview()
@@ -53,7 +53,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
           <Button 
             size="sm" 
             variant="secondary"
-            className="flex-1 bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
+            className="flex-1 bg-white dark:bg-white/20 text-gray-800 dark:text-white backdrop-blur-sm hover:bg-gray-200 dark:hover:bg-white/30 transition-all duration-300"
           >
             <Download className="w-4 h-4 mr-2" />
             Download
