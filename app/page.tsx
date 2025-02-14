@@ -52,7 +52,6 @@ export default function Page() {
 
   const loadMore = async () => {
     setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 1000))
     setPage(prev => prev + 1)
     setLoading(false)
     
@@ -141,7 +140,10 @@ export default function Page() {
             {hasMore && (
               <div className="flex justify-center mt-12 mb-2"> {/* Increased margins */}
                 <Button 
-                  onClick={loadMore} 
+                  onClick={(e) => {
+                    e.preventDefault() // Prevent default button behavior
+                    loadMore()
+                  }} 
                   disabled={loading}
                   size="lg"
                   className="min-w-[160px]" // Reduced button width
