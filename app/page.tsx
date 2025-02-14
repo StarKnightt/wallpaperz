@@ -17,16 +17,15 @@ const ITEMS_PER_PAGE = 8
 const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
 
 export default function Page() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
-  const { searchQuery, setSearchQuery } = useSearch()
+  const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
 
-  // Separate search results from regular wallpapers
-  const searchResults = searchQuery ? allWallpapers
+  // Update filtered wallpapers logic
+  const filteredWallpapers = searchQuery ? allWallpapers
     .filter(w => {
       const searchableText = [
         w.title,
@@ -34,22 +33,25 @@ export default function Page() {
         w.description
       ].join(' ').toLowerCase()
       return searchableText.includes(searchQuery.toLowerCase())
-    }) : []
-
-  // Regular filtered wallpapers (excluding search)
-  const filteredWallpapers = searchQuery ? [] : allWallpapers
-    .filter(w => !selectedCategory || w.category === selectedCategory)
+    }) : allWallpapers.filter(w => 
+      activeCategory === 'All' || w.category === activeCategory
+    )
 
   const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
 
-  // Add new effect to handle URL params
+  // Update URL params effect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const searchParam = params.get('search')
+    const categoryParam = params.get('category')
+    
     if (searchParam) {
       setSearchQuery(searchParam)
+    } else if (categoryParam) {
+      setActiveCategory(categoryParam)
+      setSearchQuery(categoryParam)
     }
-  }, [])
+  }, [setSearchQuery, setActiveCategory])
 
   const loadMore = async () => {
     setLoading(true)
@@ -80,18 +82,18 @@ export default function Page() {
                 Search Results for &quot;{searchQuery}&quot;
               </h2>
               <p className="text-muted-foreground">
-                Found {searchResults.length} wallpapers
+                Found {filteredWallpapers.length} wallpapers
               </p>
             </div>
           </div>
 
           <WallpaperGrid 
-            wallpapers={searchResults} 
+            wallpapers={filteredWallpapers} 
             onPreview={handlePreview}
             isLoading={loading}
           />
 
-          {searchResults.length === 0 && (
+          {filteredWallpapers.length === 0 && (
             <div className="text-center py-16">
               <p className="text-xl text-muted-foreground">
                 No wallpapers found for &quot;{searchQuery}&quot;. Try different keywords.
@@ -107,7 +109,7 @@ export default function Page() {
           <div className="flex justify-between items-center mb-10">
             <div>
               <h2 className="text-2xl font-bold mb-2">
-                {selectedCategory || "All Wallpapers"}
+                {activeCategory || "All Wallpapers"}
               </h2>
             </div>
           </div>

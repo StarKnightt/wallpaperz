@@ -15,7 +15,7 @@ interface SearchSuggestion {
 export default function Hero() {
   const [currentSuggestion, setCurrentSuggestion] = useState(0)
   const router = useRouter()
-  const { searchQuery, setSearchQuery } = useSearch()
+  const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
 
   const generateSuggestions = (value: string): SearchSuggestion[] => {
@@ -75,6 +75,23 @@ export default function Hero() {
     setSearchQuery(suggestion.query)
     setSuggestions([])
     performSearch(suggestion.query)
+  }
+
+  const handleCategoryClick = (tag: string) => {
+    setActiveCategory(tag)
+    if (tag === 'All') {
+      setSearchQuery('')
+      router.push('/#wallpapers-section')
+    } else {
+      setSearchQuery(tag) // Update search query with category name
+      router.replace(`/?category=${encodeURIComponent(tag)}#search-results`, { scroll: false })
+      setTimeout(() => {
+        document.getElementById('search-results')?.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }, 100)
+    }
   }
 
   return (
@@ -157,13 +174,10 @@ export default function Hero() {
             {['All', 'Abstract', 'Anime'].map((tag) => (
               <Button
                 key={tag}
-                variant={tag === 'All' ? "default" : "secondary"}
+                variant={activeCategory === tag ? "default" : "secondary"}
                 size="lg"
                 className="rounded-full px-6"
-                onClick={() => {
-                  setSearchQuery(tag === 'All' ? '' : tag)
-                  router.push('/#search-results')
-                }}
+                onClick={() => handleCategoryClick(tag)}
               >
                 {tag}
               </Button>

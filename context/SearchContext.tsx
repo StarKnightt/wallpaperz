@@ -5,12 +5,15 @@ interface SearchContextType {
   searchQuery: string
   setSearchQuery: (query: string) => void
   clearSearch: () => void
+  activeCategory: string
+  setActiveCategory: (category: string) => void
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined)
 
 export function SearchProvider({ children }: { children: ReactNode }) {
   const [searchQuery, setSearchQuery] = useState("")
+  const [activeCategory, setActiveCategory] = useState("All")
 
   const clearSearch = () => setSearchQuery("")
 
@@ -18,7 +21,9 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     <SearchContext.Provider value={{ 
       searchQuery, 
       setSearchQuery, 
-      clearSearch
+      clearSearch,
+      activeCategory, 
+      setActiveCategory 
     }}>
       {children}
     </SearchContext.Provider>
