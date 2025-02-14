@@ -6,6 +6,8 @@ export interface Wallpaper {
   imageUrl: string
   category: WallpaperCategory
   description: string
+  source: string;    // 'pexels' | 'pixabay' | 'unsplash'
+  sourceUrl?: string; // optional link to original
 }
 
 export interface WallpaperCollection {
