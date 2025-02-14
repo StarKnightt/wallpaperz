@@ -102,65 +102,45 @@ export default function Page() {
 
       {/* Show regular content only when not searching */}
       {!searchQuery && (
-        <>
-          {/* Categories Section */}
-          <section className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10"> {/* Increased gaps */}
-              <div>
-                <h2 className="text-2xl font-bold">Browse Categories</h2>
-                <p className="text-muted-foreground">Filter wallpapers by category</p>
-              </div>
-              <CategoryFilter
-                categories={categories}
-                selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
-              />
+        <section id="wallpapers-section" className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-10">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">
+                {selectedCategory || "All Wallpapers"}
+              </h2>
             </div>
-          </section>
+          </div>
 
-          {/* Wallpapers Grid */}
-          <section id="wallpapers-section" className="container mx-auto px-4">
-            <div className="flex justify-between items-center mb-10"> {/* Increased margin */}
-              <div>
-                <h2 className="text-2xl font-bold mb-2"> {/* Added margin to subtitle */}
-                  {selectedCategory || "All Wallpapers"}
-                </h2>
-                <p className="text-muted-foreground">
-                  {filteredWallpapers.length} wallpapers total • Showing {paginatedWallpapers.length} {/* Improved count display */}
-                </p>
-              </div>
+          <WallpaperGrid 
+            wallpapers={paginatedWallpapers} 
+            onPreview={handlePreview}
+            isLoading={loading}
+          />
+
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="flex justify-center mt-12 mb-2"> {/* Increased margins */}
+              <Button 
+                onClick={(e) => {
+                  e.preventDefault() // Prevent default button behavior
+                  loadMore()
+                }} 
+                disabled={loading}
+                size="lg"
+                className="min-w-[160px]" // Reduced button width
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  'Load More'
+                )}
+              </Button>
             </div>
-
-            <WallpaperGrid 
-              wallpapers={paginatedWallpapers} 
-              onPreview={handlePreview}
-              isLoading={loading}
-            />
-
-            {hasMore && (
-              <div className="flex justify-center mt-12 mb-2"> {/* Increased margins */}
-                <Button 
-                  onClick={(e) => {
-                    e.preventDefault() // Prevent default button behavior
-                    loadMore()
-                  }} 
-                  disabled={loading}
-                  size="lg"
-                  className="min-w-[160px]" // Reduced button width
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Loading...
-                    </>
-                  ) : (
-                    'Load More'
-                  )}
-                </Button>
-              </div>
-            )}
-          </section>
-        </>
+          )}
+        </section>
       )}
 
       {/* No results message */}

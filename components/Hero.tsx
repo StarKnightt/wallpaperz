@@ -34,12 +34,11 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative bg-black/5 dark:bg-black/40 backdrop-blur-sm">
+    <section className="relative bg-gradient-to-b from-background to-background/80 backdrop-blur-sm">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto py-20 md:py-32 text-center space-y-6">
-          {/* Main Heading */}
+        <div className="max-w-3xl mx-auto py-16 md:py-8 text-center space-y-6">
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold"
+            className="text-4xl md:text-5xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/80"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -47,20 +46,22 @@ export default function Hero() {
             The Best Wallpapers for Your Screen
           </motion.h1>
 
-          {/* Subtitle */}
-          <motion.p 
-            className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto"
+          {/* Enhanced Description */}
+          <motion.div 
+            className="space-y-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Browse through our curated collection of high-quality wallpapers
-          </motion.p>
+            <p className="text-base md:text-lg text-muted-foreground">
+              Discover a curated collection of stunning wallpapers for your desktop.
+            </p>
+          </motion.div>
 
-          {/* Search Form */}
+          {/* Search Form with reduced top margin */}
           <motion.form 
             onSubmit={handleSearch}
-            className="relative max-w-2xl mx-auto mt-8"
+            className="relative max-w-2xl mx-auto mt-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -84,48 +85,27 @@ export default function Hero() {
             </div>
           </motion.form>
 
-          {/* Trending Tags */}
+          {/* Category Filters with reduced spacing */}
           <motion.div
-            className="flex flex-wrap justify-center gap-2 mt-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-wrap justify-center gap-3 mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {['4K','Abstract','Anime'].map((tag) => (
+            {['All', 'Abstract', 'Anime'].map((tag) => (
               <Button
                 key={tag}
-                variant="secondary"
-                size="sm"
-                className="rounded-full"
+                variant={tag === 'All' ? "default" : "secondary"}
+                size="lg"
+                className="rounded-full px-6"
                 onClick={() => {
-                  setSearchQuery(tag)
+                  setSearchQuery(tag === 'All' ? '' : tag)
                   router.push('/#search-results')
                 }}
               >
                 {tag}
               </Button>
             ))}
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div 
-            className="flex justify-center gap-8 mt-8 text-sm text-muted-foreground"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <div>
-              <span className="font-bold text-foreground">28+ </span>
-              Wallpapers
-            </div>
-            <div>
-              <span className="font-bold text-foreground">100+ </span>
-              Downloads
-            </div>
-            <div>
-              <span className="font-bold text-foreground">3+ </span>
-              Categories
-            </div>
           </motion.div>
         </div>
       </div>
