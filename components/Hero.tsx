@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
-import { Download, Image as ImageIcon, ArrowDown } from "lucide-react"
+import { Download, Image as ImageIcon, ArrowDown, ArrowRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import ComingSoonModal from "./ComingSoonModal"
+import Link from 'next/link'
 
 const words = ["Perfect", "Best", "Exact", "Pretty", "Cute"]
 
@@ -14,7 +15,6 @@ const imageVariants = {
     y: -10,
     transition: {
       duration: 0.3,
-      ease: "easeOut"
     }
   }
 }
@@ -29,11 +29,28 @@ const containerVariants = {
   }
 }
 
+const buttonVariants = {
+  rest: { 
+    scale: 1,
+    backgroundColor: "rgb(255, 255, 255)",
+  },
+  hover: { 
+    scale: 1.05,
+    backgroundColor: "rgb(240, 240, 240)",
+    transition: {
+      duration: 0.2,
+      ease: "easeInOut"
+    }
+  }
+}
+
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
   const particleCount = 8; // Was 15 before
   const [showComingSoon, setShowComingSoon] = useState(false)
   const [comingSoonFeature, setComingSoonFeature] = useState("")
+
+  const [isButtonHovered, setIsButtonHovered] = useState(false)
 
   const scrollToWallpapers = () => {
     const wallpapersSection = document.getElementById('wallpapers-section')
@@ -118,18 +135,55 @@ export default function Hero() {
               </motion.p>
 
               <motion.div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
-                  variant="secondary" 
-                  className="gap-4 px-8 font-semibold relative pl-12" // Increased gap-4 and pl-12
-                  onClick={scrollToWallpapers}
+                <motion.div
+                  initial="rest"
+                  whileHover="hover"
+                  animate="rest"
+                  onHoverStart={() => setIsButtonHovered(true)}
+                  onHoverEnd={() => setIsButtonHovered(false)}
                 >
-                  <ArrowDown 
-                    className="w-5 h-5 animate-bounce absolute left-5" // Changed left-4 to left-5
-                    strokeWidth={2.5}
-                  />
-                  Explore Wallpapers
-                </Button>
+                  <Button 
+                    size="lg"
+                    onClick={scrollToWallpapers}
+                    className="relative overflow-hidden px-8 py-6 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-medium rounded-xl group border-0"
+                  >
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
+                      initial={{ x: '-100%', opacity: 0 }}
+                      animate={{ 
+                        x: isButtonHovered ? '100%' : '-100%',
+                        opacity: isButtonHovered ? 0.5 : 0
+                      }}
+                      transition={{ duration: 0.5, ease: "easeInOut" }}
+                    />
+                    <motion.div className="relative flex items-center gap-2">
+                      <motion.div
+                        animate={{ 
+                          y: isButtonHovered ? [0, -4, 0] : 0
+                        }}
+                        transition={{ 
+                          duration: 0.6,
+                          repeat: isButtonHovered ? Infinity : 0,
+                          repeatType: "reverse"
+                        }}
+                        className="relative"
+                      >
+                        <ArrowDown className="w-5 h-5" strokeWidth={2} />
+                      </motion.div>
+                      <span className="relative">
+                        Explore Wallpapers
+                        <motion.div
+                          className="absolute bottom-0 left-0 w-full h-[2px] bg-white/50"
+                          initial={{ scaleX: 0, originX: 0 }}
+                          animate={{ 
+                            scaleX: isButtonHovered ? 1 : 0
+                          }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </span>
+                    </motion.div>
+                  </Button>
+                </motion.div>
               </motion.div>
 
               {/* Enhanced stats section */}

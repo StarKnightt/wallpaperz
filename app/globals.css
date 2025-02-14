@@ -203,6 +203,15 @@ body {
       opacity: 0;
     }
   }
+
+  @keyframes shine {
+    from {
+      transform: translateX(-100%) skew(-45deg);
+    }
+    to {
+      transform: translateX(400%) skew(-45deg);
+    }
+  }
 }
 
 .text-gradient {
