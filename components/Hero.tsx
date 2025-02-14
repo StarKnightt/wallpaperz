@@ -52,6 +52,24 @@ export default function Hero() {
 
   const [isButtonHovered, setIsButtonHovered] = useState(false)
 
+  const [particles, setParticles] = useState<Array<{
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+  }>>([])
+
+  // Generate particles on client-side only
+  useEffect(() => {
+    const newParticles = Array(particleCount).fill(0).map(() => ({
+      width: Math.random() * 3 + 2,
+      height: Math.random() * 3 + 2,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+    }))
+    setParticles(newParticles)
+  }, [])
+
   const scrollToWallpapers = () => {
     const wallpapersSection = document.getElementById('wallpapers-section')
     wallpapersSection?.scrollIntoView({ behavior: 'smooth' })
@@ -75,16 +93,15 @@ export default function Hero() {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20" />
         
-        {/* Reduced particle count */}
-        {[...Array(particleCount)].map((_, i) => (
+        {particles.map((particle, i) => (
           <div
             key={i}
             className="particle rounded-full bg-white/10"
             style={{
-              width: `${Math.random() * 3 + 2}px`,
-              height: `${Math.random() * 3 + 2}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              width: `${particle.width}px`,
+              height: `${particle.height}px`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
             }}
           />
         ))}
