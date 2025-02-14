@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Download, Image as ImageIcon, ArrowDown, ArrowRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import ComingSoonModal from "./ComingSoonModal"
 import Link from 'next/link'
 
@@ -59,16 +59,19 @@ export default function Hero() {
     top: number;
   }>>([])
 
-  // Generate particles on client-side only
-  useEffect(() => {
-    const newParticles = Array(particleCount).fill(0).map(() => ({
+  // Use useCallback for stable particle positions
+  const generateParticles = useCallback(() => {
+    return Array(particleCount).fill(0).map(() => ({
       width: Math.random() * 3 + 2,
       height: Math.random() * 3 + 2,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
+      left: Math.floor(Math.random() * 100), // Floor to avoid hydration mismatch
+      top: Math.floor(Math.random() * 100),  // Floor to avoid hydration mismatch
     }))
-    setParticles(newParticles)
-  }, [])
+  }, [particleCount])
+
+  useEffect(() => {
+    setParticles(generateParticles())
+  }, [generateParticles])
 
   const scrollToWallpapers = () => {
     const wallpapersSection = document.getElementById('wallpapers-section')
@@ -175,17 +178,17 @@ export default function Hero() {
       </div>
 
       <div className="relative"> {/* Removed gradient background */}
-        <div className="container mx-auto px-4 py-24 md:py-32 relative"> {/* Increased vertical padding */}
-          <div className="grid md:grid-cols-2 gap-12 items-center"> {/* Increased gap */}
+        <div className="container mx-auto px-4 py-16 sm:py-24 md:py-32 relative"> {/* Adjusted padding */}
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center"> {/* Adjusted gap */}
             {/* Text content with enhanced animations */}
             <motion.div 
-              className="text-white space-y-6"
+              className="text-white space-y-4 sm:space-y-6"
               variants={containerVariants}
               initial="hidden"
               animate="show"
             >
               <motion.h1 
-                className="text-4xl md:text-6xl font-bold leading-tight"
+                className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
@@ -212,12 +215,41 @@ export default function Hero() {
                 </span>
               </motion.h1>
 
-              <motion.p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-xl">
+              <motion.p className="text-sm sm:text-base lg:text-xl opacity-90 max-w-xl">
                 Discover thousands of stunning wallpapers for your desktop and mobile devices. 
                 Free downloads, high quality, and new additions daily.
               </motion.p>
 
-              <motion.div className="flex flex-col sm:flex-row gap-4">
+              {/* Responsive benefit pills */}
+              <div className="flex flex-wrap gap-2 sm:gap-3 mt-4">
+                {[
+                  '✨ 4K',
+                  '🚀 Fast',
+                  '🎨 Custom',
+                  '🆓 Free'
+                ].map((benefit) => (
+                  <span key={benefit} 
+                    className="px-2 sm:px-3 py-1 bg-white/10 rounded-full text-xs sm:text-sm whitespace-nowrap">
+                    {benefit}
+                  </span>
+                ))}
+              </div>
+
+              {/* Responsive category shortcuts */}
+              <div className="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-6">
+                {['Nature', 'Abstract', 'Minimal', 'Gaming'].map((cat) => (
+                  <Button
+                    key={cat}
+                    variant="outline"
+                    className="bg-white/10 hover:bg-white/20"
+                    onClick={() => scrollToWallpapers()}
+                  >
+                    {cat}
+                  </Button>
+                ))}
+              </div>
+
+              <motion.div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <motion.div
                   initial="rest"
                   whileHover="hover"
@@ -271,7 +303,7 @@ export default function Hero() {
 
               {/* Enhanced stats section */}
               <motion.div 
-                className="grid grid-cols-2 sm:flex sm:gap-8 gap-4 pt-4"
+                className="grid grid-cols-2 sm:flex sm:gap-8 gap-3 pt-4"
                 variants={containerVariants}
               >
                 {[
@@ -296,7 +328,7 @@ export default function Hero() {
 
             {/* Image grid with enhanced animations */}
             <motion.div 
-              className="hidden md:block relative"
+              className="hidden sm:block relative"
               variants={containerVariants}
               initial="hidden"
               animate="show"

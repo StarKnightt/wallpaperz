@@ -9,21 +9,37 @@ import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { FormEvent } from "react"
 import debounce from 'lodash/debounce' 
+import { Skeleton } from "@/components/ui/skeleton" 
 
 export default function Header() {
   const { searchQuery, setSearchQuery } = useSearch()
   const { theme, setTheme } = useTheme()
   const router = useRouter()
+  const [isSearching, setIsSearching] = useState(false)
+  const [suggestions, setSuggestions] = useState<string[]>([])
 
   const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchQuery(value)
-      if (!value) {
-        router.push('/')
-      } else {
-        router.push('/#search-results')
+    debounce(async (value: string) => {
+      setIsSearching(true)
+      try {
+        // Show quick suggestions while typing
+        if (value.length > 2) {
+          setSuggestions([
+            `${value} wallpaper HD`,
+            `${value} background 4K`,
+            `${value} aesthetic`,
+          ])
+        }
+        setSearchQuery(value)
+        if (!value) {
+          router.push('/')
+        } else {
+          router.push('/#search-results')
+        }
+      } finally {
+        setIsSearching(false)
       }
-    }, 500), // Increased from default to 500ms
+    }, 400), // Slightly faster response
     [setSearchQuery, router]
   )
 
@@ -66,15 +82,31 @@ export default function Header() {
           >
             <Search 
               size={20} 
-              className="absolute left-3 text-muted-foreground" 
+              className={`absolute left-3 ${isSearching ? 'animate-pulse' : ''} text-muted-foreground`}
             />
             <Input
               type="search"
-              placeholder="Search wallpapers..."
+              placeholder={isSearching ? "Searching..." : "Search wallpapers..."}
               value={searchQuery}
               onChange={handleSearchChange}
               className="pl-10 w-full"
             />
+            {suggestions.length > 0 && searchQuery && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg">
+                {suggestions.map((suggestion, i) => (
+                  <button
+                    key={i}
+                    className="w-full px-4 py-2 text-left hover:bg-muted/50 transition-colors"
+                    onClick={() => {
+                      setSearchQuery(suggestion)
+                      router.push('/#search-results')
+                    }}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
           </form>
         </div>
       </div>
