@@ -20,7 +20,7 @@ export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
-  const { searchQuery } = useSearch()
+  const { searchQuery, setSearchQuery } = useSearch()
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
@@ -42,13 +42,14 @@ export default function Page() {
 
   const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
 
-  // Scroll to search results when query changes
+  // Add new effect to handle URL params
   useEffect(() => {
-    if (searchQuery) {
-      const searchSection = document.getElementById('search-results')
-      searchSection?.scrollIntoView({ behavior: 'smooth' })
+    const params = new URLSearchParams(window.location.search)
+    const searchParam = params.get('search')
+    if (searchParam) {
+      setSearchQuery(searchParam)
     }
-  }, [searchQuery])
+  }, [])
 
   const loadMore = async () => {
     setLoading(true)

@@ -6,31 +6,75 @@ import { Input } from "@/components/ui/input"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 
-const suggestions = [
-  "Anime wallpapers",
-  "Abstract art",
-  "Minimal designs",
-  "Dark themes",
-  "Landscapes"
-]
+interface SearchSuggestion {
+  title: string;
+  description: string;
+  query: string;
+}
 
 export default function Hero() {
   const [currentSuggestion, setCurrentSuggestion] = useState(0)
   const router = useRouter()
   const { searchQuery, setSearchQuery } = useSearch()
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSuggestion(prev => (prev + 1) % suggestions.length)
-    }, 3000)
-    return () => clearInterval(timer)
-  }, [])
+  const generateSuggestions = (value: string): SearchSuggestion[] => {
+    if (!value) return [];
+    return [
+      {
+        title: `${value} Wallpapers`,
+        description: "Find HD desktop backgrounds",
+        query: `${value} wallpaper`
+      },
+      {
+        title: `${value} 4K`,
+        description: "Ultra high resolution wallpapers",
+        query: `${value} 4k`
+      },
+      {
+        title: `${value} Aesthetic`,
+        description: "Stylish and artistic designs",
+        query: `${value} aesthetic`
+      }
+    ];
+  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      router.push('/#search-results')
+      setSuggestions([])
+      performSearch(searchQuery)
     }
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchQuery(value)
+    // Only update suggestions, no search/scroll
+    if (value.length >= 2) {
+      setSuggestions(generateSuggestions(value))
+    } else {
+      setSuggestions([])
+    }
+  }
+
+  const performSearch = (query: string) => {
+    if (query.trim()) {
+      router.replace(`/?search=${encodeURIComponent(query)}#search-results`, { scroll: false })
+      // Delayed smooth scroll
+      setTimeout(() => {
+        document.getElementById('search-results')?.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }, 100)
+    }
+  }
+
+  const handleSuggestionClick = (suggestion: SearchSuggestion) => {
+    setSearchQuery(suggestion.query)
+    setSuggestions([])
+    performSearch(suggestion.query)
   }
 
   return (
@@ -71,9 +115,11 @@ export default function Hero() {
               <Input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 className="w-full pl-12 pr-4 h-14 text-base md:text-lg rounded-full border-2 focus:ring-2 focus:ring-primary/20"
-                placeholder={suggestions[currentSuggestion]}
+                placeholder="Search wallpapers..."
+                autoComplete="off"
+                spellCheck="false"
               />
               <Button 
                 type="submit"
@@ -83,6 +129,22 @@ export default function Hero() {
                 Search
               </Button>
             </div>
+            
+            {/* Search Suggestions */}
+            {suggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg overflow-hidden z-50">
+                {suggestions.map((suggestion, i) => (
+                  <button
+                    key={i}
+                    className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex flex-col gap-0.5"
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    <span className="font-medium">{suggestion.title}</span>
+                    <span className="text-sm text-muted-foreground">{suggestion.description}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.form>
 
           {/* Category Filters with reduced spacing */}
