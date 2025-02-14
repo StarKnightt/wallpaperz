@@ -10,10 +10,10 @@ export const allWallpapers: Wallpaper[] = [
   },
   {
     id: "2",
-    title: "Palm tree painting",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/1.jpg?updatedAt=1739535148590",
+    title: "Sunset in a different way",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/1.jpg?updatedAt=1739535917942",
     category: "Abstract",
-    description: "Painting of a palm tree."
+    description: "Digital of art of a sunset"
   },
   {
     id: "3",
