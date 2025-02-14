@@ -1,5 +1,5 @@
 "use client"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -24,6 +24,7 @@ export default function Header() {
   const router = useRouter()
   const [isSearching, setIsSearching] = useState(false)
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
+  const [isScrolled, setIsScrolled] = useState(false)
 
   const debouncedSearch = useCallback(
     debounce(async (value: string) => {
@@ -91,6 +92,19 @@ export default function Header() {
     setSuggestions([])
     router.push('/#search-results')
   }
+
+  // Disable ESLint for this specific instance as we intentionally want an empty dependency array
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleScroll = useCallback(() => {
+    if (typeof window !== "undefined") {
+      setIsScrolled(window.scrollY > 20)
+    }
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [handleScroll])
 
   return (
     <header className="bg-background shadow sticky top-0 z-50">

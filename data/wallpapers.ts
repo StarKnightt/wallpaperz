@@ -6,196 +6,224 @@ export const allWallpapers: Wallpaper[] = [
     title: "Girl-Thinking about it",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/6.jpg?updatedAt=1738951216228",
     category: "Anime",
-    description: "Peaceful mountain landscape at sunset"
+    description: "Peaceful mountain landscape at sunset",
+    source: "pexels"
   },
   {
     id: "2",
     title: "Sunset in a different way",
     imageUrl: "https://ik.imagekit.io/starknight/Art/1.jpg?updatedAt=1739535917942",
     category: "Abstract",
-    description: "Digital of art of a sunset"
+    description: "Digital of art of a sunset",
+    source: "pexels"
   },
   {
     id: "3",
     title: "4k Flower wallpaper",
     imageUrl: "https://ik.imagekit.io/starknight/Art/5.jpg?updatedAt=1738950784247",
     category: "Abstract",
-    description: "An abstract flower wallpaper" 
+    description: "An abstract flower wallpaper",
+    source: "pexels"
   },
   {
     id: "5",
     title: "Finally Fantasty Rebirth",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/3.jpeg?updatedAt=1738950341010",
     category: "Anime",
-    description: "An abstract flower wallpaper" 
+    description: "An abstract flower wallpaper",
+    source: "pexels"
   },
   {
     id: "6",
     title: "Futuristic Windows wallpaper",
     imageUrl: "https://ik.imagekit.io/starknight/Art/7.png?updatedAt=1738951450391",
     category: "Abstract",
-    description: "An futuristic wallpaper" 
+    description: "An futuristic wallpaper",
+    source: "pexels"
   },
   {
     id: "7",
     title: "God with a programmer",
     imageUrl: "https://ik.imagekit.io/starknight/Art/8_JYkc21aIQ?updatedAt=1738951845182",
     category: "Abstract",
-    description: "A programmer with god wallpaper" 
+    description: "A programmer with god wallpaper",
+    source: "pexels"
   },
   {
     id: "8",
     title: "A boy drinking smoothie",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/2.jpeg?updatedAt=1738950341390",
     category: "Anime",
-    description: "Boy drinking smoothie with his pet" 
+    description: "Boy drinking smoothie with his pet",
+    source: "pexels"
   },
   {
     id: "9",
     title: "A Hot Air Balloon In the sky",
     imageUrl: "https://ik.imagekit.io/starknight/Art/8.jpg?updatedAt=1739367163746",
     category: "Abstract",
-    description: "A beautiful wallpaper of hot air balloon" 
+    description: "A beautiful wallpaper of hot air balloon",
+    source: "pexels"
   },
   {
     id: "10",
     title: "Night on an island",
     imageUrl: "https://ik.imagekit.io/starknight/Art/11.jpg?updatedAt=1739366813575",
     category: "Abstract",
-    description: "A Scary and thriling view of night on an island" 
+    description: "A Scary and thriling view of night on an island",
+    source: "pexels"
   },
   {
     id: "11",
     title: "Nature beauty reflected in the sky mountains and water",
     imageUrl: "https://ik.imagekit.io/starknight/Art/9.jpg?updatedAt=1739366820464",
     category: "Abstract",
-    description: "Nature's beauty is incredible" 
+    description: "Nature's beauty is incredible",
+    source: "pexels"
   },
   {
     id: "12",
     title: "Mountain forest jungle trees cartoon background",
     imageUrl: "https://ik.imagekit.io/starknight/Art/12.jpg?updatedAt=1739366820811",
     category: "Abstract",
-    description: "Mountain forest jungles are always beautiful" 
+    description: "Mountain forest jungles are always beautiful",
+    source: "pexels"
   },
   {
     id: "13",
     title: "Futuristic half-robot tiger",
     imageUrl: "https://ik.imagekit.io/starknight/Art/15.jpg?updatedAt=1739366821818",
     category: "Abstract",
-    description: "half-robot tiger wallpaper" 
+    description: "half-robot tiger wallpaper",
+    source: "pexels"
   },
   {
     id: "14",
     title: "Nature beauty reflected in the sky mountains and water",
     imageUrl: "https://ik.imagekit.io/starknight/Art/10.jpg?updatedAt=1739366822955",
     category: "Abstract",
-    description: "Nature's beauty is truly fanstastic." 
+    description: "Nature's beauty is truly fanstastic.",
+    source: "pexels"
   },
   {
     id: "15",
     title: "3d flower boho render",
     imageUrl: "https://ik.imagekit.io/starknight/Art/14.jpg?updatedAt=1739366823814",
     category: "Abstract",
-    description: "Flower's can be rendered on 3D" 
+    description: "Flower's can be rendered on 3D",
+    source: "pexels"
   },
   {
     id: "16",
     title: "Half-robot tiger in a garden",
     imageUrl: "https://ik.imagekit.io/starknight/Art/16.jpg?updatedAt=1739366825731",
     category: "Abstract",
-    description: "A futuristic tiger walking on red garden." 
+    description: "A futuristic tiger walking on red garden.",
+    source: "pexels"
   },
   {
     id: "17",
     title: "Fantasy fish made of plastic",
     imageUrl: "https://ik.imagekit.io/starknight/Art/17.jpg?updatedAt=1739366827501",
     category: "Abstract",
-    description: "A fish which is from future." 
+    description: "A fish which is from future.",
+    source: "pexels"
   },
   {
     id: "18",
     title: "A girl walking on the road alone",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/18.jpg?updatedAt=1739463580903",
     category: "Anime",
-    description: "Girl walking on the road alone in a forest" 
+    description: "Girl walking on the road alone in a forest",
+    source: "pexels"
   },
   {
     id: "19",
     title: "A van is going on a mountain",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/22.jpg?updatedAt=1739463581145",
     category: "Anime",
-    description: "Van is going the mountain" 
+    description: "Van is going the mountain",
+    source: "pexels"
   },
   {
     id: "20",
     title: "Beautiful scenery of a mountain",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/21.jpg?updatedAt=1739463581980",
     category: "Anime",
-    description: "Wonderful image of a ground" 
+    description: "Wonderful image of a ground",
+    source: "pexels"
   },
   {
     id: "21",
     title: "A girl sitting with her pet",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/27.jpg?updatedAt=1739463585340",
     category: "Anime",
-    description: "Pet is with her owner" 
+    description: "Pet is with her owner",
+    source: "pexels"
   },
   {
     id: "22",
     title: "A Couple",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/23.jpg?updatedAt=1739463588576",
     category: "Anime",
-    description: "Couples are sitting" 
+    description: "Couples are sitting",
+    source: "pexels"
   },
   {
     id: "23",
     title: "A girl is looking",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/28.jpg?updatedAt=1739463589857",
     category: "Anime",
-    description: "A girl on the sky" 
+    description: "A girl on the sky",
+    source: "pexels"
   },
   {
     id: "24",
     title: "A Samurai is looking",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/24.jpg?updatedAt=1739467842606",
     category: "Anime",
-    description: "A dark samurai" 
+    description: "A dark samurai",
+    source: "pexels"
   },
   {
     id: "25",
     title: "An Anime girl on a festival",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/25.jpg?updatedAt=1739467861774",
     category: "Anime",
-    description: "Anime girl is on festival" 
+    description: "Anime girl is on festival",
+    source: "pexels"
   },
   {
     id: "26",
     title: "An girl is looking at the moon",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/20.jpg?updatedAt=1739467877193",
     category: "Anime",
-    description: "Anime girl on a moon night" 
+    description: "Anime girl on a moon night",
+    source: "pexels"
   },
   {
     id: "27",
     title: "Beautiful scenery of mountains",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/29.jpg?updatedAt=1739467893864",
     category: "Anime",
-    description: "An artistic view of mountains" 
+    description: "An artistic view of mountains",
+    source: "pexels"
   },
   {
     id: "28",
     title: "An beautiful painting of two illusion",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/26.jpg?updatedAt=1739467894107",
     category: "Anime",
-    description: "Realistic painting of two illusion" 
+    description: "Realistic painting of two illusion",
+    source: "pexels"
   },
   {
     id: "29",
     title: "Celebrating Birthday party",
     imageUrl: "https://ik.imagekit.io/starknight/Anime/30.jpg?updatedAt=1739467894167",
     category: "Anime",
-    description: "Birthday party celebration" 
+    description: "Birthday party celebration",
+    source: "pexels"
   },
   // Add more wallpapers...
 ]
@@ -203,7 +231,6 @@ export const allWallpapers: Wallpaper[] = [
 // Optional: Organize by collections
 export const collections = {
   featured: allWallpapers.slice(0, 4),
-  nature: allWallpapers.filter(w => w.category === "Nature"),
   abstract: allWallpapers.filter(w => w.category === "Abstract"),
   // Add more collections...
 }

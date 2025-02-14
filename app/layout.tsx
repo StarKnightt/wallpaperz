@@ -7,7 +7,8 @@ import { Toaster } from "sonner"
 import type React from "react" // Added import for React
 import { SearchProvider } from "@/context/SearchContext"
 import { Analytics } from "@vercel/analytics/react"
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from "@next/third-parties/google"
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -79,6 +80,15 @@ export default function RootLayout({
           <Toaster position="top-center" />
           <Analytics />
           <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
+          <Script strategy="afterInteractive" id="microsoft-clarity">
+            {`
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "q9tt7wi9dk");
+            `}
+          </Script>
         </ThemeProvider>
       </body>
     </html>

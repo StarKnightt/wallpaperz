@@ -1,4 +1,4 @@
-export type WallpaperCategory = "Photography" | "Nature" | "Urban" | "Abstract" | "Minimalist" | "Colorful" | "Anime"
+export type WallpaperCategory = "Abstract" | "Anime" // Only include categories we're actually using
 
 export interface Wallpaper {
   id: string
