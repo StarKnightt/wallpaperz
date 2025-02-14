@@ -7,7 +7,7 @@ import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 
 const suggestions = [
-  "Nature wallpapers",
+  "Anime wallpapers",
   "Abstract art",
   "Minimal designs",
   "Dark themes",
@@ -91,7 +91,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {['4K', 'Nature', 'Abstract', 'Minimal', 'Dark'].map((tag) => (
+            {['4K','Abstract','Anime'].map((tag) => (
               <Button
                 key={tag}
                 variant="secondary"
