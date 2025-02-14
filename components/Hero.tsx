@@ -89,26 +89,92 @@ export default function Hero() {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Background with both pulse and particles */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20" />
-        
-        {particles.map((particle, i) => (
-          <div
-            key={i}
-            className="particle rounded-full bg-white/10"
-            style={{
-              width: `${particle.width}px`,
-              height: `${particle.height}px`,
-              left: `${particle.left}%`,
-              top: `${particle.top}%`,
+      {/* Animated Background Image with zoom effect */}
+      <div className="absolute inset-0 bg-black">
+        <motion.div
+          initial={{ scale: 1.1 }}
+          animate={{ 
+            scale: [1.1, 1.15, 1.1],
+            opacity: [0.7, 0.8, 0.7]
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="/hero.webp"
+            alt="Hero background"
+            fill
+            priority
+            quality={95}
+            sizes="100vw"
+            className="object-cover object-center will-change-transform"
+            style={{ 
+              transform: 'translate3d(0, 0, 0)',
+              imageRendering: '-webkit-optimize-contrast',
+              backfaceVisibility: 'hidden'
             }}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRseHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/2wBDAR"
           />
-        ))}
+        </motion.div>
+
+        {/* Animated gradient overlay */}
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/50"
+          initial={{ opacity: 0.5 }}
+          animate={{ 
+            opacity: [0.5, 0.6, 0.5],
+            background: [
+              'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.25), rgba(0,0,0,0.5))',
+              'linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.3), rgba(0,0,0,0.6))',
+              'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.25), rgba(0,0,0,0.5))'
+            ]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          style={{ mixBlendMode: 'overlay' }}
+        />
+
+        {/* Optional floating light particles */}
+        <motion.div
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          {Array.from({ length: 20 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white/10 rounded-full"
+              initial={{ 
+                x: Math.random() * 100 + '%',
+                y: Math.random() * 100 + '%',
+                scale: 0
+              }}
+              animate={{ 
+                y: ['-20%', '-80%'],
+                scale: [0, 1, 0],
+                opacity: [0, 1, 0]
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+                ease: "linear"
+              }}
+            />
+          ))}
+        </motion.div>
       </div>
 
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 relative animate-gradient-x">
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
+      <div className="relative"> {/* Removed gradient background */}
         <div className="container mx-auto px-4 py-24 md:py-32 relative"> {/* Increased vertical padding */}
           <div className="grid md:grid-cols-2 gap-12 items-center"> {/* Increased gap */}
             {/* Text content with enhanced animations */}

@@ -10,11 +10,35 @@ interface WallpaperCardProps {
 }
 
 export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardProps) {
+  const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    try {
+      const response = await fetch(wallpaper.imageUrl)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `wallpaper-${wallpaper.id || Date.now()}.jpg`
+      // Append to body and click programmatically
+      document.body.appendChild(link)
+      link.click()
+      // Cleanup
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Download failed:', error)
+      // Optionally show an error toast here
+    }
+  }
+
   return (
     <motion.div 
       className="group relative rounded-lg overflow-hidden bg-black/20 backdrop-blur-sm"
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
+      onClick={(e) => e.preventDefault()} // Prevent any parent clicks
     >
       {/* Image */}
       <div className="aspect-[16/10] relative">
@@ -35,7 +59,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
       </div>
 
       {/* Content overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+      <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-300" onClick={(e) => e.stopPropagation()}>
         <div className="flex gap-2 mt-2">
           <Button 
             size="sm" 
@@ -43,6 +67,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
             className="flex-1 bg-white dark:bg-white/20 text-gray-800 dark:text-white backdrop-blur-sm hover:bg-gray-200 dark:hover:bg-white/30 transition-all duration-300"
             onClick={(e) => {
               e.preventDefault()
+              e.stopPropagation()
               onPreview()
             }}
             aria-label="Preview wallpaper"
@@ -54,6 +79,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
             size="sm" 
             variant="secondary"
             className="flex-1 bg-white dark:bg-white/20 text-gray-800 dark:text-white backdrop-blur-sm hover:bg-gray-200 dark:hover:bg-white/30 transition-all duration-300"
+            onClick={handleDownload}
           >
             <Download className="w-4 h-4 mr-2" />
             Download
