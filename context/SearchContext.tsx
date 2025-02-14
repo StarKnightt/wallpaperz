@@ -1,6 +1,8 @@
 "use client"
 import { createContext, useContext, useState, ReactNode } from "react"
 
+export const DEFAULT_CATEGORY = "Browse Wallpapers";
+
 interface SearchContextType {
   searchQuery: string
   setSearchQuery: (query: string) => void
@@ -13,7 +15,8 @@ const SearchContext = createContext<SearchContextType | undefined>(undefined)
 
 export function SearchProvider({ children }: { children: ReactNode }) {
   const [searchQuery, setSearchQuery] = useState("")
-  const [activeCategory, setActiveCategory] = useState("All")
+  // Initialize activeCategory with DEFAULT_CATEGORY
+  const [activeCategory, setActiveCategory] = useState(DEFAULT_CATEGORY)
 
   const clearSearch = () => setSearchQuery("")
 

@@ -7,7 +7,7 @@ import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
 import { Wallpaper, WallpaperCategory } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
 import Hero from "@/components/Hero"
-import { useSearch } from "@/context/SearchContext"
+import { useSearch, DEFAULT_CATEGORY } from "@/context/SearchContext"
 import { Loader2 } from "lucide-react"
 import { allWallpapers } from "@/data/wallpapers"
 
@@ -34,7 +34,7 @@ export default function Page() {
       ].join(' ').toLowerCase()
       return searchableText.includes(searchQuery.toLowerCase())
     }) : allWallpapers.filter(w => 
-      activeCategory === 'All' || w.category === activeCategory
+      activeCategory === DEFAULT_CATEGORY || w.category === activeCategory
     )
 
   const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
@@ -50,6 +50,9 @@ export default function Page() {
     } else if (categoryParam) {
       setActiveCategory(categoryParam)
       setSearchQuery(categoryParam)
+    } else {
+      // Set default category if no params are present
+      setActiveCategory(DEFAULT_CATEGORY)
     }
   }, [setSearchQuery, setActiveCategory])
 
@@ -109,8 +112,13 @@ export default function Page() {
           <div className="flex justify-between items-center mb-10">
             <div>
               <h2 className="text-2xl font-bold mb-2">
-                {activeCategory || "All Wallpapers"}
+                {activeCategory === DEFAULT_CATEGORY ? "All Wallpapers" : activeCategory}
               </h2>
+              {activeCategory === DEFAULT_CATEGORY && (
+                <p className="text-muted-foreground">
+                  Browse through our complete collection of high-quality wallpapers
+                </p>
+              )}
             </div>
           </div>
 

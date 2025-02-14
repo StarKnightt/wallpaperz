@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
+import { DEFAULT_CATEGORY } from "@/context/SearchContext"
 
 interface SearchSuggestion {
   title: string;
@@ -79,7 +80,7 @@ export default function Hero() {
 
   const handleCategoryClick = (tag: string) => {
     setActiveCategory(tag)
-    if (tag === 'All') {
+    if (tag === DEFAULT_CATEGORY) {
       setSearchQuery('')
       router.push('/#wallpapers-section')
     } else {
@@ -171,7 +172,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {['All', 'Abstract', 'Anime'].map((tag) => (
+            {[DEFAULT_CATEGORY, 'Abstract', 'Anime'].map((tag) => (
               <Button
                 key={tag}
                 variant={activeCategory === tag ? "default" : "secondary"}
