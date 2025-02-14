@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -8,11 +8,24 @@ import { Search, Moon, Sun } from "lucide-react"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { FormEvent } from "react"
+import debounce from 'lodash/debounce' 
 
 export default function Header() {
   const { searchQuery, setSearchQuery } = useSearch()
   const { theme, setTheme } = useTheme()
   const router = useRouter()
+
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchQuery(value)
+      if (!value) {
+        router.push('/')
+      } else {
+        router.push('/#search-results')
+      }
+    }, 500), // Increased from default to 500ms
+    [setSearchQuery, router]
+  )
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -22,10 +35,11 @@ export default function Header() {
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-    if (!e.target.value) {
-      router.push('/')
-    }
+    const value = e.target.value
+    // Update local state immediately for input value
+    setSearchQuery(value)
+    // Debounce the actual search
+    debouncedSearch(value)
   }
 
   return (
