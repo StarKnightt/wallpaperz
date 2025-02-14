@@ -36,7 +36,7 @@ export default function Hero() {
   return (
     <section className="relative bg-gradient-to-b from-background to-background/80 backdrop-blur-sm">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto py-16 md:py-8 text-center space-y-6">
+        <div className="max-w-3xl mx-auto py-16 md:py-6 text-center space-y-6">
           <motion.h1 
             className="text-4xl md:text-5xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/80"
             initial={{ opacity: 0, y: 20 }}

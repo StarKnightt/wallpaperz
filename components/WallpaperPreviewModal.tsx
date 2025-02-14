@@ -1,7 +1,7 @@
 "use client"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Facebook, Twitter, Link as LinkIcon, Download, Loader2 } from "lucide-react"
+import { Facebook, Twitter, Link as LinkIcon, Download, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
@@ -40,6 +40,14 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl w-full p-0 overflow-hidden">
+        {/* Add floating close button */}
+        <DialogClose className="absolute right-4 top-4 z-50">
+          <div className="rounded-full p-2 bg-background/80 backdrop-blur-sm border shadow-sm hover:bg-background/90 transition-colors">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </div>
+        </DialogClose>
+
         <DialogHeader className="sr-only">
           <DialogTitle>{wallpaper.title}</DialogTitle>
         </DialogHeader>
