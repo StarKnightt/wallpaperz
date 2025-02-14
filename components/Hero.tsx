@@ -192,9 +192,9 @@ export default function Hero() {
                 variants={containerVariants}
               >
                 {[
-                  { count: "1000+", label: "Wallpapers" },
-                  { count: "50k+", label: "Downloads" },
-                  { count: "100+", label: "Categories" }
+                  { count: "28+", label: "Wallpapers" },
+                  { count: "100+", label: "Downloads" },
+                  { count: "3+", label: "Categories" }
                 ].map((stat, index) => (
                   <motion.div
                     key={index}
