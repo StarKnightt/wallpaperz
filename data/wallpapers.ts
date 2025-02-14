@@ -10,10 +10,10 @@ export const allWallpapers: Wallpaper[] = [
   },
   {
     id: "2",
-    title: "Flash Logo 4k",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/1.jpg?updatedAt=1738950598212",
+    title: "Palm tree painting",
+    imageUrl: "https://ik.imagekit.io/starknight/Art/1.jpg?updatedAt=1739535148590",
     category: "Abstract",
-    description: "A logo of flash wallpaper"
+    description: "Painting of a palm tree."
   },
   {
     id: "3",
