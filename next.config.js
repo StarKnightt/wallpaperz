@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'ik.imagekit.io',
-        port: '',
-        pathname: '/starknight/**',
-      },
+    domains: [
+      'ik.imagekit.io',
+      'lh3.googleusercontent.com', // Google profile images
+      'avatars.githubusercontent.com' // GitHub profile images
     ],
   },
   env: {
