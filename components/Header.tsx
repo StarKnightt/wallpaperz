@@ -116,6 +116,13 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [handleScroll])
 
+  const handleSignIn = () => {
+    const callbackUrl = typeof window !== 'undefined' 
+      ? window.location.origin 
+      : process.env.NEXTAUTH_URL;
+    signIn(undefined, { callbackUrl });
+  }
+
   return (
     <header className="bg-background shadow sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -190,7 +197,10 @@ export default function Header() {
                 </Button>
               </div>
             ) : (
-              <Button variant="ghost" onClick={() => signIn(undefined, { callbackUrl: '/' })}>
+              <Button 
+                variant="ghost" 
+                onClick={handleSignIn}
+              >
                 Sign In
               </Button>
             )}
