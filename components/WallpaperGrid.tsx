@@ -2,6 +2,8 @@ import { Wallpaper } from "@/types/wallpaper"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { getImageUrl } from '@/lib/imagekit'
+import { Button } from "./ui/button"
+import { Eye, Download } from "lucide-react"
 
 interface Props {
   wallpapers: Wallpaper[]
@@ -36,12 +38,11 @@ export default function WallpaperGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {wallpapers.map((wallpaper) => (
         <motion.div 
           key={wallpaper.id}
-          className="relative aspect-[16/9] overflow-hidden rounded-lg cursor-pointer group"
-          onClick={() => onPreview(wallpaper)}
+          className="relative aspect-[16/9] overflow-hidden rounded-lg group"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
@@ -52,8 +53,36 @@ export default function WallpaperGrid({
             fill
             priority={false}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            className="object-cover transition-all duration-300 group-hover:scale-110"
           />
+          
+          {/* Bottom Action Bar */}
+          <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-t from-black/80 to-transparent">
+              <Button 
+                variant="ghost"
+                className="bg-white/10 hover:bg-white/20 text-white"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPreview(wallpaper);
+                }}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Preview
+              </Button>
+              <Button
+                variant="ghost"
+                className="bg-white/10 hover:bg-white/20 text-white"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPreview(wallpaper);
+                }}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </Button>
+            </div>
+          </div>
         </motion.div>
       ))}
     </div>

@@ -18,7 +18,7 @@ export const authOptions = {
   session: { strategy: "jwt" as const },
   pages: {
     signIn: '/auth/signin',
-    error: '/auth/error', // Add this
+    error: '/auth/error',
   },
   callbacks: {
     async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
@@ -28,7 +28,7 @@ export const authOptions = {
     async session({ session, token }: { session: Session; token: any }) {
       return session
     }
-  },
+  }
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authOptions)
