@@ -1,19 +1,22 @@
-import { NextResponse } from "next/server"
-import ImageKit from "imagekit"
-
-const imagekit = new ImageKit({
-  publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY || "",
-  privateKey: process.env.PRIVATE_KEY || "",
-  urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT || "",
-})
+import { imagekitServer } from "@/lib/server/imagekit";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const authenticationParameters = imagekit.getAuthenticationParameters()
-    return NextResponse.json(authenticationParameters)
+    const authenticationParameters = imagekitServer.getAuthenticationParameters();
+    return NextResponse.json(authenticationParameters);
   } catch (error) {
-    console.error("Error generating ImageKit authentication parameters:", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    console.error("Error generating ImageKit authentication parameters:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    // Your API logic here using imagekitServer
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
   }
 }
 

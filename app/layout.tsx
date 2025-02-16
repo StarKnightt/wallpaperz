@@ -4,11 +4,12 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "sonner"
-import type React from "react" // Added import for React
+import type React from "react"
 import { SearchProvider } from "@/context/SearchContext"
 import { Analytics } from "@vercel/analytics/react"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import Script from 'next/script'
+import NextAuthProvider from "@/providers/NextAuthProvider" // We'll create this
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -67,29 +68,31 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SearchProvider>
-            <div className="min-h-screen flex flex-col">
-              <Header />
-              <main className="flex-grow w-full max-w-[1920px] mx-auto">
-                {children}
-              </main>
-              <Footer />
-            </div>
-          </SearchProvider>
-          <Toaster position="top-center" />
-          <Analytics />
-          <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
-          <Script strategy="afterInteractive" id="microsoft-clarity">
-            {`
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "q9tt7wi9dk");
-            `}
-          </Script>
-        </ThemeProvider>
+        <NextAuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <SearchProvider>
+              <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-grow w-full max-w-[1920px] mx-auto">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </SearchProvider>
+            <Toaster position="top-center" />
+            <Analytics />
+            <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
+            <Script strategy="afterInteractive" id="microsoft-clarity">
+              {`
+                (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                })(window, document, "clarity", "script", "q9tt7wi9dk");
+              `}
+            </Script>
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   )

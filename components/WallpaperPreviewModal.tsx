@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
 import { useState } from "react"
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { publicConfig, getImageUrl } from '@/lib/imagekit'
 
 interface WallpaperPreviewModalProps {
   wallpaper: Wallpaper | null
@@ -37,6 +38,8 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
     }
   }
 
+  const imageUrl = `${publicConfig.urlEndpoint}/${wallpaper.imageUrl}`
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl w-full p-0 overflow-hidden">
@@ -63,7 +66,7 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
 
         <div className="relative aspect-[16/9] w-full">
           <Image 
-            src={wallpaper.imageUrl || "/placeholder.svg"} 
+            src={imageUrl || "/placeholder.svg"} 
             alt={wallpaper.title} 
             fill 
             className="object-contain"
@@ -114,7 +117,7 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
               className="w-full sm:w-auto"
               onClick={async () => {
                 try {
-                  const response = await fetch(wallpaper.imageUrl);
+                  const response = await fetch(imageUrl);
                   const blob = await response.blob();
                   const url = window.URL.createObjectURL(blob);
                   const link = document.createElement('a');

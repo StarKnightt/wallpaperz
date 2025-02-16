@@ -1,5 +1,5 @@
 "use client"
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback, useEffect, useMemo } from "react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -10,15 +10,19 @@ import { useRouter } from "next/navigation"
 import { FormEvent } from "react"
 import debounce from 'lodash/debounce' 
 import { Skeleton } from "@/components/ui/skeleton" 
+import { signIn, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
+import Image from 'next/image'
 
-// Add these suggestion types
+// Fix type issues
 interface SearchSuggestion {
-  title: string;
-  description: string;
-  query: string;
+  title: string
+  description: string
+  query: string
 }
 
 export default function Header() {
+  const { data: session, status } = useSession()
   const { searchQuery, setSearchQuery } = useSearch()
   const { theme, setTheme } = useTheme()
   const router = useRouter()
@@ -26,25 +30,8 @@ export default function Header() {
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
   const [isScrolled, setIsScrolled] = useState(false)
 
-  const debouncedSearch = useCallback(
-    debounce(async (value: string) => {
-      setIsSearching(true)
-      try {
-        // Only show suggestions for 3 or more characters
-        if (value.length >= 3) {
-          setSuggestions(generateSuggestions(value))
-          router.push('/#search-results')
-        } else {
-          setSuggestions([])
-        }
-      } finally {
-        setIsSearching(false)
-      }
-    }, 600), // Increased debounce time
-    [router]
-  )
-
-  const generateSuggestions = (value: string): SearchSuggestion[] => {
+  // Fix useCallback dependency and typing
+  const generateSuggestions = useCallback((value: string): SearchSuggestion[] => {
     if (!value) return [];
     return [
       {
@@ -53,7 +40,7 @@ export default function Header() {
         query: `${value} wallpaper`
       },
       {
-        title: `${value} 4K`,
+        title: `${value} 4K`, // Fixed missing title
         description: "Ultra high resolution wallpapers",
         query: `${value} 4k`
       },
@@ -63,7 +50,30 @@ export default function Header() {
         query: `${value} aesthetic`
       }
     ];
-  }
+  }, []);
+
+  const debouncedSearch = useCallback(
+    (value: string) => {
+      setIsSearching(true);
+      try {
+        if (value.length >= 3) {
+          setSuggestions(generateSuggestions(value));
+          router.push('/#search-results');
+        } else {
+          setSuggestions([]);
+        }
+      } finally {
+        setIsSearching(false);
+      }
+    },
+    [generateSuggestions, router]
+  );
+
+  // Wrap debounce outside useCallback
+  const debouncedSearchHandler = useMemo(
+    () => debounce(debouncedSearch, 600),
+    [debouncedSearch]
+  );
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -78,7 +88,7 @@ export default function Header() {
     
     // Only trigger search for 3 or more characters
     if (value.length >= 3) {
-      debouncedSearch(value)
+      debouncedSearchHandler(value)
     } else {
       setSuggestions([])
       if (!value) {
@@ -158,6 +168,33 @@ export default function Header() {
               </div>
             )}
           </form>
+          <div className="flex items-center gap-4">
+            {status === 'loading' ? (
+              <Button variant="ghost" disabled>Loading...</Button>
+            ) : session ? (
+              <div className="flex items-center gap-2">
+                {session.user?.image && (
+                  <div className="relative w-8 h-8">
+                    <Image
+                      src={session.user.image}
+                      alt={session.user.name || 'Profile'}
+                      fill
+                      className="rounded-full object-cover"
+                      sizes="32px"
+                    />
+                  </div>
+                )}
+                <span className="text-sm hidden md:inline">{session.user?.name}</span>
+                <Button variant="ghost" onClick={() => signOut({ callbackUrl: '/' })}>
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <Button variant="ghost" onClick={() => signIn(undefined, { callbackUrl: '/' })}>
+                Sign In
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </header>

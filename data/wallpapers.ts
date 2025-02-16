@@ -1,18 +1,19 @@
 import { Wallpaper, WallpaperCollection } from "@/types/wallpaper"
 
+// Store only the path part, not the full URL
 export const allWallpapers: Wallpaper[] = [
   {
     id: "1",
     title: "Girl-Thinking about it",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/6.jpg?updatedAt=1738951216228",
+    imageUrl: "Anime/6.jpg", // Remove the base URL part
     category: "Anime",
     description: "Peaceful mountain landscape at sunset",
-    source: "pexels"
+    source: "pixabay"
   },
   {
     id: "2",
     title: "Sunset in a different way",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/1.jpg?updatedAt=1739535917942",
+    imageUrl: "Art/1.jpg", // Remove the base URL part
     category: "Abstract",
     description: "Digital of art of a sunset",
     source: "pexels"
@@ -20,7 +21,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "3",
     title: "4k Flower wallpaper",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/5.jpg?updatedAt=1738950784247",
+    imageUrl: "Art/5.jpg", // Remove the base URL part
     category: "Abstract",
     description: "An abstract flower wallpaper",
     source: "pexels"
@@ -28,7 +29,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "5",
     title: "Finally Fantasty Rebirth",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/3.jpeg?updatedAt=1738950341010",
+    imageUrl: "Anime/3.jpeg", // Remove the base URL part
     category: "Anime",
     description: "An abstract flower wallpaper",
     source: "pexels"
@@ -36,7 +37,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "6",
     title: "Futuristic Windows wallpaper",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/7.png?updatedAt=1738951450391",
+    imageUrl: "Art/7.png", // Remove the base URL part
     category: "Abstract",
     description: "An futuristic wallpaper",
     source: "pexels"
@@ -44,7 +45,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "7",
     title: "God with a programmer",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/8_JYkc21aIQ?updatedAt=1738951845182",
+    imageUrl: "Art/8_JYkc21aIQ", // Remove the base URL part
     category: "Abstract",
     description: "A programmer with god wallpaper",
     source: "pexels"
@@ -52,7 +53,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "8",
     title: "A boy drinking smoothie",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/2.jpeg?updatedAt=1738950341390",
+    imageUrl: "Anime/2.jpeg", // Remove the base URL part
     category: "Anime",
     description: "Boy drinking smoothie with his pet",
     source: "pexels"
@@ -60,7 +61,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "9",
     title: "A Hot Air Balloon In the sky",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/8.jpg?updatedAt=1739367163746",
+    imageUrl: "Art/8.jpg", // Remove the base URL part
     category: "Abstract",
     description: "A beautiful wallpaper of hot air balloon",
     source: "pexels"
@@ -68,7 +69,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "10",
     title: "Night on an island",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/11.jpg?updatedAt=1739366813575",
+    imageUrl: "Art/11.jpg", // Remove the base URL part
     category: "Abstract",
     description: "A Scary and thriling view of night on an island",
     source: "pexels"
@@ -76,7 +77,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "11",
     title: "Nature beauty reflected in the sky mountains and water",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/9.jpg?updatedAt=1739366820464",
+    imageUrl: "Art/9.jpg", // Remove the base URL part
     category: "Abstract",
     description: "Nature's beauty is incredible",
     source: "pexels"
@@ -84,7 +85,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "12",
     title: "Mountain forest jungle trees cartoon background",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/12.jpg?updatedAt=1739366820811",
+    imageUrl: "Art/12.jpg", // Remove the base URL part
     category: "Abstract",
     description: "Mountain forest jungles are always beautiful",
     source: "pexels"
@@ -92,7 +93,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "13",
     title: "Futuristic half-robot tiger",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/15.jpg?updatedAt=1739366821818",
+    imageUrl: "Art/15.jpg", // Remove the base URL part
     category: "Abstract",
     description: "half-robot tiger wallpaper",
     source: "pexels"
@@ -100,7 +101,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "14",
     title: "Nature beauty reflected in the sky mountains and water",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/10.jpg?updatedAt=1739366822955",
+    imageUrl: "Art/10.jpg", // Remove the base URL part
     category: "Abstract",
     description: "Nature's beauty is truly fanstastic.",
     source: "pexels"
@@ -108,7 +109,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "15",
     title: "3d flower boho render",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/14.jpg?updatedAt=1739366823814",
+    imageUrl: "Art/14.jpg", // Remove the base URL part
     category: "Abstract",
     description: "Flower's can be rendered on 3D",
     source: "pexels"
@@ -116,7 +117,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "16",
     title: "Half-robot tiger in a garden",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/16.jpg?updatedAt=1739366825731",
+    imageUrl: "Art/16.jpg", // Remove the base URL part
     category: "Abstract",
     description: "A futuristic tiger walking on red garden.",
     source: "pexels"
@@ -124,7 +125,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "17",
     title: "Fantasy fish made of plastic",
-    imageUrl: "https://ik.imagekit.io/starknight/Art/17.jpg?updatedAt=1739366827501",
+    imageUrl: "Art/17.jpg", // Remove the base URL part
     category: "Abstract",
     description: "A fish which is from future.",
     source: "pexels"
@@ -132,7 +133,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "18",
     title: "A girl walking on the road alone",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/18.jpg?updatedAt=1739463580903",
+    imageUrl: "Anime/18.jpg", // Remove the base URL part
     category: "Anime",
     description: "Girl walking on the road alone in a forest",
     source: "pexels"
@@ -140,7 +141,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "19",
     title: "A van is going on a mountain",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/22.jpg?updatedAt=1739463581145",
+    imageUrl: "Anime/22.jpg", // Remove the base URL part
     category: "Anime",
     description: "Van is going the mountain",
     source: "pexels"
@@ -148,7 +149,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "20",
     title: "Beautiful scenery of a mountain",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/21.jpg?updatedAt=1739463581980",
+    imageUrl: "Anime/21.jpg", // Remove the base URL part
     category: "Anime",
     description: "Wonderful image of a ground",
     source: "pexels"
@@ -156,7 +157,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "21",
     title: "A girl sitting with her pet",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/27.jpg?updatedAt=1739463585340",
+    imageUrl: "Anime/27.jpg", // Remove the base URL part
     category: "Anime",
     description: "Pet is with her owner",
     source: "pexels"
@@ -164,7 +165,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "22",
     title: "A Couple",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/23.jpg?updatedAt=1739463588576",
+    imageUrl: "Anime/23.jpg", // Remove the base URL part
     category: "Anime",
     description: "Couples are sitting",
     source: "pexels"
@@ -172,7 +173,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "23",
     title: "A girl is looking",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/28.jpg?updatedAt=1739463589857",
+    imageUrl: "Anime/28.jpg", // Remove the base URL part
     category: "Anime",
     description: "A girl on the sky",
     source: "pexels"
@@ -180,7 +181,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "24",
     title: "A Samurai is looking",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/24.jpg?updatedAt=1739467842606",
+    imageUrl: "Anime/24.jpg", // Remove the base URL part
     category: "Anime",
     description: "A dark samurai",
     source: "pexels"
@@ -188,7 +189,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "25",
     title: "An Anime girl on a festival",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/25.jpg?updatedAt=1739467861774",
+    imageUrl: "Anime/25.jpg", // Remove the base URL part
     category: "Anime",
     description: "Anime girl is on festival",
     source: "pexels"
@@ -196,7 +197,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "26",
     title: "An girl is looking at the moon",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/20.jpg?updatedAt=1739467877193",
+    imageUrl: "Anime/20.jpg", // Remove the base URL part
     category: "Anime",
     description: "Anime girl on a moon night",
     source: "pexels"
@@ -204,7 +205,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "27",
     title: "Beautiful scenery of mountains",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/29.jpg?updatedAt=1739467893864",
+    imageUrl: "Anime/29.jpg", // Remove the base URL part
     category: "Anime",
     description: "An artistic view of mountains",
     source: "pexels"
@@ -212,7 +213,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "28",
     title: "An beautiful painting of two illusion",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/26.jpg?updatedAt=1739467894107",
+    imageUrl: "Anime/26.jpg", // Remove the base URL part
     category: "Anime",
     description: "Realistic painting of two illusion",
     source: "pexels"
@@ -220,7 +221,7 @@ export const allWallpapers: Wallpaper[] = [
   {
     id: "29",
     title: "Celebrating Birthday party",
-    imageUrl: "https://ik.imagekit.io/starknight/Anime/30.jpg?updatedAt=1739467894167",
+    imageUrl: "Anime/30.jpg", // Remove the base URL part
     category: "Anime",
     description: "Birthday party celebration",
     source: "pexels"

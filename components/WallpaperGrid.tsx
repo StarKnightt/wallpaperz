@@ -1,9 +1,9 @@
 import { Wallpaper } from "@/types/wallpaper"
+import Image from "next/image"
 import { motion } from "framer-motion"
-import WallpaperCard from "./WallpaperCard"
-import { cn } from "@/lib/utils"
+import { getImageUrl } from '@/lib/imagekit'
 
-interface WallpaperGridProps {
+interface Props {
   wallpapers: Wallpaper[]
   onPreview: (wallpaper: Wallpaper) => void
   isLoading?: boolean
@@ -13,7 +13,7 @@ export default function WallpaperGrid({
   wallpapers, 
   onPreview, 
   isLoading = false 
-}: WallpaperGridProps) {
+}: Props) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 container mx-auto">
@@ -36,19 +36,23 @@ export default function WallpaperGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 container mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {wallpapers.map((wallpaper) => (
-        <motion.div
+        <motion.div 
           key={wallpaper.id}
+          className="relative aspect-[16/9] overflow-hidden rounded-lg cursor-pointer group"
+          onClick={() => onPreview(wallpaper)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="bg-white/5 dark:bg-white/5 backdrop-blur-sm p-2 rounded-lg hover:shadow-xl transition-all duration-300"
-          layout
         >
-          <WallpaperCard 
-            wallpaper={wallpaper}
-            onPreview={() => onPreview(wallpaper)}
+          <Image
+            src={getImageUrl(wallpaper.imageUrl)}
+            alt={wallpaper.title || 'Wallpaper'}
+            fill
+            priority={false}
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
           />
         </motion.div>
       ))}
