@@ -11,13 +11,13 @@ export default function SignIn() {
         <div className="space-y-3">
           <Button 
             className="w-full" 
-            onClick={() => signIn('github', { callbackUrl: '/' })}
+            onClick={() => signIn('github')}
           >
             Continue with GitHub
           </Button>
           <Button 
             className="w-full" 
-            onClick={() => signIn('google', { callbackUrl: '/' })}
+            onClick={() => signIn('google')}
           >
             Continue with Google
           </Button>
