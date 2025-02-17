@@ -5,7 +5,7 @@ import { Session } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
-import { User, Account, Profile } from "next-auth"
+import type { Adapter } from "next-auth/adapters"
 
 // Add custom session type
 declare module "next-auth" {
@@ -28,53 +28,33 @@ declare module "next-auth/jwt" {
 }
 
 export const authOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
-      profile(profile) {
-        return {
-          id: profile.id.toString(),
-          name: profile.name || profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-          username: profile.login,
-        }
-      }
     }),
     Google({
       clientId: process.env.GOOGLE_ID ?? "",
       clientSecret: process.env.GOOGLE_SECRET ?? "",
-      profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-          username: profile.email.split('@')[0],
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
         }
       }
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  debug: true,
   session: { strategy: "jwt" as const },
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error',
   },
   callbacks: {
-    async redirect() {
-      return 'https://wallpaperz.in'
-    },
-    async signIn({ user, account, profile }: { 
-      user: User, 
-      account: Account | null, 
-      profile?: Profile 
-    }) {
-      if (!user.email) return false
-      return true
+    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
+      return baseUrl
     },
     async session({ session, token }: { 
       session: Session, 
@@ -82,24 +62,17 @@ export const authOptions = {
     }) {
       if (session.user) {
         session.user.id = token.sub as string
-        session.accessToken = token.accessToken
       }
       return session
     },
     async jwt({ token, account }: { 
       token: JWT, 
-      account: Account | null 
+      account: any | null 
     }) {
-      if (account?.access_token) {
+      if (account) {
         token.accessToken = account.access_token
       }
       return token
-    }
-  },
-  events: {
-    async createUser({ user }: { user: User }) {
-      // You can add additional logic here when a user is created
-      console.log('New user created:', user)
     }
   }
 }
