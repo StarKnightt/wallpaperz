@@ -22,10 +22,8 @@ export const authOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      // Always use the deployment URL for callbacks
-      if (process.env.VERCEL_URL) {
-        baseUrl = `https://${process.env.VERCEL_URL}`
-      }
+      // Use wallpaperz.in as the base URL
+      baseUrl = 'https://wallpaperz.in'
       if (url.startsWith("/")) return `${baseUrl}${url}`
       else if (new URL(url).origin === baseUrl) return url
       return baseUrl
