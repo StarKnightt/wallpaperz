@@ -117,10 +117,11 @@ export default function Header() {
   }, [handleScroll])
 
   const handleSignIn = () => {
-    const callbackUrl = typeof window !== 'undefined' 
-      ? window.location.origin 
-      : process.env.NEXTAUTH_URL;
-    signIn(undefined, { callbackUrl });
+    // Force the production URL for sign-in
+    signIn(undefined, { 
+      callbackUrl: 'https://wallpaperz.in',
+      redirect: true
+    });
   }
 
   return (

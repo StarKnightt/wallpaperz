@@ -9,7 +9,7 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET ?? "",
       authorization: {
         params: {
-          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/github`
+          redirect_uri: 'https://wallpaperz.in/api/auth/callback/github'
         }
       }
     }),
@@ -18,7 +18,7 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET ?? "",
       authorization: {
         params: {
-          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/google`
+          redirect_uri: 'https://wallpaperz.in/api/auth/callback/google'
         }
       }
     })
@@ -31,8 +31,17 @@ export const authOptions = {
     error: '/auth/error',
   },
   callbacks: {
-    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      return baseUrl
+    async redirect({ url }) {
+      return 'https://wallpaperz.in'
+    },
+    async session({ session, token }) {
+      return session
+    },
+    async jwt({ token, user, account }) {
+      if (account && user) {
+        token.accessToken = account.access_token
+      }
+      return token
     }
   }
 }
