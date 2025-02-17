@@ -7,12 +7,6 @@ export const authOptions = {
     GitHub({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
-      authorization: {
-        params: {
-          // Remove the hardcoded redirect_uri to let NextAuth handle it automatically
-          // based on NEXTAUTH_URL
-        }
-      }
     }),
     Google({
       clientId: process.env.GOOGLE_ID ?? "",
@@ -28,9 +22,11 @@ export const authOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      // Allows relative callback URLs
+      // Always use the deployment URL for callbacks
+      if (process.env.VERCEL_URL) {
+        baseUrl = `https://${process.env.VERCEL_URL}`
+      }
       if (url.startsWith("/")) return `${baseUrl}${url}`
-      // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     }
