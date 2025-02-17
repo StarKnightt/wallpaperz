@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google"
 import { Session } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 
 // Add custom session type
 declare module "next-auth" {
@@ -18,8 +18,6 @@ declare module "next-auth/jwt" {
     accessToken?: string
   }
 }
-
-const prisma = new PrismaClient()
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
