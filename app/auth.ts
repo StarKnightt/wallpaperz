@@ -37,13 +37,6 @@ export const authOptions = {
     Google({
       clientId: process.env.GOOGLE_ID ?? "",
       clientSecret: process.env.GOOGLE_SECRET ?? "",
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code"
-        }
-      }
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -53,8 +46,8 @@ export const authOptions = {
     error: '/auth/error',
   },
   callbacks: {
-    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      return baseUrl
+    async redirect() {
+      return 'https://wallpaperz.in'
     },
     async session({ session, token }: { 
       session: Session, 
