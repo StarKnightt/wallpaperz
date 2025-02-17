@@ -4,6 +4,19 @@ import Google from "next-auth/providers/google"
 import { Session } from "next-auth"
 import { JWT } from "next-auth/jwt"
 
+// Add custom session type
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken?: string
+  }
+}
+
 export const authOptions = {
   providers: [
     GitHub({
@@ -20,6 +33,9 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET ?? "",
       authorization: {
         params: {
+          prompt: "select_account",
+          access_type: "offline",
+          response_type: "code",
           redirect_uri: 'https://wallpaperz.in/api/auth/callback/google'
         }
       }
@@ -37,10 +53,13 @@ export const authOptions = {
       return 'https://wallpaperz.in'
     },
     async session({ session, token }: { session: Session, token: JWT }) {
+      if (token.accessToken) {
+        session.accessToken = token.accessToken
+      }
       return session
     },
-    async jwt({ token, user, account }: { token: JWT, user: any, account: any }) {
-      if (account && user) {
+    async jwt({ token, account }: { token: JWT, account: any }) {
+      if (account?.access_token) {
         token.accessToken = account.access_token
       }
       return token
