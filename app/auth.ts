@@ -7,6 +7,13 @@ export const authOptions = {
     GitHub({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
+      authorization: {
+        params: {
+          redirect_uri: process.env.NODE_ENV === 'production' 
+            ? 'https://wallpaperz.in/api/auth/callback/github'
+            : 'http://localhost:3000/api/auth/callback/github'
+        }
+      }
     }),
     Google({
       clientId: process.env.GOOGLE_ID ?? "",
