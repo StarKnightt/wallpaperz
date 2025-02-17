@@ -10,6 +10,7 @@ import Hero from "@/components/Hero"
 import { useSearch, DEFAULT_CATEGORY } from "@/context/SearchContext"
 import { Loader2 } from "lucide-react"
 import { allWallpapers } from "@/data/wallpapers"
+import { useSession } from "next-auth/react"
 
 const ITEMS_PER_PAGE = 8
 
@@ -17,6 +18,7 @@ const ITEMS_PER_PAGE = 8
 const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
 
 export default function Page() {
+  const { data: session } = useSession()
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()
