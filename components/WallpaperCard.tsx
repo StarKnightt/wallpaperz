@@ -89,4 +89,3 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
     </motion.div>
   )
 }
-
