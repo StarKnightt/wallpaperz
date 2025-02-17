@@ -1,19 +1,24 @@
-import { NextResponse } from "next/server"
-import { auth } from "./app/auth"
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export default auth((req) => {
-  // Only protect routes that start with /protected
-  const isProtectedRoute = req.nextUrl.pathname.startsWith('/protected')
-  const isAuth = !!req.auth
+// Remove any runtime configuration if it exists
+// export const runtime = 'edge'
 
-  if (isProtectedRoute && !isAuth) {
-    return NextResponse.redirect(new URL('/auth/signin', req.nextUrl))
-  }
-
+// This function can be marked `async` if using `await` inside
+export function middleware(request: NextRequest) {
   return NextResponse.next()
-})
+}
 
+// See "Matching Paths" below to learn more
 export const config = {
-  // Only run middleware on routes that match this pattern
-  matcher: ["/protected/:path*"]
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 }

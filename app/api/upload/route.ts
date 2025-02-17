@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { handleUpload } from '@/lib/uploadHandler'
 
-export const runtime = 'edge' // Add this line
-
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData()

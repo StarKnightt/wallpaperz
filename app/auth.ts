@@ -1,6 +1,8 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
+import { Session } from "next-auth"
+import { JWT } from "next-auth/jwt"
 
 export const authOptions = {
   providers: [
@@ -34,10 +36,10 @@ export const authOptions = {
     async redirect() {
       return 'https://wallpaperz.in'
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session, token: JWT }) {
       return session
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account }: { token: JWT, user: any, account: any }) {
       if (account && user) {
         token.accessToken = account.access_token
       }
