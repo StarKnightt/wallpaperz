@@ -169,16 +169,27 @@ export default function Header() {
           </form>
           <div className="flex items-center gap-4">
             {!isLoaded ? (
-              <Button variant="ghost" disabled>Loading...</Button>
+              <Button variant="ghost" size="sm">Loading...</Button>
             ) : isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton 
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    userButtonBox: "w-10 h-10"
+                  }
+                }}
+              />
             ) : (
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <SignInButton mode="modal">
-                  <Button variant="ghost">Sign In</Button>
+                  <Button variant="ghost" size="sm">
+                    Sign in
+                  </Button>
                 </SignInButton>
                 <SignUpButton mode="modal">
-                  <Button variant="ghost">Sign Up</Button>
+                  <Button variant="ghost" size="sm">
+                    Sign up
+                  </Button>
                 </SignUpButton>
               </div>
             )}
