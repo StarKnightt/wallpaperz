@@ -7,13 +7,6 @@ export const authOptions = {
     GitHub({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
-      authorization: {
-        params: {
-          redirect_uri: process.env.NODE_ENV === 'production' 
-            ? 'https://wallpaperz.in/api/auth/callback/github'
-            : 'http://localhost:3000/api/auth/callback/github'
-        }
-      }
     }),
     Google({
       clientId: process.env.GOOGLE_ID ?? "",
@@ -21,7 +14,7 @@ export const authOptions = {
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
+  debug: true, // Temporarily enable debug to see what's happening
   session: { strategy: "jwt" as const },
   pages: {
     signIn: '/auth/signin',
@@ -29,10 +22,6 @@ export const authOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      // Use wallpaperz.in as the base URL
-      baseUrl = 'https://wallpaperz.in'
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     }
   }
