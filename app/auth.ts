@@ -38,10 +38,10 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET ?? "",
       authorization: {
         params: {
-          prompt: "select_account",
           access_type: "offline",
           response_type: "code",
-          redirect_uri: 'https://wallpaperz.in/api/auth/callback/google'
+          redirect_uri: 'https://wallpaperz.in/api/auth/callback/google',
+          scope: "openid email profile"
         }
       }
     })
