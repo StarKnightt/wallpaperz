@@ -9,7 +9,8 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET ?? "",
       authorization: {
         params: {
-          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/github"
+          // Remove the hardcoded redirect_uri to let NextAuth handle it automatically
+          // based on NEXTAUTH_URL
         }
       }
     }),
@@ -27,6 +28,10 @@ export const authOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     }
   }
