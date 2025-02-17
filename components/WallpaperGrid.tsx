@@ -37,6 +37,20 @@ export default function WallpaperGrid({
     )
   }
 
+  const handleFavorite = async (wallpaperId: string) => {
+    try {
+      const response = await fetch('/api/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallpaperId })
+      })
+      if (!response.ok) throw new Error('Failed to favorite')
+      // Show success message
+    } catch (error) {
+      // Show error message
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {wallpapers.map((wallpaper) => (

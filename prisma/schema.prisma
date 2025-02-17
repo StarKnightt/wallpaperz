@@ -40,8 +40,23 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bio           String?
+  username      String?   @unique
+  favorites     Favorite[]
   accounts      Account[]
   sessions      Session[]
+}
+
+model Favorite {
+  id          String   @id @default(cuid())
+  userId      String
+  wallpaperId String
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wallpaperId])
 }
 
 model VerificationToken {

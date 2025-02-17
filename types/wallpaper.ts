@@ -17,3 +17,20 @@ export interface WallpaperCollection {
   thumbnail: string
   wallpapers: Wallpaper[]
 }
+
+export interface Favorite {
+  id: string
+  wallpaperId: string
+  userId: string
+  createdAt: Date
+}
+
+// Update User type
+export interface User {
+  id: string
+  name?: string | null
+  email?: string | null
+  image?: string | null
+  username?: string | null
+  favorites?: Favorite[]
+}
