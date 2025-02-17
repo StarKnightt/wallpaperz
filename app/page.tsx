@@ -4,13 +4,13 @@ import { useState, useEffect } from "react"
 import WallpaperGrid from "@/components/WallpaperGrid"
 import CategoryFilter from "@/components/CategoryFilter"
 import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
-import { Wallpaper, WallpaperCategory } from "@/types/wallpaper"
+import { Wallpaper } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
 import Hero from "@/components/Hero"
 import { useSearch, DEFAULT_CATEGORY } from "@/context/SearchContext"
 import { Loader2 } from "lucide-react"
 import { allWallpapers } from "@/data/wallpapers"
-import { useSession } from "next-auth/react"
+import { useAuth } from "@clerk/nextjs"
 
 const ITEMS_PER_PAGE = 8
 
@@ -18,7 +18,7 @@ const ITEMS_PER_PAGE = 8
 const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
 
 export default function Page() {
-  const { data: session } = useSession()
+  const { isSignedIn } = useAuth()
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()

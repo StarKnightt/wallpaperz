@@ -9,7 +9,7 @@ import { SearchProvider } from "@/context/SearchContext"
 import { Analytics } from "@vercel/analytics/react"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import Script from 'next/script'
-import NextAuthProvider from "@/providers/NextAuthProvider" // We'll create this
+import { ClerkProvider } from '@clerk/nextjs'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -66,10 +66,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <NextAuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
             <SearchProvider>
               <div className="min-h-screen flex flex-col">
                 <Header />
@@ -78,23 +83,23 @@ export default function RootLayout({
                 </main>
                 <Footer />
               </div>
+              <Toaster position="top-center" />
+              <Analytics />
+              <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
+              <Script strategy="afterInteractive" id="microsoft-clarity">
+                {`
+                  (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                  })(window, document, "clarity", "script", "q9tt7wi9dk");
+                `}
+              </Script>
             </SearchProvider>
-            <Toaster position="top-center" />
-            <Analytics />
-            <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
-            <Script strategy="afterInteractive" id="microsoft-clarity">
-              {`
-                (function(c,l,a,r,i,t,y){
-                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-                })(window, document, "clarity", "script", "q9tt7wi9dk");
-              `}
-            </Script>
           </ThemeProvider>
-        </NextAuthProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
 

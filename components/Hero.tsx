@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { DEFAULT_CATEGORY } from "@/context/SearchContext"
+import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs"
 
 interface SearchSuggestion {
   title: string;

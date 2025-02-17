@@ -10,9 +10,8 @@ import { useRouter } from "next/navigation"
 import { FormEvent } from "react"
 import debounce from 'lodash/debounce' 
 import { Skeleton } from "@/components/ui/skeleton" 
-import { signIn, signOut } from "next-auth/react"
-import { useSession } from "next-auth/react"
-import Image from 'next/image'
+import { UserButton, SignInButton, SignUpButton } from "@clerk/nextjs"
+import { useAuth } from "@clerk/nextjs"
 
 // Fix type issues
 interface SearchSuggestion {
@@ -22,7 +21,7 @@ interface SearchSuggestion {
 }
 
 export default function Header() {
-  const { data: session, status } = useSession()
+  const { isSignedIn, isLoaded } = useAuth()
   const { searchQuery, setSearchQuery } = useSearch()
   const { theme, setTheme } = useTheme()
   const router = useRouter()
@@ -116,14 +115,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [handleScroll])
 
-  const handleSignIn = () => {
-    // Force the production URL for sign-in
-    signIn(undefined, { 
-      callbackUrl: 'https://wallpaperz.in',
-      redirect: true
-    });
-  }
-
   return (
     <header className="bg-background shadow sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -177,33 +168,19 @@ export default function Header() {
             )}
           </form>
           <div className="flex items-center gap-4">
-            {status === 'loading' ? (
+            {!isLoaded ? (
               <Button variant="ghost" disabled>Loading...</Button>
-            ) : session ? (
-              <div className="flex items-center gap-2">
-                {session.user?.image && (
-                  <div className="relative w-8 h-8">
-                    <Image
-                      src={session.user.image}
-                      alt={session.user.name || 'Profile'}
-                      fill
-                      className="rounded-full object-cover"
-                      sizes="32px"
-                    />
-                  </div>
-                )}
-                <span className="text-sm hidden md:inline">{session.user?.name}</span>
-                <Button variant="ghost" onClick={() => signOut({ callbackUrl: '/' })}>
-                  Sign Out
-                </Button>
-              </div>
+            ) : isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
             ) : (
-              <Button 
-                variant="ghost" 
-                onClick={handleSignIn}
-              >
-                Sign In
-              </Button>
+              <div className="flex gap-2">
+                <SignInButton mode="modal">
+                  <Button variant="ghost">Sign In</Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button variant="ghost">Sign Up</Button>
+                </SignUpButton>
+              </div>
             )}
           </div>
         </div>
