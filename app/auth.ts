@@ -31,7 +31,7 @@ export const authOptions = {
     error: '/auth/error',
   },
   callbacks: {
-    async redirect({ url }) {
+    async redirect() {
       return 'https://wallpaperz.in'
     },
     async session({ session, token }) {
