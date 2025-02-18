@@ -1,0 +1,35 @@
+@keyframes glow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-glow {
+  animation: glow 3s linear infinite;
+}
+
+@keyframes shine {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.shine {
+  animation: shine 2s infinite;
+}
+
+/* Fix for Hero gradient in light mode */
+.gradient-bg {
+  @apply bg-gradient-to-r;
+  --gradient-from: theme('colors.purple.500 / 20%');
+  --gradient-via: theme('colors.pink.500 / 20%');
+  --gradient-to: theme('colors.orange.500 / 20%');
+
+  @apply dark:from-purple-900/40 dark:via-pink-900/40 dark:to-orange-900/40;
+} 

@@ -24,16 +24,10 @@ export default function Footer() {
               Your daily source for stunning wallpapers. Free downloads, high quality, updated daily.
             </p>
             <div className="flex gap-4">
-              <Link href="#" className="text-muted-foreground hover:text-primary">
-                <Facebook size={20} />
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="/twitter" className="text-muted-foreground hover:text-primary" target="_blank" rel="noopener noreferrer">
                 <Twitter size={20} />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
-                <Instagram size={20} />
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="/github" className="text-muted-foreground hover:text-primary" target="_blank" rel="noopener noreferrer">
                 <Github size={20} />
               </Link>
             </div>

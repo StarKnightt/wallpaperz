@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Search, ArrowRight } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useAnimationControls } from "framer-motion"
 import { useState, useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { useSearch } from "@/context/SearchContext"
@@ -22,6 +22,7 @@ export default function Hero() {
   const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
   const { theme } = useTheme()
+  const controls = useAnimationControls()
 
   const generateSuggestions = (value: string): SearchSuggestion[] => {
     if (!value) return [];
@@ -101,23 +102,59 @@ export default function Hero() {
 
   return (
     <div className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
+      {/* Enhanced Animated Background */}
       <div className="absolute inset-0 -z-10">
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 dark:from-purple-900/40 dark:via-pink-900/40 dark:to-orange-900/40"
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(to right, 
+              ${theme === 'dark' ? 'rgba(126, 34, 206, 0.2)' : 'rgba(168, 85, 247, 0.1)'}, 
+              ${theme === 'dark' ? 'rgba(219, 39, 119, 0.2)' : 'rgba(236, 72, 153, 0.1)'},
+              ${theme === 'dark' ? 'rgba(249, 115, 22, 0.2)' : 'rgba(251, 146, 60, 0.1)'})`
+          }}
           animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
+            backgroundSize: ["100% 100%", "200% 200%"],
+            backgroundPosition: ["0% 0%", "100% 100%"]
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
             repeatType: "reverse",
+            ease: "linear"
           }}
         />
+        
+        {/* Sparkles Effect */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{
+                opacity: [0, 1, 0],
+                scale: [0, 1, 0],
+                x: Math.random() * 100 - 50,
+                y: Math.random() * 100 - 50
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+                repeatType: "loop"
+              }}
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`
+              }}
+            />
+          ))}
+        </div>
+
         <div className="absolute inset-0 backdrop-blur-3xl" />
       </div>
 
-      {/* Content */}
+      {/* Content with enhanced animations */}
       <div className="container px-4 py-16 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -243,6 +280,13 @@ export default function Hero() {
             ))}
           </motion.div>
         </motion.div>
+      </div>
+
+      {/* Glowing border effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 border border-white/10 rounded-lg overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-glow" />
+        </div>
       </div>
     </div>
   )
