@@ -4,7 +4,7 @@ import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Moon, Sun, Menu, X } from "lucide-react"
+import { Search, Moon, Sun } from "lucide-react"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { FormEvent } from "react"
@@ -25,7 +25,6 @@ export default function Header() {
   const { searchQuery, setSearchQuery } = useSearch()
   const { theme, setTheme } = useTheme()
   const router = useRouter()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
   const [isScrolled, setIsScrolled] = useState(false)
@@ -165,59 +164,51 @@ export default function Header() {
         </div>
 
         {/* Mobile Layout */}
-        <div className="md:hidden flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            Wallpaperz
-          </Link>
+        <div className="md:hidden space-y-4">
+          {/* Top Row */}
+          <div className="flex items-center justify-between">
+            <Link href="/" className="text-xl font-bold">
+              Wallpaperz
+            </Link>
 
-          <div className="flex items-center gap-2">
-            {!isLoaded ? (
-              <Button variant="ghost" size="sm">Loading...</Button>
-            ) : isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
-            ) : (
-              <SignInButton mode="modal">
-                <Button variant="default" size="sm">
-                  Sign in
-                </Button>
-              </SignInButton>
-            )}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
+                <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              </Button>
+
+              {!isLoaded ? (
+                <Button variant="ghost" size="sm">Loading...</Button>
+              ) : isSignedIn ? (
+                <UserButton afterSignOutUrl="/" />
+              ) : (
+                <SignInButton mode="modal">
+                  <Button variant="default" size="sm">
+                    Sign in
+                  </Button>
+                </SignInButton>
+              )}
+            </div>
           </div>
+
+          {/* Search Row */}
+          <form onSubmit={handleSubmit} className="relative">
+            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isSearching ? 'animate-pulse' : ''} text-muted-foreground`} size={20} />
+            <Input
+              type="search"
+              placeholder={isSearching ? "Searching..." : "Search wallpapers..."}
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="pl-10 w-full"
+              autoComplete="off"
+              spellCheck="false"
+            />
+          </form>
         </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-4">
-            <form onSubmit={handleSubmit} className="relative">
-              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isSearching ? 'animate-pulse' : ''} text-muted-foreground`} size={20} />
-              <Input
-                type="search"
-                placeholder={isSearching ? "Searching..." : "Search wallpapers..."}
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="pl-10 w-full"
-                autoComplete="off"
-                spellCheck="false"
-              />
-            </form>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            >
-              {theme === "dark" ? <Sun size={16} className="mr-2" /> : <Moon size={16} className="mr-2" />}
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
-            </Button>
-          </div>
-        )}
       </div>
     </header>
   )

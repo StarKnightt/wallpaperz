@@ -36,55 +36,66 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
   return (
     <motion.div 
       className="group relative rounded-lg overflow-hidden bg-black/20 backdrop-blur-sm"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2 }}
-      onClick={(e) => e.preventDefault()} // Prevent any parent clicks
+      transition={{ 
+        duration: 0.3,
+        ease: "easeOut",
+        layout: { duration: 0.3 }
+      }}
     >
-      {/* Image */}
-      <div className="aspect-[16/10] relative">
-        <Image
-          src={wallpaper.imageUrl}
-          alt={wallpaper.title}
-          fill
-          loading="lazy"
-          className="object-cover transform transition-transform duration-300 group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-          quality={75}
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRseHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/2wBDAR"
-        />
-        
-        {/* Overlay gradient with blur */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
-      </div>
+      <div className="aspect-[16/10] relative overflow-hidden">
+        <motion.div
+          initial={{ scale: 1.2, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Image
+            src={wallpaper.imageUrl}
+            alt={wallpaper.title}
+            fill
+            loading="lazy"
+            className="object-cover transform transition-all duration-500 group-hover:scale-110"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            quality={75}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRseHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/2wBDAR"
+          />
+        </motion.div>
 
-      {/* Content overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-300" onClick={(e) => e.stopPropagation()}>
-        <div className="flex gap-2 mt-2">
+        {/* Overlay with improved animation */}
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        />
+
+        {/* Buttons with staggered animation */}
+        <motion.div 
+          className="absolute bottom-0 left-0 right-0 p-4 flex gap-2"
+          initial={{ y: 20, opacity: 0 }}
+          whileHover={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
           <Button 
-            size="sm" 
-            variant="secondary" 
-            className="flex-1 bg-white dark:bg-white/20 text-gray-800 dark:text-white backdrop-blur-sm hover:bg-gray-200 dark:hover:bg-white/30 transition-all duration-300"
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onPreview()
-            }}
-            aria-label="Preview wallpaper"
+            variant="secondary"
+            className="flex-1 bg-white/10 backdrop-blur-sm hover:bg-white/20"
+            onClick={onPreview}
           >
             <Eye className="w-4 h-4 mr-2" />
             Preview
           </Button>
           <Button 
-            size="sm" 
             variant="secondary"
-            className="flex-1 bg-white dark:bg-white/20 text-gray-800 dark:text-white backdrop-blur-sm hover:bg-gray-200 dark:hover:bg-white/30 transition-all duration-300"
+            className="flex-1 bg-white/10 backdrop-blur-sm hover:bg-white/20"
             onClick={handleDownload}
           >
             <Download className="w-4 h-4 mr-2" />
             Download
           </Button>
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   )

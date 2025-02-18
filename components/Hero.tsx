@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import { Search, ArrowRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -7,6 +8,7 @@ import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { DEFAULT_CATEGORY } from "@/context/SearchContext"
 import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs"
+import { useTheme } from "next-themes"
 
 interface SearchSuggestion {
   title: string;
@@ -19,6 +21,7 @@ export default function Hero() {
   const router = useRouter()
   const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
+  const { theme } = useTheme()
 
   const generateSuggestions = (value: string): SearchSuggestion[] => {
     if (!value) return [];
@@ -97,29 +100,83 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative bg-gradient-to-b from-background to-background/80 backdrop-blur-sm">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto py-16 md:py-6 text-center space-y-6">
+    <div className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 -z-10">
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 dark:from-purple-900/40 dark:via-pink-900/40 dark:to-orange-900/40"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%"],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        />
+        <div className="absolute inset-0 backdrop-blur-3xl" />
+      </div>
+
+      {/* Content */}
+      <div className="container px-4 py-16 relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mx-auto text-center space-y-6"
+        >
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/80"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400"
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            The Best Wallpapers for Your Screen
+           The Best Wallpapers for Your Screen
           </motion.h1>
-
-          {/* Enhanced Description */}
-          <motion.div 
-            className="space-y-2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+          
+          <motion.p 
+            className="text-lg md:text-xl text-muted-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            <p className="text-base md:text-lg text-muted-foreground">
-              Discover a curated collection of stunning wallpapers for your desktop.
-            </p>
-          </motion.div>
+          Discover a curated collection of stunning wallpapers for your desktop.
+          </motion.p>
+
+          {/* Floating Elements */}
+          <motion.div 
+            className="absolute -z-10 w-72 h-72 bg-purple-500/10 dark:bg-purple-400/10 rounded-full blur-3xl"
+            animate={{
+              x: [0, 100, 0],
+              y: [0, 50, 0],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+            style={{
+              left: '10%',
+              top: '20%',
+            }}
+          />
+          
+          <motion.div 
+            className="absolute -z-10 w-72 h-72 bg-pink-500/10 dark:bg-pink-400/10 rounded-full blur-3xl"
+            animate={{
+              x: [0, -100, 0],
+              y: [0, -50, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+            style={{
+              right: '10%',
+              bottom: '20%',
+            }}
+          />
 
           {/* Search Form with reduced top margin */}
           <motion.form 
@@ -185,8 +242,8 @@ export default function Hero() {
               </Button>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </div>
   )
 }
