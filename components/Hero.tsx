@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Search, ArrowRight } from "lucide-react"
 import { motion, AnimatePresence, useAnimationControls } from "framer-motion"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Input } from "@/components/ui/input"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
@@ -16,6 +16,15 @@ interface SearchSuggestion {
   query: string;
 }
 
+// Helper function to generate consistent random positions
+const generateSparklePositions = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    left: `${(i * 17 + 13) % 100}%`,  // Deterministic but seemingly random
+    top: `${(i * 23 + 7) % 100}%`,    // Deterministic but seemingly random
+  }))
+}
+
 export default function Hero() {
   const [currentSuggestion, setCurrentSuggestion] = useState(0)
   const router = useRouter()
@@ -23,6 +32,19 @@ export default function Hero() {
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
   const { theme } = useTheme()
   const controls = useAnimationControls()
+  const [mounted, setMounted] = useState(false)
+  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Generate consistent sparkle positions
+  const sparkles = useMemo(() => generateSparklePositions(20), [])
+
+  // Default to light theme gradient for server-side rendering
+  const gradientClass = mounted && theme === 'dark'
+    ? 'bg-gradient-to-r from-purple-900/40 via-pink-900/40 to-orange-900/40'
+    : 'bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20'
 
   const generateSuggestions = (value: string): SearchSuggestion[] => {
     if (!value) return [];
@@ -105,13 +127,7 @@ export default function Hero() {
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0 -z-10">
         <motion.div 
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(to right, 
-              ${theme === 'dark' ? 'rgba(126, 34, 206, 0.2)' : 'rgba(168, 85, 247, 0.1)'}, 
-              ${theme === 'dark' ? 'rgba(219, 39, 119, 0.2)' : 'rgba(236, 72, 153, 0.1)'},
-              ${theme === 'dark' ? 'rgba(249, 115, 22, 0.2)' : 'rgba(251, 146, 60, 0.1)'})`
-          }}
+          className={`absolute inset-0 ${gradientClass}`}
           animate={{
             backgroundSize: ["100% 100%", "200% 200%"],
             backgroundPosition: ["0% 0%", "100% 100%"]
@@ -124,28 +140,26 @@ export default function Hero() {
           }}
         />
         
-        {/* Sparkles Effect */}
+        {/* Sparkles with consistent positions */}
         <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
+          {sparkles.map((sparkle) => (
             <motion.div
-              key={i}
+              key={sparkle.id}
               className="absolute w-1 h-1 bg-white rounded-full"
+              style={{
+                left: sparkle.left,
+                top: sparkle.top,
+              }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{
                 opacity: [0, 1, 0],
                 scale: [0, 1, 0],
-                x: Math.random() * 100 - 50,
-                y: Math.random() * 100 - 50
               }}
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                delay: Math.random() * 2,
+                delay: sparkle.id * 0.1,
                 repeatType: "loop"
-              }}
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`
               }}
             />
           ))}
