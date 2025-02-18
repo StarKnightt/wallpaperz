@@ -154,7 +154,7 @@ export default function Header() {
             ) : isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
             ) : (
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" fallbackRedirectUrl="/">
                 <Button variant="default" size="sm">
                   Sign in
                 </Button>
@@ -186,7 +186,7 @@ export default function Header() {
               ) : isSignedIn ? (
                 <UserButton afterSignOutUrl="/" />
               ) : (
-                <SignInButton mode="modal">
+                <SignInButton mode="modal" fallbackRedirectUrl="/">
                   <Button variant="default" size="sm">
                     Sign in
                   </Button>

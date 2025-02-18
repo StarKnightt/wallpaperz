@@ -49,9 +49,17 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                 sizes={`
                   (max-width: 640px) ${isMobileFull ? '100vw' : '50vw'},
-                  (max-width: 1024px) ${isLarge || isMedium ? '50vw' : '33vw'},
-                  25vw
+                  (max-width: 1024px) ${isLarge || isMedium ? '66vw' : '33vw'},
+                  ${isLarge || isMedium ? '50vw' : '25vw'}
                 `}
+                onLoad={(event) => {
+                  const img = event.target as HTMLImageElement
+                  if (img.naturalWidth === 0) {
+                    // Handle error case
+                    console.error('Image failed to load:', wallpaper.imageUrl)
+                  }
+                }}
+                priority={index < 4} // Load first 4 images immediately
               />
             </div>
 

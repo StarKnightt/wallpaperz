@@ -9,6 +9,12 @@ const nextConfig = {
   },
   env: {
     NEXT_PUBLIC_SITE_URL: 'https://wallpaperz.in',
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NODE_ENV === 'production' 
+      ? process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_PROD 
+      : process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_DEV,
+    CLERK_SECRET_KEY: process.env.NODE_ENV === 'production'
+      ? process.env.CLERK_SECRET_KEY_PROD
+      : process.env.CLERK_SECRET_KEY_DEV,
   },
   async redirects() {
     return []
