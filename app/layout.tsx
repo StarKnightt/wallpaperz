@@ -10,6 +10,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import Script from 'next/script'
 import { ClerkProvider } from '@clerk/nextjs'
+import { ScrollProgress } from "@/components/ScrollProgress"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -76,7 +77,8 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <SearchProvider>
-              <div className="min-h-screen flex flex-col">
+              <ScrollProgress />
+              <div className="min-h-screen flex flex-col relative">
                 <Header />
                 <main className="flex-grow w-full max-w-[1920px] mx-auto">
                   {children}
