@@ -85,7 +85,7 @@ export default function RootLayout({
                 </main>
                 <Footer />
               </div>
-              <Toaster position="top-center" />
+              <Toaster position="bottom-right" />
               <Analytics />
               <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
               <Script strategy="afterInteractive" id="microsoft-clarity">

@@ -55,7 +55,10 @@ export default function PreviewModal({ isOpen, onClose, wallpaper }: PreviewModa
           />
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-muted-foreground">
+            {wallpaper.source ? `Source: ${wallpaper.source}` : ""}
+          </div>
           <Button 
             variant="default"
             onClick={handleDownload}

@@ -25,6 +25,29 @@ const generateSparklePositions = (count: number) => {
   }))
 }
 
+const TyndallEffect = () => {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div className="relative w-full h-full">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-[2px] h-[200px] bg-gradient-to-b from-white/40 to-transparent"
+            style={{
+              left: `${(i + 1) * 7}%`,
+              top: '-50px',
+              transform: `rotate(${15 + i * 2}deg)`,
+              filter: 'blur(5px)',
+              opacity: 0.7,
+              animation: `tyndall ${3 + i * 0.3}s ease-in-out infinite alternate`
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Hero() {
   const [currentSuggestion, setCurrentSuggestion] = useState(0)
   const router = useRouter()

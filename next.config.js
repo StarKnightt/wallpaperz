@@ -4,7 +4,8 @@ const nextConfig = {
     domains: [
       'ik.imagekit.io',
       'lh3.googleusercontent.com', // Google profile images
-      'avatars.githubusercontent.com' // GitHub profile images
+      'avatars.githubusercontent.com', // GitHub profile images
+      'images.pexels.com'  // Update this line
     ],
   },
   env: {
