@@ -75,12 +75,12 @@ export default function Page() {
   }
 
   return (
-    <div className="space-y-16 pb-24"> {/* Increased spacing between sections and bottom padding */}
+    <div className="space-y-8 pb-16"> {/* Reduced spacing */}
       <Hero />
       
       {/* Search Results Section */}
       {searchQuery && (
-        <section id="search-results" className="container mx-auto px-4">
+        <section id="search-results" className="container mx-auto px-4 -mt-4"> {/* Negative margin to pull content up */}
           <div className="flex justify-between items-center mb-8">
             <div>
               <h2 className="text-2xl font-bold mb-2">
@@ -110,7 +110,7 @@ export default function Page() {
 
       {/* Show regular content only when not searching */}
       {!searchQuery && (
-        <section id="wallpapers-section" className="container mx-auto px-4">
+        <section id="wallpapers-section" className="container mx-auto px-4 -mt-4"> {/* Negative margin to pull content up */}
           <div className="flex justify-between items-center mb-10">
             <div>
               <h2 className="text-2xl font-bold mb-2">

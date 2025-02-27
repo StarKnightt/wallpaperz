@@ -20,4 +20,4 @@ export async function handleUpload(file: File | Blob) {
   } catch (error) {
     throw new Error('Failed to upload file')
   }
-}
+}      
