@@ -3,10 +3,10 @@ import { motion } from "framer-motion"
 import { Users, Image, Download, Heart } from "lucide-react"
 
 const stats = [
-  { icon: Users, label: "Active Users", value: "10K+" },
-  { icon: Image, label: "Wallpapers", value: "50K+" },
-  { icon: Download, label: "Downloads", value: "1M+" },
-  { icon: Heart, label: "Favorites", value: "100K+" },
+  { icon: Users, label: "Active Users", value: "100+" },
+  { icon: Image, label: "Wallpapers", value: "1K+" },
+  { icon: Download, label: "Downloads", value: "500+" },
+  { icon: Heart, label: "Favorites", value: "200+" },
 ]
 
 export default function AboutPage() {
@@ -62,8 +62,9 @@ export default function AboutPage() {
           >
             <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
             <p className="text-lg text-muted-foreground">
-              To curate and provide access to the finest collection of wallpapers while making 
-              the discovery and download process seamless and enjoyable.
+              To create a simple and beautiful platform for wallpaper enthusiasts to discover and 
+              share high-quality wallpapers. We're just starting out, but we're committed to 
+              growing our collection and building a community around beautiful desktop art.
             </p>
           </motion.section>
 
@@ -73,15 +74,15 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-bold mb-6">What Sets Us Apart</h2>
+            <h2 className="text-3xl font-bold mb-6">What We Offer</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
-                "High-resolution wallpapers for all devices",
-                "Regular content updates",
-                "Advanced search capabilities",
-                "Curated collections",
-                "Community-driven platform",
-                "Free downloads for personal use"
+                "Carefully selected wallpapers",
+                "Simple, clean interface",
+                "Easy download process",
+                "Growing collection",
+                "Community features coming soon",
+                "Free for personal use"
               ].map((feature, i) => (
                 <div key={i} className="flex items-center gap-3 p-4 rounded-lg bg-primary/5">
                   <div className="h-2 w-2 rounded-full bg-primary" />

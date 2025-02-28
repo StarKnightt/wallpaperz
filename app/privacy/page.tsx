@@ -75,7 +75,7 @@ export default function PrivacyPage() {
           <p>
             For copyright claims, questions, or concerns, please contact us at:
             <br />
-            Email: support@wallpaperz.com
+            Email: prasen.nayak@hotmail.com
           </p>
         </>
       )
