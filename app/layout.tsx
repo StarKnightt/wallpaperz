@@ -11,17 +11,24 @@ import { GoogleAnalytics } from "@next/third-parties/google"
 import Script from 'next/script'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
+import { Metadata } from 'next'
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
-  title: 'Wallpaperz',
-  description: 'Discover and download high-quality wallpapers',
-  rights: 'Images sourced from Pexels, Pixabay, and Unsplash under free-to-use licenses',
+export const metadata: Metadata = {
+  title: {
+    default: 'Wallpaperz - High Quality Wallpapers',
+    template: '%s | Wallpaperz'
+  },
+  description: 'Discover and download high-quality wallpapers for your desktop and mobile devices. Free HD and 4K wallpapers updated daily.',
+  keywords: ['wallpapers', 'HD wallpapers', '4K wallpapers', 'desktop backgrounds', 'free wallpapers'],
   metadataBase: new URL('https://wallpaperz.in'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Wallpaperz',
-    description: 'Discover and download high-quality wallpapers',
+    title: 'Wallpaperz - High Quality Wallpapers',
+    description: 'Discover and download high-quality wallpapers for your desktop and mobile devices.',
     url: 'https://wallpaperz.in',
     siteName: 'Wallpaperz',
     locale: 'en_US',
@@ -29,35 +36,11 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wallpaperz',
-    description: 'Discover and download high-quality wallpapers',
-    site: '@wallpaperz',
+    title: 'Wallpaperz - High Quality Wallpapers',
+    description: 'Discover and download high-quality wallpapers for your desktop and mobile devices.',
   },
-  icons: {
-    icon: [
-      {
-        url: '/favicon.png',
-        sizes: '32x32',
-        type: 'image/ico',
-      },
-      {
-        url: '/favicon.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        url: '/favicon-512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-    ],
-    apple: [
-      {
-        url: '/favicon.png',
-        sizes: '180x180',
-        type: 'image/png',
-      },
-    ],
+  verification: {
+    google: 'add-your-verification-code-here', // Replace with code from Google Search Console
   },
 }
 
@@ -69,6 +52,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        </head>
         <body className={inter.className}>
           <ThemeProvider
             attribute="class"
