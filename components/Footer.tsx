@@ -9,9 +9,11 @@ export default function Footer() {
   const [comingSoonFeature, setComingSoonFeature] = useState("")
 
   const handleComingSoonClick = (e: React.MouseEvent<HTMLAnchorElement>, feature: string) => {
-    e.preventDefault()
-    setComingSoonFeature(feature)
-    setShowComingSoon(true)
+    if (feature !== "About Us" && feature !== "Privacy Policy") {
+      e.preventDefault()
+      setComingSoonFeature(feature)
+      setShowComingSoon(true)
+    }
   }
 
   return (
@@ -63,14 +65,30 @@ export default function Footer() {
                     {item}
                   </Link>
                 </li>
-              ))}
+              ))} 
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold mb-4">About</h4>
             <ul className="space-y-2">
-              {["About Us", "Privacy Policy", "Terms", "Contact"].map((item) => (
+              <li>
+                <Link 
+                  href="/about" 
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/privacy" 
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              {["Terms", "Contact"].map((item) => (
                 <li key={item}>
                   <Link 
                     href="#" 
