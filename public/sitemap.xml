@@ -18,4 +18,22 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://wallpaperz.in/category/nature</loc>
+    <lastmod>2024-02-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wallpaperz.in/category/abstract</loc>
+    <lastmod>2024-02-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wallpaperz.in/category/space</loc>
+    <lastmod>2024-02-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

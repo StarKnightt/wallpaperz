@@ -62,6 +62,21 @@ export const metadata = {
   verification: {
     google: "P4kzrFl_om0QoNgXYaGqZ1Vv6W3wAiZeVfoolatuWnU",
   },
+  keywords: ['wallpapers', 'HD wallpapers', '4K wallpapers', 'desktop backgrounds', 'mobile wallpapers', 'free wallpapers'],
+  alternates: {
+    canonical: 'https://wallpaperz.in',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function RootLayout({

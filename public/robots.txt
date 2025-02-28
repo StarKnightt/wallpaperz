@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /category/*
+Allow: /about
+Allow: /privacy
+
+Disallow: /api/*
+Disallow: /admin/*
+Disallow: /*?search=*
 
 Sitemap: https://wallpaperz.in/sitemap.xml
