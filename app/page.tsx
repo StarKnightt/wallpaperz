@@ -11,7 +11,6 @@ import { useSearch, DEFAULT_CATEGORY } from "@/context/SearchContext"
 import { Loader2 } from "lucide-react"
 import { allWallpapers } from "@/data/wallpapers"
 import { useAuth } from "@clerk/nextjs"
-import Advertisement from '@/components/Advertisement'
 
 const ITEMS_PER_PAGE = 8
 
@@ -88,11 +87,6 @@ export default function Page() {
   return (
     <div className="space-y-8 pb-16"> {/* Reduced spacing */}
       <Hero />
-      <Advertisement 
-        slot="YOUR_AD_SLOT_ID"
-        format="rectangle"
-        className="my-8"
-      />
       
       {/* Search Results Section */}
       {searchQuery && (
@@ -144,12 +138,6 @@ export default function Page() {
             wallpapers={paginatedWallpapers.slice(0, 4)} 
             onPreview={handlePreview}
             isLoading={loading}
-          />
-          <Advertisement 
-            slot="YOUR_AD_SLOT_ID"
-            format="auto"
-            layout="in-article"
-            className="my-8"
           />
           <WallpaperGrid 
             wallpapers={paginatedWallpapers.slice(4)} 
