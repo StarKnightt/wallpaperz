@@ -29,11 +29,11 @@ export default function BentoGrid({ onPreview }: BentoGridProps) {
         </h2>
       </div>
 
-      {/* Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-7xl mx-auto h-full">
+      {/* Modified Bento Grid - gapless on desktop */}
+      <div className="grid grid-cols-1 gap-3 md:gap-0 max-w-7xl mx-auto h-full md:h-[900px] md:grid-cols-3 md:grid-rows-[600px_300px] relative">
         {/* Large featured card */}
         <motion.div 
-          className="md:col-span-2 relative rounded-xl overflow-hidden group h-[500px] md:h-[600px]"
+          className="md:col-span-2 relative overflow-hidden group h-[500px] md:h-full"
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
         >
@@ -56,12 +56,12 @@ export default function BentoGrid({ onPreview }: BentoGridProps) {
           </div>
         </motion.div>
 
-        {/* Smaller cards */}
-        <div className="grid grid-cols-2 md:grid-cols-1 gap-3 md:h-[600px]">
+        {/* Right column cards */}
+        <div className="grid grid-cols-2 md:grid-cols-1 gap-3 md:gap-0 md:h-full">
           {[1, 2].map((i) => (
             <motion.div 
               key={i}
-              className="relative rounded-xl overflow-hidden group h-[240px] md:h-[294px]"
+              className="relative overflow-hidden group h-[240px] md:h-[300px]"
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.2 }}
             >
@@ -82,11 +82,11 @@ export default function BentoGrid({ onPreview }: BentoGridProps) {
         </div>
 
         {/* Bottom row cards */}
-        <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-3 h-[240px] md:h-[294px]">
+        <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-0 h-[240px] md:h-[300px]">
           {[3, 4, 5].map((i) => (
             <motion.div 
               key={i}
-              className="relative rounded-xl overflow-hidden group"
+              className="relative overflow-hidden group h-full"
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.2 }}
             >

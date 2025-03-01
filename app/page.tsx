@@ -17,6 +17,11 @@ const ITEMS_PER_PAGE = 8
 // Get unique categories from allWallpapers
 const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
 
+// Get random wallpapers from filtered list
+const randomizeWallpapers = (wallpapers: Wallpaper[]) => {
+  return [...wallpapers].sort(() => Math.random() - 0.5)
+}
+
 export default function Page() {
   const { isSignedIn } = useAuth()
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
@@ -25,21 +30,26 @@ export default function Page() {
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
+  const [randomizedWallpapers, setRandomizedWallpapers] = useState(allWallpapers)
 
-  // Update filtered wallpapers logic
-  const filteredWallpapers = searchQuery ? allWallpapers
-    .filter(w => {
-      const searchableText = [
-        w.title,
-        w.category,
-        w.description
-      ].join(' ').toLowerCase()
-      return searchableText.includes(searchQuery.toLowerCase())
-    }) : allWallpapers.filter(w => 
-      activeCategory === DEFAULT_CATEGORY || w.category === activeCategory
-    )
+  // Move randomization to useEffect to avoid hydration mismatch
+  useEffect(() => {
+    const randomized = searchQuery ? allWallpapers
+      .filter(w => {
+        const searchableText = [
+          w.title,
+          w.category,
+          w.description
+        ].join(' ').toLowerCase()
+        return searchableText.includes(searchQuery.toLowerCase())
+      }) : allWallpapers.filter(w => 
+        activeCategory === DEFAULT_CATEGORY || w.category === activeCategory
+      )
+    
+    setRandomizedWallpapers([...randomized].sort(() => Math.random() - 0.5))
+  }, [searchQuery, activeCategory])
 
-  const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
+  const paginatedWallpapers = randomizedWallpapers.slice(0, page * ITEMS_PER_PAGE)
 
   // Update URL params effect
   useEffect(() => {
@@ -64,7 +74,7 @@ export default function Page() {
     setLoading(false)
     
     // Only hide button if we've loaded all wallpapers
-    if ((page + 1) * ITEMS_PER_PAGE >= filteredWallpapers.length) {
+    if ((page + 1) * ITEMS_PER_PAGE >= randomizedWallpapers.length) {
       setHasMore(false)
     }
   }
@@ -87,18 +97,18 @@ export default function Page() {
                 Search Results for &quot;{searchQuery}&quot;
               </h2>
               <p className="text-muted-foreground">
-                Found {filteredWallpapers.length} wallpapers
+                Found {randomizedWallpapers.length} wallpapers
               </p>
             </div>
           </div>
 
           <WallpaperGrid 
-            wallpapers={filteredWallpapers} 
+            wallpapers={randomizedWallpapers} 
             onPreview={handlePreview}
             isLoading={loading}
           />
 
-          {filteredWallpapers.length === 0 && (
+          {randomizedWallpapers.length === 0 && (
             <div className="text-center py-16">
               <p className="text-xl text-muted-foreground">
                 No wallpapers found for &quot;{searchQuery}&quot;. Try different keywords.
@@ -157,7 +167,7 @@ export default function Page() {
       )}
 
       {/* No results message */}
-      {filteredWallpapers.length === 0 && (
+      {randomizedWallpapers.length === 0 && (
         <div className="text-center py-16">
           <p className="text-xl text-muted-foreground">
             No wallpapers found for your search. Try different keywords or categories.
