@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://wallpaperz.in</loc>
     <lastmod>2024-02-14</lastmod>
@@ -23,29 +24,39 @@
     <lastmod>2024-02-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://wallpaperz.in/og/nature.jpg</image:loc>
+      <image:title>Nature Wallpapers</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://wallpaperz.in/category/abstract</loc>
     <lastmod>2024-02-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://wallpaperz.in/og/abstract.jpg</image:loc>
+      <image:title>Abstract Wallpapers</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://wallpaperz.in/category/space</loc>
     <lastmod>2024-02-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://wallpaperz.in/og/space.jpg</image:loc>
+      <image:title>Space Wallpapers</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://wallpaperz.in/category/anime</loc>
     <lastmod>2024-02-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wallpaperz.in/category/anime</loc>
-    <lastmod>2024-02-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://wallpaperz.in/og/anime.jpg</image:loc>
+      <image:title>Anime Wallpapers</image:title>
+    </image:image>
   </url>
 </urlset>

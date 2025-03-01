@@ -15,24 +15,34 @@ import { ScrollProgress } from "@/components/ScrollProgress"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: 'Wallpaperz',
-  description: 'Discover and download high-quality wallpapers',
+  title: 'Wallpaperz - High Quality Wallpapers for Desktop and Mobile',
+  description: 'Download free HD and 4K wallpapers for your desktop and mobile. Browse through our collection of high-quality wallpapers including Nature, Abstract, Space, and Anime themes.',
   rights: 'Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). Images sourced from Pexels, Pixabay, and Unsplash under their respective licenses.',
   license: 'CC BY-SA 4.0',
   metadataBase: new URL('https://wallpaperz.in'),
   openGraph: {
-    title: 'Wallpaperz',
-    description: 'Discover and download high-quality wallpapers',
+    title: 'Wallpaperz - High Quality Wallpapers',
+    description: 'Download free HD and 4K wallpapers for your desktop and mobile. Browse through our curated collection of stunning wallpapers.',
     url: 'https://wallpaperz.in',
     siteName: 'Wallpaperz',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Wallpaperz - High Quality Wallpapers'
+      }
+    ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wallpaperz',
-    description: 'Discover and download high-quality wallpapers',
+    title: 'Wallpaperz - High Quality Wallpapers',
+    description: 'Download free HD and 4K wallpapers for your desktop and mobile',
     site: '@wallpaperz',
+    creator: '@wallpaperz',
+    images: ['/og-image.jpg'],
   },
   icons: {
     icon: [
@@ -60,12 +70,26 @@ export const metadata = {
       },
     ],
   },
-  verification: {
-    google: "P4kzrFl_om0QoNgXYaGqZ1Vv6W3wAiZeVfoolatuWnU",
-  },
-  keywords: ['wallpapers', 'HD wallpapers', '4K wallpapers', 'desktop backgrounds', 'mobile wallpapers', 'free wallpapers'],
+  keywords: [
+    'wallpapers',
+    'HD wallpapers',
+    '4K wallpapers',
+    'desktop backgrounds',
+    'mobile wallpapers',
+    'free wallpapers',
+    'nature wallpapers',
+    'abstract wallpapers',
+    'space wallpapers',
+    'anime wallpapers',
+    'high quality wallpapers',
+    'desktop wallpapers',
+    'phone wallpapers'
+  ],
   alternates: {
     canonical: 'https://wallpaperz.in',
+    languages: {
+      'en-US': 'https://wallpaperz.in'
+    }
   },
   robots: {
     index: true,
@@ -77,7 +101,14 @@ export const metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+    nocache: true,
   },
+  category: 'Technology',
+  verification: {
+    google: "P4kzrFl_om0QoNgXYaGqZ1Vv6W3wAiZeVfoolatuWnU",
+    yandex: "YOUR_YANDEX_VERIFICATION", // Optional
+    bing: "YOUR_BING_VERIFICATION", // Optional
+  }
 }
 
 export default function RootLayout({
