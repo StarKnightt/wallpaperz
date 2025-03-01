@@ -89,10 +89,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
-          {/* Add AdSense script */}
+          <meta name="google-adsense-account" content="ca-pub-9812963383908086" />
           <Script
             async
-            src="https://pagead2.googlesyndatabase.com/pagead/js/adsbygoogle.js?client=ca-pub-9812963383908086"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9812963383908086"
             crossOrigin="anonymous"
             strategy="afterInteractive"
           />
