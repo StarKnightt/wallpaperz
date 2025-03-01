@@ -1,13 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
-import { Users, Image, Download, Heart } from "lucide-react"
-
-const stats = [
-  { icon: Users, label: "Active Users", value: "100+" },
-  { icon: Image, label: "Wallpapers", value: "1K+" },
-  { icon: Download, label: "Downloads", value: "500+" },
-  { icon: Heart, label: "Favorites", value: "200+" },
-]
+import { Image } from "lucide-react"
 
 export default function AboutPage() {
   return (
@@ -29,27 +22,6 @@ export default function AboutPage() {
         </motion.div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="text-center space-y-2"
-            >
-              <stat.icon className="w-8 h-8 mx-auto text-primary" />
-              <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
-                {stat.value}
-              </div>
-              <div className="text-muted-foreground">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
       {/* Content Sections */}
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="prose prose-lg dark:prose-invert space-y-12">
@@ -60,11 +32,15 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="bg-primary/5 rounded-2xl p-8"
           >
-            <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
+            <div className="flex items-center gap-4 mb-6">
+              <Image className="w-8 h-8 text-primary" />
+              <h2 className="text-3xl font-bold">Our Mission</h2>
+            </div>
             <p className="text-lg text-muted-foreground">
-              To create a simple and beautiful platform for wallpaper enthusiasts to discover and 
-              share high-quality wallpapers. We're just starting out, but we're committed to 
-              growing our collection and building a community around beautiful desktop art.
+              At Wallpaperz, we're building a simple and beautiful platform for wallpaper enthusiasts. 
+              Our goal is to provide a curated collection of high-quality wallpapers that enhance your 
+              digital spaces. Whether you're looking for nature scenes, abstract art, or minimal designs, 
+              we're here to help you find the perfect backdrop for your screen.
             </p>
           </motion.section>
 
@@ -73,21 +49,28 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="bg-primary/5 rounded-2xl p-8"
           >
             <h2 className="text-3xl font-bold mb-6">What We Offer</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
-                "Carefully selected wallpapers",
+                "Carefully curated wallpapers",
                 "Simple, clean interface",
-                "Easy download process",
-                "Growing collection",
-                "Community features coming soon",
+                "Fast, easy downloads",
+                "Regular new additions",
+                "Multiple resolution options",
                 "Free for personal use"
               ].map((feature, i) => (
-                <div key={i} className="flex items-center gap-3 p-4 rounded-lg bg-primary/5">
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex items-center gap-3 p-4 rounded-lg bg-background/50 backdrop-blur-sm"
+                >
                   <div className="h-2 w-2 rounded-full bg-primary" />
                   <span>{feature}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.section>

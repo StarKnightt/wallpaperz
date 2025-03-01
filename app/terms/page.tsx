@@ -1,4 +1,3 @@
-
 "use client"
 import { motion } from "framer-motion"
 import { ScrollText, Shield, AlertCircle, Scale } from "lucide-react"
@@ -9,54 +8,67 @@ export default function TermsPage() {
       icon: ScrollText,
       title: "Terms of Service",
       content: (
-        <>
-          <p>By using Wallpaperz, you agree to these terms:</p>
-          <ul>
-            <li>All wallpapers are for personal use only</li>
-            <li>Commercial use requires explicit permission</li>
-            <li>Do not redistribute our wallpapers</li>
-            <li>Credit original artists where applicable</li>
-          </ul>
-        </>
+        <div className="space-y-4">
+          <p className="text-lg">
+            Welcome to Wallpaperz. By accessing or using our service, you agree to comply 
+            with and be bound by the following terms and conditions:
+          </p>
+          <div className="space-y-3">
+            <p>1. All wallpapers provided through our platform are intended for personal use only.</p>
+            <p>2. Any commercial usage of our wallpapers requires explicit written permission from the respective rights holders.</p>
+            <p>3. Redistribution of wallpapers from our platform is strictly prohibited without prior authorization.</p>
+            <p>4. Users must maintain and respect all attribution and credit to original artists where provided.</p>
+          </div>
+        </div>
       )
     },
     {
       icon: Shield,
       title: "Usage Rights",
       content: (
-        <>
-          <p>You are permitted to:</p>
-          <ul>
-            <li>Download wallpapers for personal desktop/mobile use</li>
-            <li>Share links to our wallpapers</li>
-            <li>Create derivative works for personal use</li>
-          </ul>
-        </>
+        <div className="space-y-4">
+          <p className="text-lg">Under these terms, you are explicitly permitted to:</p>
+          <div className="space-y-3">
+            <p>1. Download and use wallpapers for personal desktop and mobile device customization.</p>
+            <p>2. Share direct links to wallpapers on our platform through social media or personal websites.</p>
+            <p>3. Create personal modifications of wallpapers for non-commercial use.</p>
+            <p>4. Save wallpapers to your personal collection within our platform.</p>
+          </div>
+        </div>
       )
     },
     {
       icon: AlertCircle,
-      title: "Limitations",
+      title: "Usage Limitations",
       content: (
-        <>
-          <p>You are not permitted to:</p>
-          <ul>
-            <li>Sell or redistribute our wallpapers</li>
-            <li>Claim ownership of the wallpapers</li>
-            <li>Remove watermarks or attribution</li>
-            <li>Use wallpapers for NFTs or AI training</li>
-          </ul>
-        </>
+        <div className="space-y-4">
+          <p className="text-lg">The following activities are strictly prohibited:</p>
+          <div className="space-y-3">
+            <p>1. Commercial distribution or sale of wallpapers from our platform.</p>
+            <p>2. Claiming ownership or copyright of wallpapers provided through our service.</p>
+            <p>3. Removing, altering, or obscuring any watermarks, attributions, or copyright notices.</p>
+            <p>4. Using wallpapers for NFT creation, AI training, or other automated data collection.</p>
+            <p>5. Incorporating wallpapers into commercial products or services without authorization.</p>
+          </div>
+        </div>
       )
     },
     {
       icon: Scale,
       title: "Legal Notice",
       content: (
-        <p>
-          Wallpaperz reserves the right to modify these terms at any time. 
-          Continued use of the service implies acceptance of updated terms.
-        </p>
+        <div className="space-y-4">
+          <p className="text-lg">
+            Wallpaperz maintains the right to modify, update, or amend these terms of service 
+            at any time without prior notice. Continued use of our platform following any 
+            modifications constitutes your acceptance of the updated terms.
+          </p>
+          <p>
+            We reserve the right to terminate or restrict access to our service for any users 
+            found in violation of these terms. All decisions regarding term violations are 
+            final and at the discretion of Wallpaperz administration.
+          </p>
+        </div>
       )
     }
   ]

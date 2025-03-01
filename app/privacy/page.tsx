@@ -7,77 +7,98 @@ export default function PrivacyPage() {
   const sections = [
     {
       icon: Shield,
-      title: "Image Sources & Copyright",
+      title: "Data Collection & Usage",
       content: (
-        <>
-          <p>
-            Wallpaperz provides wallpapers from various sources:
-          </p>
-          <ul>
-            <li>Royalty-free images from platforms like Unsplash, Pexels, and Pixabay</li>
-            <li>Original content created by Wallpaperz</li>
-            <li>User-submitted content (where applicable)</li>
-          </ul>
-          <p>
-            While we make every effort to ensure all content is free to use, specific images 
-            may be subject to their respective licenses. Users should verify the license terms 
-            before commercial use.
-          </p>
-        </>
+        <div className="space-y-4">
+          <p className="text-lg">We are committed to protecting your privacy and handling your data with transparency:</p>
+          <div className="space-y-3">
+            <p>1. Account Information Collection</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Email address (for registered users only)</li>
+              <li>• Display name (optional)</li>
+              <li>• Profile picture (optional)</li>
+            </ul>
+
+            <p>2. Usage Information</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Wallpaper download history</li>
+              <li>• Favorite wallpapers</li>
+              <li>• Search queries</li>
+              <li>• Device type and browser information</li>
+            </ul>
+          </div>
+        </div>
       )
     },
     {
       icon: Lock,
-      title: "User Data & Privacy",
+      title: "Data Security",
       content: (
-        <>
-          <p>
-            We collect minimal user data necessary for service functionality:
-          </p>
-          <ul>
-            <li>Basic account information (if you choose to register)</li>
-            <li>Download history and favorites (for registered users)</li>
-            <li>Usage analytics for service improvement</li>
-          </ul>
-        </>
+        <div className="space-y-4">
+          <p className="text-lg">Your data security is our priority:</p>
+          <div className="space-y-3">
+            <p>1. Data Protection Measures</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Industry-standard SSL encryption</li>
+              <li>• Secure cloud storage</li>
+              <li>• Regular security audits</li>
+            </ul>
+
+            <p>2. Third-Party Services</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Clerk.com for authentication</li>
+              <li>• Vercel Analytics for usage statistics</li>
+              <li>• Microsoft Clarity for UX improvement</li>
+            </ul>
+          </div>
+        </div>
       )
     },
     {
       icon: FileText,
-      title: "Terms of Use",
+      title: "Cookie Policy",
       content: (
-        <>
-          <h2>Usage Rights</h2>
-          <p>
-            All wallpapers are free for personal use. For commercial use, please refer to the 
-            original source's license terms, which are linked where available.
-          </p>
-          <h2>Attributions</h2>
-          <p>
-            We provide attribution to original sources where possible. If you believe your work 
-            has been used without proper attribution or permission, please contact us for prompt resolution.
-          </p>
-          <h2>Disclaimer</h2>
-          <p>
-            While we strive to provide high-quality content, we cannot guarantee the copyright 
-            status of every image. Users are responsible for verifying usage rights for their 
-            specific needs. If you find any content that violates copyright laws, please 
-            contact us for immediate removal.
-          </p>
-        </>
+        <div className="space-y-4">
+          <p className="text-lg">We use cookies to enhance your experience:</p>
+          <div className="space-y-3">
+            <p>1. Essential Cookies</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Authentication status</li>
+              <li>• Session management</li>
+              <li>• Security features</li>
+            </ul>
+
+            <p>2. Analytics Cookies</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Usage patterns</li>
+              <li>• Performance monitoring</li>
+              <li>• Feature optimization</li>
+            </ul>
+          </div>
+        </div>
       )
     },
     {
       icon: Mail,
-      title: "Contact",
+      title: "Your Rights & Contact",
       content: (
-        <>
-          <p>
-            For copyright claims, questions, or concerns, please contact us at:
-            <br />
-            Email: prasen.nayak@hotmail.com
-          </p>
-        </>
+        <div className="space-y-4">
+          <p className="text-lg">You have the right to:</p>
+          <div className="space-y-3">
+            <p>1. Access and Control</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Request your data</li>
+              <li>• Delete your account</li>
+              <li>• Opt-out of analytics</li>
+            </ul>
+
+            <p>2. Contact Information</p>
+            <ul className="list-none pl-6 space-y-2">
+              <li>• Email: prasen.nayak@hotmail.com</li>
+              <li>• Response time: Within 48 hours</li>
+            </ul>
+          </div>
+        </div>
       )
     }
   ]
