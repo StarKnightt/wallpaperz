@@ -1,7 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Download, Eye } from "lucide-react"
 import { Button } from "./ui/button"
 
 interface BentoGridProps {
@@ -29,82 +28,48 @@ export default function BentoGrid({ onPreview }: BentoGridProps) {
         </h2>
       </div>
 
-      {/* Modified Bento Grid - gapless on desktop */}
-      <div className="grid grid-cols-1 gap-3 md:gap-0 max-w-7xl mx-auto h-full md:h-[900px] md:grid-cols-3 md:grid-rows-[600px_300px] relative">
-        {/* Large featured card */}
+      {/* New Simplified Bento Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 max-w-7xl mx-auto">
+        {/* Featured large card */}
         <motion.div 
-          className="md:col-span-2 relative overflow-hidden group h-[500px] md:h-full"
+          className="md:col-span-2 md:row-span-2 relative overflow-hidden group aspect-square md:aspect-auto md:h-[600px]"
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
         >
           <Image
             src="https://ik.imagekit.io/starknight/tr:w-800/abstract1.jpg"
-            alt="Featured wallpaper"
-            width={1920}
-            height={1080}
-            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+            alt="Featured Collection"
+            fill
+            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform">
-            <h3 className="text-2xl font-bold mb-2">Abstract Collection</h3>
-            <p className="text-white/80 mb-4">Explore our curated abstract wallpapers</p>
-            <div className="flex gap-2">
-              <Button variant="secondary" className="bg-white/10 backdrop-blur-sm">
-                View All
-              </Button>
-            </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <h3 className="text-2xl font-bold mb-2">Featured Collection</h3>
+            <p className="text-white/80">Our best curated wallpapers</p>
           </div>
         </motion.div>
 
-        {/* Right column cards */}
-        <div className="grid grid-cols-2 md:grid-cols-1 gap-3 md:gap-0 md:h-full">
-          {[1, 2].map((i) => (
-            <motion.div 
-              key={i}
-              className="relative overflow-hidden group h-[240px] md:h-[300px]"
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Image
-                src={`https://ik.imagekit.io/starknight/tr:w-400/nature${i}.jpg`}
-                alt={`Collection ${i}`}
-                width={960}
-                height={540}
-                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform">
-                <h3 className="text-lg font-bold mb-1">Nature Collection {i}</h3>
-                <p className="text-white/80 text-sm">Beautiful landscapes</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Bottom row cards */}
-        <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-0 h-[240px] md:h-[300px]">
-          {[3, 4, 5].map((i) => (
-            <motion.div 
-              key={i}
-              className="relative overflow-hidden group h-full"
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Image
-                src={`https://ik.imagekit.io/starknight/tr:w-400/nature${i}.jpg`}
-                alt={`Collection ${i}`}
-                width={960}
-                height={540}
-                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform">
-                <h3 className="text-lg font-bold mb-1">Nature Collection {i}</h3>
-                <p className="text-white/80 text-sm">Beautiful landscapes</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {/* Regular cards */}
+        {[1, 2, 3, 4].map((i) => (
+          <motion.div 
+            key={i}
+            className="relative overflow-hidden group aspect-square"
+            whileHover={{ scale: 1.01 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Image
+              src={`https://ik.imagekit.io/starknight/tr:w-400/nature${i}.jpg`}
+              alt={`Collection ${i}`}
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+              <h3 className="text-lg font-bold">Collection {i}</h3>
+              <p className="text-sm text-white/80">Nature & Landscapes</p>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   )
