@@ -31,9 +31,10 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
           animate={{ opacity: 1, y: 0 }}
         >
           <Advertisement
-            slot="YOUR_AD_SLOT_ID"
-            format="rectangle"
+            slot="3807233703"
+            format="auto"
             className="w-full h-full min-h-[220px]"
+            data-full-width-responsive="true"
           />
         </motion.div>
       ))
