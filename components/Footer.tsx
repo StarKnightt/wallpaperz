@@ -88,17 +88,22 @@ export default function Footer() {
                   Privacy Policy
                 </Link>
               </li>
-              {["Terms", "Contact"].map((item) => (
-                <li key={item}>
-                  <Link 
-                    href="#" 
-                    className="text-muted-foreground hover:text-primary"
-                    onClick={(e) => handleComingSoonClick(e, item)}
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link 
+                  href="/terms" 
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  Terms
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/contact" 
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
