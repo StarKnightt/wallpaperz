@@ -109,9 +109,18 @@ export default function Footer() {
         </div>
         
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Wallpaperz. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Wallpaperz. All rights reserved.
+            </p>
+            <span className="hidden md:inline text-muted-foreground">•</span>
+            <Link 
+              href="/license"
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              CC BY-SA 4.0
+            </Link>
+          </div>
           <p className="text-sm text-muted-foreground">
             Made with ❤️ for wallpaper enthusiasts
           </p>

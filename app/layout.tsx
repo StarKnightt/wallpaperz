@@ -17,7 +17,8 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata = {
   title: 'Wallpaperz',
   description: 'Discover and download high-quality wallpapers',
-  rights: 'Images sourced from Pexels, Pixabay, and Unsplash under free-to-use licenses',
+  rights: 'Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). Images sourced from Pexels, Pixabay, and Unsplash under their respective licenses.',
+  license: 'CC BY-SA 4.0',
   metadataBase: new URL('https://wallpaperz.in'),
   openGraph: {
     title: 'Wallpaperz',
