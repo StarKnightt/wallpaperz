@@ -36,10 +36,13 @@ export default function PreviewModal({ isOpen, onClose, wallpaper }: PreviewModa
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl" aria-describedby="modal-description">
+      <DialogContent 
+        className="max-w-4xl" 
+        aria-describedby="wallpaper-description"
+      >
         <DialogHeader>
           <DialogTitle>{wallpaper.title}</DialogTitle>
-          <DialogDescription id="modal-description">
+          <DialogDescription id="wallpaper-description">
             {wallpaper.description}
           </DialogDescription>
         </DialogHeader>
