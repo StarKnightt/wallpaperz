@@ -19,7 +19,7 @@ interface PreviewModalProps {
 export default function PreviewModal({ isOpen, onClose, wallpaper }: PreviewModalProps) {
   const handleDownload = async () => {
     try {
-      const response = await fetch(wallpaper.imageUrl)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT}/${wallpaper.imageUrl}`)
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -36,22 +36,28 @@ export default function PreviewModal({ isOpen, onClose, wallpaper }: PreviewModa
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl bg-background/95 backdrop-blur-sm">
+      <DialogContent className="max-w-4xl" aria-describedby="modal-description">
         <DialogHeader>
           <DialogTitle>{wallpaper.title}</DialogTitle>
-          <DialogDescription>
-            High quality wallpaper preview
+          <DialogDescription id="modal-description">
+            {wallpaper.description}
           </DialogDescription>
         </DialogHeader>
 
         <div className="relative aspect-video w-full overflow-hidden rounded-lg">
           <Image
-            src={wallpaper.imageUrl}
+            src={`${process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT}/${wallpaper.imageUrl}`}
             alt={wallpaper.title}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 80vw"
             priority
+            onLoad={(event) => {
+              const target = event.target as HTMLImageElement
+              if (target.src.indexOf('data:image/gif;base64') < 0) {
+                target.style.opacity = '1'
+              }
+            }}
           />
         </div>
 
