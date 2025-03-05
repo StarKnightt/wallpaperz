@@ -120,6 +120,8 @@ export default function BentoGrid({ onPreview }: BentoGridProps) {
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                     className="object-cover absolute inset-0"
+                    priority={item.span === "featured"}
+                    loading={item.span === "featured" ? "eager" : "lazy"}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 text-white">

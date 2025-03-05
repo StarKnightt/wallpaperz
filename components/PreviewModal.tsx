@@ -51,7 +51,7 @@ export default function PreviewModal({ isOpen, onClose, wallpaper }: PreviewModa
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 80vw"
-            priority
+            loading="eager"
             onLoad={(event) => {
               const target = event.target as HTMLImageElement
               if (target.src.indexOf('data:image/gif;base64') < 0) {
