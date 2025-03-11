@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { getImageUrl } from '@/lib/imagekit'
 import { Button } from "./ui/button"
 import { Eye, Download } from "lucide-react"
-import Advertisement from "./Advertisement"
+
 
 interface Props {
   wallpapers: Wallpaper[]
@@ -30,12 +30,12 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Advertisement
+          {/* <Advertisement
             slot="3807233703"
             format="auto"
             className="w-full h-full min-h-[220px]"
             data-full-width-responsive="true"
-          />
+          /> */}
         </motion.div>
       ))
     }

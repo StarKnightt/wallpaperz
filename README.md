@@ -1,24 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wallpaperz
+
+![Wallpaperz Logo](https://wallpaperz.in/logo.png)
+
+A modern, open-source wallpaper discovery and sharing platform built with Next.js.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/StarKnightt/wallpaperz/issues)
+
+![Screenshot](https://wallpaperz.in/screenshot.png)
+
+## Features
+
+- 🖼️ Curated collection of high-quality wallpapers 
+- 🔍 Powerful search functionality
+- 🌓 Light/Dark mode support
+- 🚀 Fast, responsive design
+- 🔐 User authentication with Clerk
+- 🤖 AI-generated wallpapers (coming soon!)
+
+## Tech Stack
+
+- **Frontend**: Next.js, React, TypeScript, TailwindCSS, Framer Motion
+- **Authentication**: Clerk
+- **Image Management**: ImageKit.io
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ and npm/yarn
+- Git
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/StarKnightt/wallpaperz.git
+cd wallpaperz
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn
+```
+
+3. Copy the example environment file and update it with your values:
+```bash
+cp .env.example .env.local
+```
+
+4. Start the development server:
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environmental Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The following environment variables are required for the app to function properly:
 
 ## Learn More
 

@@ -9,7 +9,3 @@ Disallow: /admin/*
 Disallow: /*?search=*
 
 Sitemap: https://wallpaperz.in/sitemap.xml
-
-# Allow Google AdSense bot
-User-agent: Mediapartners-Google
-Allow: /

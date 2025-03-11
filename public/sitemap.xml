@@ -49,14 +49,4 @@
       <image:title>Space Wallpapers</image:title>
     </image:image>
   </url>
-  <url>
-    <loc>https://wallpaperz.in/category/anime</loc>
-    <lastmod>2024-02-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://wallpaperz.in/og/anime.jpg</image:loc>
-      <image:title>Anime Wallpapers</image:title>
-    </image:image>
-  </url>
 </urlset>
