@@ -4,7 +4,7 @@ import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Moon, Sun } from "lucide-react"
+import { Search, Moon, Sun, Sparkles } from "lucide-react"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { FormEvent } from "react"
@@ -149,6 +149,13 @@ export default function Header() {
               />
             </form>
 
+            <Link href="/ai-generate">
+              <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                AI Generate
+              </Button>
+            </Link>
+
             {!isLoaded ? (
               <Button variant="ghost" size="sm">Loading...</Button>
             ) : isSignedIn ? (
@@ -208,6 +215,15 @@ export default function Header() {
               spellCheck="false"
             />
           </form>
+
+          <div className="flex justify-center">
+            <Link href="/ai-generate">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                AI Generate
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </header>
