@@ -1,14 +1,14 @@
 # Wallpaperz
 
-![Wallpaperz Logo](https://wallpaperz.in/logo.png)
+![Wallpaperz Logo](/public/favicon.png)
 
 A modern, open-source wallpaper discovery and sharing platform built with Next.js.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/StarKnightt/wallpaperz/issues)
 
-![Screenshot](https://wallpaperz.in/screenshot.png)
-
+!
+![Wallpaperz.in](wallpaperz.png)
 ## Features
 
 - 🖼️ Curated collection of high-quality wallpapers 
