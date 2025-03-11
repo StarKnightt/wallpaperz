@@ -98,6 +98,35 @@ export default function AIGeneratePage() {
     setValue("prompt", suggestion)
   }
 
+  const handleReset = () => {
+    setGeneratedImage(null)
+    setError(null)
+  }
+  
+  const handleShare = async () => {
+    if (!generatedImage) return
+    
+    try {
+      if (navigator.share) {
+        // Use Web Share API if available
+        const blob = await fetch(generatedImage).then(r => r.blob())
+        const file = new File([blob], `wallpaperz-ai-${Date.now()}.png`, { type: 'image/png' })
+        
+        await navigator.share({
+          title: 'My AI-generated wallpaper',
+          text: 'Check out this wallpaper I created with AI!',
+          files: [file]
+        })
+      } else {
+        // Fallback: Copy image URL to clipboard
+        await navigator.clipboard.writeText(window.location.href)
+        alert('Link copied to clipboard!')
+      }
+    } catch (err) {
+      console.error('Sharing failed:', err)
+    }
+  }
+
   if (!isLoaded) {
     return (
       <div className="container mx-auto px-4 py-20 flex justify-center">
@@ -375,22 +404,30 @@ export default function AIGeneratePage() {
                             priority
                           />
                         </div>
-                        <div className="flex justify-center gap-4 mt-6">
+                        <div className="flex flex-wrap justify-center gap-4 mt-6">
                           <Button 
                             variant="outline" 
                             onClick={handleDownload} 
                             className="flex gap-2 bg-background/80 backdrop-blur-sm hover:bg-background"
                           >
                             <Download className="h-4 w-4" />
-                            Download Wallpaper
+                            Download
                           </Button>
                           <Button 
                             variant="outline" 
+                            onClick={handleShare}
                             className="flex gap-2 bg-background/80 backdrop-blur-sm hover:bg-background"
-                            // Implement share functionality if needed
                           >
                             <Share2 className="h-4 w-4" />
                             Share
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={handleReset}
+                            className="flex gap-2 bg-background/80 backdrop-blur-sm hover:bg-background mt-3 sm:mt-0 w-full sm:w-auto"
+                          >
+                            <Sparkles className="h-4 w-4" />
+                            Generate New Image
                           </Button>
                         </div>
                       </motion.div>
