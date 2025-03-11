@@ -179,6 +179,14 @@ export default function Header() {
             </Link>
 
             <div className="flex items-center gap-2">
+              <Link href="/ai-generate">
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="hidden sm:inline">AI Generate</span>
+                  <span className="sm:hidden">AI</span>
+                </Button>
+              </Link>
+
               <Button
                 variant="ghost"
                 size="icon"
@@ -215,15 +223,6 @@ export default function Header() {
               spellCheck="false"
             />
           </form>
-
-          <div className="flex justify-center">
-            <Link href="/ai-generate">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
-                AI Generate
-              </Button>
-            </Link>
-          </div>
         </div>
       </div>
     </header>
