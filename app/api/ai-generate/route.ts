@@ -21,36 +21,20 @@ export async function POST(req: NextRequest) {
 
     // Parse the request body
     const body = await req.json();
-    const { prompt, negative_prompt, style } = body;
+    const { prompt, negative_prompt } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
 
-    // Style-specific configuration
-    let engine_id = "stable-diffusion-xl-1024-v1-0";
-    let cfg_scale = 7;
-    let steps = 30;
+    // Fixed dimensions - use default square format for best quality
+    const width = 1024;
+    const height = 1024;
+    const cfg_scale = 7;
+    const steps = 30;
     
-    switch (style) {
-      case 'realistic':
-        engine_id = "stable-diffusion-xl-1024-v1-0";
-        cfg_scale = 7;
-        steps = 40; // More steps for realism
-        break;
-      case 'artistic':
-        engine_id = "stable-diffusion-xl-1024-v1-0";
-        cfg_scale = 9; // Higher scale for more stylization
-        steps = 35;
-        break;
-      case 'anime':
-        engine_id = "stable-diffusion-xl-1024-v1-0";
-        cfg_scale = 8;
-        steps = 30;
-        break;
-      default:
-        engine_id = "stable-diffusion-xl-1024-v1-0";
-    }
+    // Engine ID - using the latest stable model
+    const engine_id = "stable-diffusion-xl-1024-v1-0";
 
     // Call the DreamStudio API
     const apiKey = process.env.DREAMSTUDIO_API_KEY;
@@ -62,7 +46,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("Generating image with prompt:", prompt);
+    console.log(`Generating image with prompt:`, prompt);
     
     const response = await fetch(
       `https://api.stability.ai/v1/generation/${engine_id}/text-to-image`,
@@ -85,8 +69,8 @@ export async function POST(req: NextRequest) {
             }] : []),
           ],
           cfg_scale,
-          height: 1024,
-          width: 1024,
+          height,
+          width,
           steps,
           samples: 1,
         }),
