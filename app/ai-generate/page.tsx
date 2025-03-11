@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2 } from "lucide-react"
+import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye } from "lucide-react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
@@ -24,6 +24,7 @@ export default function AIGeneratePage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   
   const promptSuggestions = [
     "A breathtaking mountain landscape at sunset with vibrant colors",
@@ -110,7 +111,7 @@ export default function AIGeneratePage() {
       if (navigator.share) {
         // Use Web Share API if available
         const blob = await fetch(generatedImage).then(r => r.blob())
-        const file = new File([blob], `wallpaperz-ai-${Date.now()}.png`, { type: 'image/png' })
+        const file = new File([blob], 'wallpaper.png', { type: 'image/png' })
         
         await navigator.share({
           title: 'My AI-generated wallpaper',
