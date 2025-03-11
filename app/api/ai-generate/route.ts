@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
 
-    // Use style parameter to adjust the engine and settings
+    // Style-specific configuration
     let engine_id = "stable-diffusion-xl-1024-v1-0";
     let cfg_scale = 7;
     let steps = 30;
@@ -36,14 +36,17 @@ export async function POST(req: NextRequest) {
       case 'realistic':
         engine_id = "stable-diffusion-xl-1024-v1-0";
         cfg_scale = 7;
+        steps = 40; // More steps for realism
         break;
       case 'artistic':
         engine_id = "stable-diffusion-xl-1024-v1-0";
-        cfg_scale = 9;
+        cfg_scale = 9; // Higher scale for more stylization
+        steps = 35;
         break;
       case 'anime':
-        engine_id = "stable-diffusion-xl-1024-v1-0"; // You might want to use a different model for anime
+        engine_id = "stable-diffusion-xl-1024-v1-0";
         cfg_scale = 8;
+        steps = 30;
         break;
       default:
         engine_id = "stable-diffusion-xl-1024-v1-0";
@@ -59,6 +62,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    console.log("Generating image with prompt:", prompt);
+    
     const response = await fetch(
       `https://api.stability.ai/v1/generation/${engine_id}/text-to-image`,
       {

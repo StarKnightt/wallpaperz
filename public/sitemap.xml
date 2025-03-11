@@ -3,25 +3,35 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://wallpaperz.in</loc>
-    <lastmod>2024-02-14</lastmod>
+    <lastmod>2024-05-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://wallpaperz.in/about</loc>
-    <lastmod>2024-02-14</lastmod>
+    <lastmod>2024-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://wallpaperz.in/privacy</loc>
-    <lastmod>2024-02-14</lastmod>
+    <lastmod>2024-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://wallpaperz.in/ai-generate</loc>
+    <lastmod>2024-05-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://wallpaperz.in/og/ai-generator.jpg</image:loc>
+      <image:title>AI Wallpaper Generator</image:title>
+    </image:image>
+  </url>
+  <url>
     <loc>https://wallpaperz.in/category/nature</loc>
-    <lastmod>2024-02-14</lastmod>
+    <lastmod>2024-05-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -31,7 +41,7 @@
   </url>
   <url>
     <loc>https://wallpaperz.in/category/abstract</loc>
-    <lastmod>2024-02-14</lastmod>
+    <lastmod>2024-05-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -41,7 +51,7 @@
   </url>
   <url>
     <loc>https://wallpaperz.in/category/space</loc>
-    <lastmod>2024-02-14</lastmod>
+    <lastmod>2024-05-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
     <image:image>
