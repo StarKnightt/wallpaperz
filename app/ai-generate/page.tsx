@@ -215,7 +215,7 @@ export default function AIGeneratePage() {
             className="mb-10 text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-block">
-              AI Wallpaper Generator
+              AI Image Generator
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Transform your imagination into stunning wallpapers using AI
