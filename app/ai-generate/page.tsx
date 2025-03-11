@@ -34,6 +34,12 @@ export default function AIGeneratePage() {
     "Abstract geometric patterns with vibrant gradient colors"
   ]
 
+  const demoImages = [
+    "https://ik.imagekit.io/starknight/AI-Demo/wallpaperz-ai-1741709708281_kQjMl55ZR.png?updatedAt=1741711241939",
+    "https://ik.imagekit.io/starknight/AI-Demo/wallpaperz-ai-1741710553378_w7IibV2QA.png?updatedAt=1741711329095",
+    "https://ik.imagekit.io/starknight/AI-Demo/wallpaperz-ai-1741711355599_X61ZQ9mv7.png?updatedAt=1741711391373"
+  ]
+
   const {
     register,
     handleSubmit,
@@ -185,20 +191,6 @@ export default function AIGeneratePage() {
                     Transform your ideas into beautiful wallpapers in seconds.
                     Sign in to start creating your own AI-generated masterpieces.
                   </p>
-
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-md mx-auto">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="relative aspect-[3/2] rounded-lg overflow-hidden opacity-70 hover:opacity-100 transition-opacity">
-                        <Image
-                          src={`/ai-examples/example-${i}.jpg`}
-                          alt={`AI Example ${i}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-
                   <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate">
                     <Button size="lg" className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90">
                       <Sparkles className="w-4 h-4 mr-2" />
