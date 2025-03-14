@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
-import { Image } from "lucide-react"
+import { ImageIcon } from "lucide-react"
 
 export default function AboutPage() {
   return (
@@ -33,7 +33,7 @@ export default function AboutPage() {
             className="bg-primary/5 rounded-2xl p-8"
           >
             <div className="flex items-center gap-4 mb-6">
-              <Image className="w-8 h-8 text-primary" />
+              <ImageIcon className="w-8 h-8 text-primary" />
               <h2 className="text-3xl font-bold">Our Mission</h2>
             </div>
             <p className="text-lg text-muted-foreground">

@@ -1,11 +1,14 @@
+import { cn } from "@/lib/utils"
+import { ReactNode } from "react"
 
 interface ContainerProps {
-  children: React.ReactNode
+  children: ReactNode
+  className?: string
 }
 
-export function Container({ children }: ContainerProps) {
+export function Container({ children, className }: ContainerProps) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className={cn("container mx-auto px-4", className)}>
       {children}
     </div>
   )

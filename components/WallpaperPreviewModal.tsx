@@ -7,7 +7,7 @@ import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
 import { useState } from "react"
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import { publicConfig, getImageUrl } from '@/lib/imagekit'
+import { getImageUrl } from '@/lib/imagekit'
 
 interface WallpaperPreviewModalProps {
   wallpaper: Wallpaper | null
@@ -38,7 +38,7 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
     }
   }
 
-  const imageUrl = `${publicConfig.urlEndpoint}/${wallpaper.imageUrl}`
+  const imageUrl = getImageUrl(wallpaper.imageUrl)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
