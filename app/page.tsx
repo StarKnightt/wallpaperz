@@ -17,11 +17,6 @@ const ITEMS_PER_PAGE = 8
 // Get unique categories from allWallpapers
 const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
 
-// Get random wallpapers from filtered list
-const randomizeWallpapers = (wallpapers: Wallpaper[]) => {
-  return [...wallpapers].sort(() => Math.random() - 0.5)
-}
-
 export default function Page() {
   const { isSignedIn } = useAuth()
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)
@@ -30,26 +25,29 @@ export default function Page() {
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
-  const [randomizedWallpapers, setRandomizedWallpapers] = useState(allWallpapers)
+  const [filteredWallpapers, setFilteredWallpapers] = useState<Wallpaper[]>([])
 
-  // Move randomization to useEffect to avoid hydration mismatch
+  // Filter wallpapers based on search query or category
   useEffect(() => {
-    const randomized = searchQuery ? allWallpapers
-      .filter(w => {
+    let filtered = allWallpapers
+    
+    if (searchQuery) {
+      filtered = allWallpapers.filter(w => {
         const searchableText = [
           w.title,
           w.category,
           w.description
         ].join(' ').toLowerCase()
         return searchableText.includes(searchQuery.toLowerCase())
-      }) : allWallpapers.filter(w => 
-        activeCategory === DEFAULT_CATEGORY || w.category === activeCategory
-      )
+      })
+    } else if (activeCategory !== DEFAULT_CATEGORY) {
+      filtered = allWallpapers.filter(w => w.category === activeCategory)
+    }
     
-    setRandomizedWallpapers([...randomized].sort(() => Math.random() - 0.5))
+    setFilteredWallpapers(filtered)
+    setPage(1)
+    setHasMore(filtered.length > ITEMS_PER_PAGE)
   }, [searchQuery, activeCategory])
-
-  const paginatedWallpapers = randomizedWallpapers.slice(0, page * ITEMS_PER_PAGE)
 
   // Update URL params effect
   useEffect(() => {
@@ -61,20 +59,20 @@ export default function Page() {
       setSearchQuery(searchParam)
     } else if (categoryParam) {
       setActiveCategory(categoryParam)
-      setSearchQuery(categoryParam)
-    } else {
-      // Set default category if no params are present
-      setActiveCategory(DEFAULT_CATEGORY)
     }
   }, [setSearchQuery, setActiveCategory])
 
+  const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
+
   const loadMore = async () => {
     setLoading(true)
+    // Simulate loading delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500))
     setPage(prev => prev + 1)
     setLoading(false)
     
     // Only hide button if we've loaded all wallpapers
-    if ((page + 1) * ITEMS_PER_PAGE >= randomizedWallpapers.length) {
+    if ((page + 1) * ITEMS_PER_PAGE >= filteredWallpapers.length) {
       setHasMore(false)
     }
   }
@@ -85,32 +83,37 @@ export default function Page() {
   }
 
   return (
-    <div className="space-y-8 pb-16"> {/* Reduced spacing */}
+    <div className="space-y-8 pb-16">
       <Hero />
+      
+      {/* Category Filter */}
+      <section className="container mx-auto px-4 -mt-4">
+        <CategoryFilter categories={categories} selectedCategory={null} onSelectCategory={() => {}} />
+      </section>
       
       {/* Search Results Section */}
       {searchQuery && (
-        <section id="search-results" className="container mx-auto px-4 -mt-4"> {/* Negative margin to pull content up */}
-          <div className="flex justify-between items-center mb-8">
+        <section id="search-results" className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">
+              <h2 className="text-xl md:text-2xl font-bold mb-2">
                 Search Results for &quot;{searchQuery}&quot;
               </h2>
-              <p className="text-muted-foreground">
-                Found {randomizedWallpapers.length} wallpapers
+              <p className="text-sm text-muted-foreground">
+                Found {filteredWallpapers.length} wallpapers
               </p>
             </div>
           </div>
 
           <WallpaperGrid 
-            wallpapers={randomizedWallpapers} 
+            wallpapers={paginatedWallpapers} 
             onPreview={handlePreview}
             isLoading={loading}
           />
 
-          {randomizedWallpapers.length === 0 && (
+          {filteredWallpapers.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground">
+              <p className="text-lg text-muted-foreground">
                 No wallpapers found for &quot;{searchQuery}&quot;. Try different keywords.
               </p>
             </div>
@@ -120,42 +123,34 @@ export default function Page() {
 
       {/* Show regular content only when not searching */}
       {!searchQuery && (
-        <section id="wallpapers-section" className="container mx-auto px-4 -mt-4"> {/* Negative margin to pull content up */}
-          <div className="flex justify-between items-center mb-10">
+        <section id="wallpapers-section" className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">
+              <h2 className="text-xl md:text-2xl font-bold mb-2">
                 {activeCategory === DEFAULT_CATEGORY ? "All Wallpapers" : activeCategory}
               </h2>
               {activeCategory === DEFAULT_CATEGORY && (
-                <p className="text-muted-foreground">
-                  Browse through our complete collection of high-quality wallpapers
+                <p className="text-sm text-muted-foreground">
+                  Browse through our collection of high-quality wallpapers
                 </p>
               )}
             </div>
           </div>
 
           <WallpaperGrid 
-            wallpapers={paginatedWallpapers.slice(0, 4)} 
-            onPreview={handlePreview}
-            isLoading={loading}
-          />
-          <WallpaperGrid 
-            wallpapers={paginatedWallpapers.slice(4)} 
+            wallpapers={paginatedWallpapers} 
             onPreview={handlePreview}
             isLoading={loading}
           />
 
           {/* Load More Button */}
           {hasMore && (
-            <div className="flex justify-center mt-12 mb-2"> {/* Increased margins */}
+            <div className="flex justify-center mt-10">
               <Button 
-                onClick={(e) => {
-                  e.preventDefault() // Prevent default button behavior
-                  loadMore()
-                }} 
+                onClick={loadMore} 
                 disabled={loading}
                 size="lg"
-                className="min-w-[160px]" // Reduced button width
+                className="min-w-[140px]"
               >
                 {loading ? (
                   <>
@@ -172,10 +167,10 @@ export default function Page() {
       )}
 
       {/* No results message */}
-      {randomizedWallpapers.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-xl text-muted-foreground">
-            No wallpapers found for your search. Try different keywords or categories.
+      {filteredWallpapers.length === 0 && !searchQuery && (
+        <div className="text-center py-16 container mx-auto px-4">
+          <p className="text-lg text-muted-foreground">
+            No wallpapers found in this category. Try a different category.
           </p>
         </div>
       )}

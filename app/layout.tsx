@@ -11,6 +11,8 @@ import { GoogleAnalytics } from "@next/third-parties/google"
 import Script from 'next/script'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
+import BottomNav from "@/components/BottomNav"
+import LocalStorageWarning from "@/components/LocalStorageWarning"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -137,12 +139,14 @@ export default function RootLayout({
           >
             <SearchProvider>
               <ScrollProgress />
-              <div className="min-h-screen flex flex-col relative">
+              <div className="min-h-screen flex flex-col relative pb-16 md:pb-0">
                 <Header />
                 <main className="flex-grow w-full max-w-[1920px] mx-auto">
                   {children}
                 </main>
                 <Footer />
+                <BottomNav />
+                <LocalStorageWarning />
               </div>
               <Toaster position="bottom-right" />
               <Analytics />

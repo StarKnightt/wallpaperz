@@ -51,8 +51,11 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
           </div>
         </DialogClose>
 
-        <DialogHeader className="sr-only">
-          <DialogTitle>{wallpaper.title}</DialogTitle>
+        <DialogHeader className="p-4">
+          {/* Use VisuallyHidden to make the title accessible but not visible */}
+          <DialogTitle className="sr-only">
+            {wallpaper.title}
+          </DialogTitle>
         </DialogHeader>
 
         {isLoading && (
