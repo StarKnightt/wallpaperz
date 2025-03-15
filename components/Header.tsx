@@ -4,7 +4,7 @@ import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Moon, Sun, Menu, X } from "lucide-react"
+import { Search, Moon, Sun, Menu, X, Github, Star } from "lucide-react"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { FormEvent } from "react"
@@ -23,6 +23,7 @@ export default function Header() {
   const [isSearching, setIsSearching] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
+  const [starCount, setStarCount] = useState<number | null>(null)
 
   // Handle scroll effect
   useEffect(() => {
@@ -32,6 +33,23 @@ export default function Header() {
     
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  // Fetch GitHub stars count
+  useEffect(() => {
+    const fetchStarCount = async () => {
+      try {
+        const response = await fetch('https://api.github.com/repos/StarKnightt/wallpaperz')
+        if (response.ok) {
+          const data = await response.json()
+          setStarCount(data.stargazers_count)
+        }
+      } catch (error) {
+        console.error('Failed to fetch star count:', error)
+      }
+    }
+    
+    fetchStarCount()
   }, [])
 
   // Debounced search handler
@@ -81,6 +99,17 @@ export default function Header() {
               Wallpaperz
             </Link>
             <Navigation />
+            
+            {/* GitHub Star Counter - Desktop (moved here) */}
+            <Link
+              href="https://github.com/StarKnightt/wallpaperz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-muted/50 hover:bg-muted rounded-full transition-colors"
+            >
+              <Github className="h-4 w-4" />
+              <span>{starCount !== null ? starCount : '...'}</span>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -135,26 +164,45 @@ export default function Header() {
               <SheetContent side="left" className="w-[80%] sm:w-[350px]">
                 <div className="flex flex-col h-full">
                   <div className="py-6">
-            <Link href="/" className="text-xl font-bold">
-              Wallpaperz
-            </Link>
+                    <Link href="/" className="text-xl font-bold">
+                      Wallpaperz
+                    </Link>
                   </div>
                   <Navigation />
+                  
+                  {/* GitHub Star Counter - Mobile Menu */}
+                  <div className="mt-4">
+                    <Link
+                      href="https://github.com/StarKnightt/wallpaperz"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted rounded-md transition-colors"
+                    >
+                      <Github className="h-4 w-4" />
+                      <span>GitHub</span>
+                      {starCount !== null && (
+                        <div className="ml-auto bg-muted px-1.5 py-0.5 rounded-full text-xs">
+                          {starCount}
+                        </div>
+                      )}
+                    </Link>
+                  </div>
+                  
                   <div className="mt-auto pt-6 border-t">
                     <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {!isLoaded ? (
+                      <div className="flex items-center gap-2">
+                        {!isLoaded ? (
                           <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
-              ) : isSignedIn ? (
-                <UserButton afterSignOutUrl="/" />
-              ) : (
-                <SignInButton mode="modal" fallbackRedirectUrl="/">
-                  <Button variant="default" size="sm">
-                    Sign in
-                  </Button>
-                </SignInButton>
-              )}
-            </div>
+                        ) : isSignedIn ? (
+                          <UserButton afterSignOutUrl="/" />
+                        ) : (
+                          <SignInButton mode="modal" fallbackRedirectUrl="/">
+                            <Button variant="default" size="sm">
+                              Sign in
+                            </Button>
+                          </SignInButton>
+                        )}
+                      </div>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -177,18 +225,28 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* GitHub link - Mobile compact (simplified) */}
+            <Link
+              href="https://github.com/StarKnightt/wallpaperz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-8 h-8 bg-muted/50 hover:bg-muted rounded-full transition-colors"
+            >
+              <Github className="h-4 w-4" />
+            </Link>
+            
             {isMobileSearchOpen ? (
               <form onSubmit={handleSubmit} className="absolute inset-x-0 top-0 z-50 bg-background/95 backdrop-blur-md p-4 flex items-center gap-2 border-b">
-            <Input
-              type="search"
+                <Input
+                  type="search"
                   placeholder="Search wallpapers..."
-              value={searchQuery}
-              onChange={handleSearchChange}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                   className="flex-1"
                   autoFocus
-              autoComplete="off"
-              spellCheck="false"
-            />
+                  autoComplete="off"
+                  spellCheck="false"
+                />
                 <Button 
                   type="button" 
                   variant="ghost" 
@@ -197,7 +255,7 @@ export default function Header() {
                 >
                   <X className="h-5 w-5" />
                 </Button>
-          </form>
+              </form>
             ) : (
               <Button 
                 variant="ghost" 

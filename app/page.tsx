@@ -26,6 +26,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [filteredWallpapers, setFilteredWallpapers] = useState<Wallpaper[]>([])
+  const [displayedWallpapers, setDisplayedWallpapers] = useState<Wallpaper[]>([])
 
   // Filter wallpapers based on search query or category
   useEffect(() => {
@@ -45,8 +46,11 @@ export default function Page() {
     }
     
     setFilteredWallpapers(filtered)
+    // Reset pagination when filters change
     setPage(1)
     setHasMore(filtered.length > ITEMS_PER_PAGE)
+    // Initialize displayed wallpapers with first page
+    setDisplayedWallpapers(filtered.slice(0, ITEMS_PER_PAGE))
   }, [searchQuery, activeCategory])
 
   // Update URL params effect
@@ -62,17 +66,24 @@ export default function Page() {
     }
   }, [setSearchQuery, setActiveCategory])
 
-  const paginatedWallpapers = filteredWallpapers.slice(0, page * ITEMS_PER_PAGE)
-
   const loadMore = async () => {
     setLoading(true)
+    
     // Simulate loading delay for better UX
     await new Promise(resolve => setTimeout(resolve, 500))
-    setPage(prev => prev + 1)
+    
+    const nextPage = page + 1
+    const startIndex = page * ITEMS_PER_PAGE
+    const endIndex = nextPage * ITEMS_PER_PAGE
+    const newItems = filteredWallpapers.slice(startIndex, endIndex)
+    
+    // Append new items to displayed wallpapers instead of replacing them
+    setDisplayedWallpapers(prev => [...prev, ...newItems])
+    setPage(nextPage)
     setLoading(false)
     
     // Only hide button if we've loaded all wallpapers
-    if ((page + 1) * ITEMS_PER_PAGE >= filteredWallpapers.length) {
+    if (endIndex >= filteredWallpapers.length) {
       setHasMore(false)
     }
   }
@@ -88,7 +99,7 @@ export default function Page() {
       
       {/* Category Filter */}
       <section className="container mx-auto px-4 -mt-4">
-        <CategoryFilter categories={categories} selectedCategory={null} onSelectCategory={() => {}} />
+        <CategoryFilter categories={categories} />
       </section>
       
       {/* Search Results Section */}
@@ -106,9 +117,9 @@ export default function Page() {
           </div>
 
           <WallpaperGrid 
-            wallpapers={paginatedWallpapers} 
+            wallpapers={displayedWallpapers} 
             onPreview={handlePreview}
-            isLoading={loading}
+            isLoading={loading && displayedWallpapers.length === 0}
           />
 
           {filteredWallpapers.length === 0 && (
@@ -138,9 +149,9 @@ export default function Page() {
           </div>
 
           <WallpaperGrid 
-            wallpapers={paginatedWallpapers} 
+            wallpapers={displayedWallpapers} 
             onPreview={handlePreview}
-            isLoading={loading}
+            isLoading={loading && displayedWallpapers.length === 0}
           />
 
           {/* Load More Button */}

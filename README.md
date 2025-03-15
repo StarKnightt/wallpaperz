@@ -1,79 +1,110 @@
-# Wallpaperz
+# Wallpaperz 🖼️
 
-<video controls src="wallpaperz-1741971911269.mp4" title="Wallpaperz Intro"></video>
+<p align="center">
+  <img src="https://img.shields.io/github/stars/StarKnightt/wallpaperz?style=social" alt="GitHub stars">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome">
+</p>
 
-A modern, open-source wallpaper discovery and sharing platform built with Next.js.
+A beautiful, open-source wallpaper platform built with Next.js. Find and create stunning wallpapers for your devices!
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/StarKnightt/wallpaperz/issues)
+<video controls src="wallpaperz-1741971911269.mp4" title="Wallpaperz Demo"></video>
 
-## Features
+## ✨ Features
 
-- 🖼️ Curated collection of high-quality wallpapers 
-- 🔍 Powerful search functionality
-- 🌓 Light/Dark mode support
-- 🚀 Fast, responsive design
-- 🔐 User authentication with Clerk
-- 🤖 AI-generated wallpapers (coming soon!)
+- 🖼️ Browse high-quality wallpapers
+- 🔍 Easy search and filtering
+- 🌓 Light and dark mode
+- 🤖 AI-powered wallpaper generation
+- 📱 Fully responsive design
+- 💾 Save your favorite wallpapers locally
 
-## Tech Stack
+## 🚀 Demo
 
-- **Frontend**: Next.js, React, TypeScript, TailwindCSS, Framer Motion
-- **Authentication**: Clerk
-- **Image Management**: ImageKit.io
-- **Deployment**: Vercel
+Check out the live demo: [wallpaperz.in](https://wallpaperz.in)
 
-## Getting Started
+## 🛠️ Built With
+
+- **[Next.js](https://nextjs.org/)** - React framework
+- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
+- **[Tailwind CSS](https://tailwindcss.com/)** - Styling
+- **[Framer Motion](https://www.framer.com/motion/)** - Animations
+- **[Clerk](https://clerk.dev/)** - Authentication
+- **[ImageKit](https://imagekit.io/)** - Image storage
+- **[Stability AI](https://stability.ai/)** - AI image generation
+
+## 🏁 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm/yarn
-- Git
+- Node.js 18 or newer
+- npm or yarn
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/StarKnightt/wallpaperz.git
-cd wallpaperz
-```
+1. Clone the repo
+   ```bash
+   git clone https://github.com/StarKnightt/wallpaperz.git
+   cd wallpaperz
+   ```
 
-2. Install dependencies:
-```bash
-npm install
-# or
-yarn
-```
+2. Install packages
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
 
-3. Copy the example environment file and update it with your values:
-```bash
-cp .env.example .env.local
-```
+3. Set up environment variables
+   ```bash
+   cp .env.example .env.local
+   ```
+   Then fill in your API keys in the `.env.local` file.
 
-4. Start the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
+4. Start the development server
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-5. Open [http://localhost:3000](http://localhost:3000) with your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Environmental Variables
+## 📸 Screenshots
 
-The following environment variables are required for the app to function properly:
+<details>
+<summary>Click to see screenshots</summary>
+<br>
+<p align="center">
+  <img src="https://ik.imagekit.io/starknight/screenshots/home.png" alt="Home page" width="80%">
+  <img src="https://ik.imagekit.io/starknight/screenshots/ai-generate.png" alt="AI Generate page" width="80%">
+</p>
+</details>
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Feel free to:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📄 License
 
-## Deploy on Vercel
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ☕ Support
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you find this project helpful, consider buying me a coffee!
+
+<a href="https://buymeacoffee.com/prasen" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50">
+</a>
+
+## 📬 Contact
+
+Prasen - [prasen.dev](https://prasen.dev)
+
+Project Link: [https://github.com/StarKnightt/wallpaperz](https://github.com/StarKnightt/wallpaperz)
