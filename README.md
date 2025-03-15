@@ -95,13 +95,13 @@ Contributions are welcome! Feel free to:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ☕ Support
+<!-- ## ☕ Support
 
 If you find this project helpful, consider buying me a coffee!
 
 <a href="https://buymeacoffee.com/prasen" target="_blank">
   <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50">
-</a>
+</a> -->
 
 ## 📬 Contact
 
