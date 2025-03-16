@@ -67,24 +67,24 @@ export default function Header() {
     [router]
   )
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
       router.push('/#search-results')
       setIsMobileSearchOpen(false)
     }
-  }
+  }, [router, searchQuery, setIsMobileSearchOpen])
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchQuery(value)
     
     if (value.length >= 3) {
       debouncedSearch(value)
     } else if (!value) {
-        router.push('/')
+      router.push('/')
     }
-  }
+  }, [debouncedSearch, router, setSearchQuery])
 
   return (
     <header className={cn(

@@ -11,6 +11,8 @@ import { useSearch, DEFAULT_CATEGORY } from "@/context/SearchContext"
 import { Loader2 } from "lucide-react"
 import { allWallpapers } from "@/data/wallpapers"
 import { useAuth } from "@clerk/nextjs"
+import StructuredData from "@/components/StructuredData"
+import Image from 'next/image'
 
 const ITEMS_PER_PAGE = 8
 
@@ -27,6 +29,18 @@ export default function Page() {
   const [hasMore, setHasMore] = useState(true)
   const [filteredWallpapers, setFilteredWallpapers] = useState<Wallpaper[]>([])
   const [displayedWallpapers, setDisplayedWallpapers] = useState<Wallpaper[]>([])
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Wallpaperz',
+    url: 'https://wallpaperz.in',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://wallpaperz.in/search?q={search_term_string}',
+      'query-input': 'required name=search_term_string'
+    }
+  }
 
   // Filter wallpapers based on search query or category
   useEffect(() => {
@@ -94,103 +108,106 @@ export default function Page() {
   }
 
   return (
-    <div className="space-y-8 pb-16">
-      <Hero />
-      
-      {/* Category Filter */}
-      <section className="container mx-auto px-4 -mt-4">
-        <CategoryFilter categories={categories} />
-      </section>
-      
-      {/* Search Results Section */}
-      {searchQuery && (
-        <section id="search-results" className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold mb-2">
-                Search Results for &quot;{searchQuery}&quot;
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Found {filteredWallpapers.length} wallpapers
-              </p>
-            </div>
-          </div>
-
-          <WallpaperGrid 
-            wallpapers={displayedWallpapers} 
-            onPreview={handlePreview}
-            isLoading={loading && displayedWallpapers.length === 0}
-          />
-
-          {filteredWallpapers.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-lg text-muted-foreground">
-                No wallpapers found for &quot;{searchQuery}&quot;. Try different keywords.
-              </p>
-            </div>
-          )}
+    <>
+      <StructuredData data={websiteSchema} />
+      <div className="space-y-8 pb-16">
+        <Hero />
+        
+        {/* Category Filter */}
+        <section className="container mx-auto px-4 -mt-4">
+          <CategoryFilter categories={categories} />
         </section>
-      )}
-
-      {/* Show regular content only when not searching */}
-      {!searchQuery && (
-        <section id="wallpapers-section" className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold mb-2">
-                {activeCategory === DEFAULT_CATEGORY ? "All Wallpapers" : activeCategory}
-              </h2>
-              {activeCategory === DEFAULT_CATEGORY && (
+        
+        {/* Search Results Section */}
+        {searchQuery && (
+          <section id="search-results" className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold mb-2">
+                  Search Results for &quot;{searchQuery}&quot;
+                </h2>
                 <p className="text-sm text-muted-foreground">
-                  Browse through our collection of high-quality wallpapers
+                  Found {filteredWallpapers.length} wallpapers
                 </p>
-              )}
+              </div>
             </div>
-          </div>
 
-          <WallpaperGrid 
-            wallpapers={displayedWallpapers} 
-            onPreview={handlePreview}
-            isLoading={loading && displayedWallpapers.length === 0}
-          />
+            <WallpaperGrid 
+              wallpapers={displayedWallpapers} 
+              onPreview={handlePreview}
+              isLoading={loading && displayedWallpapers.length === 0}
+            />
 
-          {/* Load More Button */}
-          {hasMore && (
-            <div className="flex justify-center mt-10">
-              <Button 
-                onClick={loadMore} 
-                disabled={loading}
-                size="lg"
-                className="min-w-[140px]"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  'Load More'
+            {filteredWallpapers.length === 0 && (
+              <div className="text-center py-16">
+                <p className="text-lg text-muted-foreground">
+                  No wallpapers found for &quot;{searchQuery}&quot;. Try different keywords.
+                </p>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* Show regular content only when not searching */}
+        {!searchQuery && (
+          <section id="wallpapers-section" className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold mb-2">
+                  {activeCategory === DEFAULT_CATEGORY ? "All Wallpapers" : activeCategory}
+                </h2>
+                {activeCategory === DEFAULT_CATEGORY && (
+                  <p className="text-sm text-muted-foreground">
+                    Browse through our collection of high-quality wallpapers
+                  </p>
                 )}
-              </Button>
+              </div>
             </div>
-          )}
-        </section>
-      )}
 
-      {/* No results message */}
-      {filteredWallpapers.length === 0 && !searchQuery && (
-        <div className="text-center py-16 container mx-auto px-4">
-          <p className="text-lg text-muted-foreground">
-            No wallpapers found in this category. Try a different category.
-          </p>
-        </div>
-      )}
+            <WallpaperGrid 
+              wallpapers={displayedWallpapers} 
+              onPreview={handlePreview}
+              isLoading={loading && displayedWallpapers.length === 0}
+            />
 
-      <WallpaperPreviewModal
-        wallpaper={selectedWallpaper}
-        isOpen={isPreviewOpen}
-        onClose={() => setIsPreviewOpen(false)}
-      />
-    </div>
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="flex justify-center mt-10">
+                <Button 
+                  onClick={loadMore} 
+                  disabled={loading}
+                  size="lg"
+                  className="min-w-[140px]"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    'Load More'
+                  )}
+                </Button>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* No results message */}
+        {filteredWallpapers.length === 0 && !searchQuery && (
+          <div className="text-center py-16 container mx-auto px-4">
+            <p className="text-lg text-muted-foreground">
+              No wallpapers found in this category. Try a different category.
+            </p>
+          </div>
+        )}
+
+        <WallpaperPreviewModal
+          wallpaper={selectedWallpaper}
+          isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+        />
+      </div>
+    </>
   )
 }

@@ -9,3 +9,11 @@ Disallow: /admin/*
 Disallow: /*?search=*
 
 Sitemap: https://wallpaperz.in/sitemap.xml
+
+# Disallow crawling of authentication pages
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /auth/
+
+# Crawl delay for bots
+Crawl-delay: 1

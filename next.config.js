@@ -18,7 +18,13 @@ const nextConfig = {
       : process.env.CLERK_SECRET_KEY_DEV,
   },
   async redirects() {
-    return []
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+        permanent: true,
+      },
+    ];
   },
   async headers() {
     return []
