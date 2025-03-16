@@ -144,4 +144,3 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
     </Dialog>
   )
 }
-
