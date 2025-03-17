@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye } from "lucide-react"
+import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye, User } from "lucide-react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
@@ -332,24 +332,26 @@ export default function AIGeneratePage() {
                   </div>
 
                   <div className="pt-4">
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white py-6 text-lg shadow-md"
-                      disabled={isGenerating}
-                    >
-                      {isGenerating ? (
-                        <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          Generating...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="mr-2 h-5 w-5" />
-                          Generate My Wallpaper
-                        </>
-                      )}
-                    </Button>
+                    <div className="flex flex-col gap-3 mt-4">
+                      <Button
+                        type="submit"
+                        size="default"
+                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white py-5 text-base shadow-md transition-all hover:shadow-lg hover:translate-y-[-2px]"
+                        disabled={isGenerating}
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Generating...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="mr-2 h-4 w-4" />
+                            Generate My Wallpaper
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </form>
               </div>

@@ -15,6 +15,14 @@ import { cn } from "@/lib/utils"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Navigation from "@/components/Navigation"
 
+const navigationItems = [
+  { name: 'Home', href: '/' },
+  { name: 'Gallery', href: '/gallery' },
+  { name: 'AI Generate', href: '/ai-generate' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
+];
+
 export default function Header() {
   const { isSignedIn, isLoaded } = useAuth()
   const { searchQuery, setSearchQuery } = useSearch()
