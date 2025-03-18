@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: 'Wallpaperz',
     images: [
       {
-        url: '/og_image.png',
+        url: 'https://wallpaperz.in/og_image.png',
         width: 1200,
         height: 630,
         alt: 'Wallpaperz - Make your Day with fresh wallpapers',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Wallpaperz - Premium HD & 4K Wallpapers',
     description: 'Discover and download high-quality HD and 4K wallpapers for desktop, mobile, and tablet. Create custom AI-generated wallpapers for free.',
-    images: ['/og_image.png'],
+    images: ['https://wallpaperz.in/og_image.png'],
   },
   icons: {
     icon: [
@@ -122,7 +122,10 @@ export const metadata: Metadata = {
     google: 'your-google-verification-code',
     // yandex: "YOUR_YANDEX_VERIFICATION", // Optional
     // bing: "YOUR_BING_VERIFICATION", // Optional
-  }
+  },
+  other: {
+    'og:logo': 'https://wallpaperz.in/favicon-512x512.png',
+  },
 }
 
 export default function RootLayout({
