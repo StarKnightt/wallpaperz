@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: 'Wallpaperz',
     images: [
       {
-        url: 'https://wallpaperz.in/og_image.png',
+        url: 'https://wallpaperz.in/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Wallpaperz - Make your Day with fresh wallpapers',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Wallpaperz - Premium HD & 4K Wallpapers',
     description: 'Discover and download high-quality HD and 4K wallpapers for desktop, mobile, and tablet. Create custom AI-generated wallpapers for free.',
-    images: ['https://wallpaperz.in/og_image.png'],
+    images: ['https://wallpaperz.in/og-image.png'],
   },
   icons: {
     icon: [
