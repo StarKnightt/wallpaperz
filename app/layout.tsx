@@ -140,6 +140,10 @@ export default function RootLayout({
           <meta name="google-adsense-account" content="ca-pub-9812963383908086" />
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#000000" />
+          <meta property="og:image" content="https://wallpaperz.in/og-image.png" />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="twitter:image" content="https://wallpaperz.in/og-image.png" />
           <Script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9812963383908086"
