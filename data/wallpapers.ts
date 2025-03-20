@@ -3,6 +3,14 @@ import { Wallpaper, WallpaperCollection } from "@/types/wallpaper"
 // Store only the path part, not the full URL
 export const allWallpapers: Wallpaper[] = [
   {
+    id: "1",
+    title: "Lotus flower Lake mountain scene",
+    imageUrl: "Art/louts.jpg",
+    category: "Art",
+    description: "A stunning lotus flower mountain with a lake in background with a beautiful sunset with amazing flowers and louts too.",
+    source: "pexels"
+  },
+  {
     id: "2",
     title: "Sunset in a different way",
     imageUrl: "Art/1.jpg",
@@ -19,6 +27,22 @@ export const allWallpapers: Wallpaper[] = [
     source: "pexels"
   },
   {
+    id: "4",
+    title: "Snowy Walks on snow",
+    imageUrl: "Art/Snowy_Walks.jpg",
+    category: "Art",
+    description: "A snow weather with amazing tress in background as well as making stuffs more better.",
+    source: "Google"
+  },
+  {
+    id: "5",
+    title: "Splash effect stars of art black and white",
+    imageUrl: "Art/splash_B7kJ9aUC38.jpg",
+    category: "Art",
+    description: "A splash effect of Art of black and white with a different view of the world containing a stunning view of the potrait of the effect.",
+    source: "Goodfon"
+  },
+  {
     id: "6",
     title: "Futuristic Windows wallpaper",
     imageUrl: "Art/7.png",
@@ -33,6 +57,14 @@ export const allWallpapers: Wallpaper[] = [
     category: "Abstract",
     description: "Artistic representation of divine inspiration in programming, featuring symbolic elements of technology and spirituality. A unique perspective on the creative process of coding, perfect for developers and tech enthusiasts.",
     source: "pexels"
+  },
+  {
+    id: "8",
+    title: "Wallpaper field, purple, trees, mountains, sky",
+    imageUrl: "minimalist/min1.jpg",
+    category: "Minimalist",
+    description: "A minimalist wallpaper with a field of purple flowers, trees, mountains, and sky. The vibrant colors and unique artistic style make it perfect for nature lovers and modern art enthusiasts.",
+    source: "Goodfon"
   },
   {
     id: "9",
@@ -107,13 +139,45 @@ export const allWallpapers: Wallpaper[] = [
     source: "pexels"
   },
   {
-    id: "30",
+    id: "18",
     title: "blue gradient wallpaper",
     imageUrl: "Art/gradiant_ONzR9fJIr.jpg",
     category: "Abstract",
     description: "A stunning blue gradient wallpaper with a smooth, seamless transition between colors. This modern design creates a calming and visually appealing background for any device, perfect for those who appreciate subtle, sophisticated color palettes.",
     source: "pexels"
-  }
+  },
+  {
+    id: "19",
+    title: "A leafless branch of a tree",
+    imageUrl: "minimalist/min2.jpg",
+    category: "Minimalist",
+    description: "A minimalist wallpaper with a leafless branch of a tree. The vibrant colors and unique artistic style make it perfect for nature lovers and modern art enthusiasts.",
+    source: "Goodfon"
+  },
+  {
+    id: "20",
+    title: "A beautiful view of the coconut tree on a beach",
+    imageUrl: "minimalist/min3.jpg",
+    category: "Minimalist",
+    description: "A minimalist wallpaper with a beautiful view of the coconut tree on a beach. The vibrant colors and unique artistic style make it perfect for nature lovers and modern art enthusiasts.",
+    source: "Goodfon"
+  },
+  {
+    id: "21",
+    title: "An amazing art of a astrounaut trying to go into UFO",
+    imageUrl: "minimalist/min4.jpg",
+    category: "Minimalist",
+    description: "A minimalist wallpaper with an amazing art of a astrounaut trying to go into UFO. The vibrant colors and unique artistic style make it perfect for nature lovers and modern art enthusiasts.",
+    source: "Goodfon"
+  },
+  {
+    id: "22",
+    title: "Moon's minimalist art view",
+    imageUrl: "minimalist/min5.jpg",
+    category: "Minimalist",
+    description: "A minimalist wallpaper with a beautiful view of the moon. The vibrant colors and unique artistic style make it perfect for nature lovers and modern art enthusiasts.",
+    source: "Goodfon"
+  },
 ]
 
 // Optional: Organize by collections
