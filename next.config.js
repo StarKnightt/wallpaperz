@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ik.imagekit.io',
+        pathname: '/starknight/**'
+      }
+    ],
     domains: [
       'ik.imagekit.io',
       'lh3.googleusercontent.com', // Google profile images
@@ -20,11 +27,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/sitemap.xml',
+        source: '/api/sitemap.xml',
         destination: '/api/sitemap',
         permanent: true,
       },
-    ];
+    ]
   },
   async headers() {
     return []
@@ -44,4 +51,4 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+export default nextConfig

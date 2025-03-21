@@ -8,7 +8,7 @@ Disallow: /api/*
 Disallow: /admin/*
 Disallow: /*?search=*
 
-Sitemap: https://wallpaperz.in/sitemap.xml
+Sitemap: https://www.wallpaperz.in/api/sitemap
 
 # Disallow crawling of authentication pages
 Disallow: /sign-in
