@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: 'Wallpaperz',
     images: [
       {
-        url: 'https://wallpaperz.in/og-image.png',
+        url: 'https://wallpaperz.in/theimage.png',
         width: 1200,
         height: 630,
         alt: 'Wallpaperz - Make your Day with fresh wallpapers',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Wallpaperz - Premium HD & 4K Wallpapers',
     description: 'Discover and download high-quality HD and 4K wallpapers for desktop, mobile, and tablet. Create custom AI-generated wallpapers for free.',
-    images: ['https://wallpaperz.in/og-image.png'],
+    images: ['https://wallpaperz.in/theimage.png'],
   },
   icons: {
     icon: [
@@ -140,10 +140,10 @@ export default function RootLayout({
           <meta name="google-adsense-account" content="ca-pub-9812963383908086" />
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#000000" />
-          <meta property="og:image" content="https://wallpaperz.in/og-image.png" />
+          <meta property="og:image" content="https://wallpaperz.in/theimage.png" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
-          <meta property="twitter:image" content="https://wallpaperz.in/og-image.png" />
+          <meta property="twitter:image" content="https://wallpaperz.in/theimage.png" />
           <Script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9812963383908086"
