@@ -171,7 +171,7 @@ export default function Hero() {
           </form>
 
           <div className="flex flex-wrap justify-center gap-3 mt-8">
-            {[DEFAULT_CATEGORY, 'Abstract', 'Anime'].map((tag) => (
+            {[DEFAULT_CATEGORY, 'Abstract', 'Minimalist', 'Fantasy', 'Art'].map((tag) => (
               <Button
                 key={tag}
                 variant={activeCategory === tag ? "default" : "secondary"}

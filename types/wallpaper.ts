@@ -1,4 +1,4 @@
-export type WallpaperCategory = "Abstract" | "Anime" | "Art" | "Cars" | "City" | "Fantasy" | "Nature" | "Space" | "Technology" | "Other" | "Minimalist"
+export type WallpaperCategory = "Abstract" | "Anime" | "Art" | "Cars" | "City" | "Fantasy" | "Nature" | "Space" | "Technology" | "Other" | "Minimalist" | "Fantasy" | "4k"
 
 export interface Wallpaper {
   id: string
