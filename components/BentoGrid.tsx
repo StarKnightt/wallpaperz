@@ -15,7 +15,7 @@ interface BentoItem {
   title?: string
   description?: string
 }
-
+  
 export default function BentoGrid({ onPreview, items: propItems }: BentoGridProps) {
   // Use provided items directly, no default items needed
   const items = propItems || []
