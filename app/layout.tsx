@@ -61,47 +61,32 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/favicon.ico',
-        sizes: 'any',
-        type: 'image/x-icon',
-      },
-      {
-        url: '/favicon-16x16.png',
-        sizes: '16x16',
-        type: 'image/png',
-      },
-      {
-        url: '/favicon-32x32.png',
-        sizes: '32x32',
-        type: 'image/png',
-      },
-      {
-        url: '/favicon.png',
+        url: '/web-app-manifest-192x192.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
-        url: '/favicon-512x512.png',
+        url: '/web-app-manifest-512x512.png',
         sizes: '512x512',
         type: 'image/png',
-      },
+      }
     ],
     apple: [
       {
-        url: '/apple-touch-icon.png',
-        sizes: '180x180',
+        url: '/web-app-manifest-192x192.png',
+        sizes: '192x192',
         type: 'image/png',
       },
     ],
     other: [
       {
         rel: 'mask-icon',
-        url: '/safari-pinned-tab.svg',
+        url: '/web-app-manifest-192x192.png',
         color: '#5bbad5',
       },
       {
         rel: 'shortcut icon',
-        url: '/favicon.ico',
+        url: '/web-app-manifest-192x192.png',
       },
     ],
   },
@@ -124,7 +109,7 @@ export const metadata: Metadata = {
     // bing: "YOUR_BING_VERIFICATION", // Optional
   },
   other: {
-    'og:logo': 'https://wallpaperz.in/favicon-512x512.png',
+    'og:logo': 'https://wallpaperz.in/web-app-manifest-512x512.png',
   },
 }
 
@@ -137,19 +122,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
-          <meta name="google-adsense-account" content="ca-pub-9812963383908086" />
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#000000" />
           <meta property="og:image" content="https://wallpaperz.in/theimage.png" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
           <meta property="twitter:image" content="https://wallpaperz.in/theimage.png" />
-          <Script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9812963383908086"
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
         </head>
         <body className={inter.className}>
           <ThemeProvider
