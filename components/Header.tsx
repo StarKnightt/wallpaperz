@@ -1,5 +1,5 @@
 "use client"
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback, useEffect, useMemo } from "react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -61,18 +61,21 @@ export default function Header() {
   }, [])
 
   // Debounced search handler
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setIsSearching(true)
-      try {
-        if (value.length >= 3) {
-          router.push('/#search-results')
-        }
-      } finally {
-        setIsSearching(false)
+  const debouncedSearch = useCallback((value: string) => {
+    setIsSearching(true)
+    try {
+      if (value.length >= 3) {
+        router.push('/#search-results')
       }
-    }, 600),
-    [router]
+    } finally {
+      setIsSearching(false)
+    }
+  }, [router])
+
+  // Memoize the debounced version
+  const debouncedSearchHandler = useMemo(
+    () => debounce(debouncedSearch, 600),
+    [debouncedSearch]
   )
 
   const handleSubmit = useCallback((e: FormEvent) => {
@@ -88,11 +91,11 @@ export default function Header() {
     setSearchQuery(value)
     
     if (value.length >= 3) {
-      debouncedSearch(value)
+      debouncedSearchHandler(value)
     } else if (!value) {
       router.push('/')
     }
-  }, [debouncedSearch, router, setSearchQuery])
+  }, [debouncedSearchHandler, router, setSearchQuery])
 
   return (
     <header className={cn(

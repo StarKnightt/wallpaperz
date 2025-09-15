@@ -1,23 +1,24 @@
 import { NextRequest } from 'next/server'
-import ImageKit from 'imagekit'
-
-// Initialize ImageKit
-const imagekit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY || "",
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || "",
-  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || ""
-})
+import { imagekitServer } from './server/imagekit'
 
 export async function handleUpload(file: File | Blob) {
   try {
-    // For now, just return a mock URL
-    // In production, you'd upload to a real service
+    const buffer = await file.arrayBuffer()
+    const fileName = `upload_${Date.now()}`
+    
+    const result = await imagekitServer.upload({
+      file: Buffer.from(buffer),
+      fileName,
+      folder: 'uploads'
+    })
+
     return {
       success: true,
-      url: URL.createObjectURL(file),
-      fileId: Date.now().toString()
+      url: result.url,
+      fileId: result.fileId
     }
   } catch (error) {
+    console.error('Upload error:', error)
     throw new Error('Failed to upload file')
   }
 }      

@@ -14,9 +14,6 @@ export const publicConfig = {
   publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || ''
 };
 
-/**
- * Get the full URL for an ImageKit image
- */
 export function getImageUrl(path: string): string {
   // If the path is already a full URL, return it as is
   if (path.startsWith('http://') || path.startsWith('https://')) {
@@ -27,7 +24,6 @@ export function getImageUrl(path: string): string {
   const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight';
   return `${endpoint}/${path}`;
 }
-
 /**
  * Get a transformed URL for an ImageKit image
  */
