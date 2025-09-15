@@ -11,10 +11,9 @@ export function ScrollProgress() {
   
   // Enhanced spring animation
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 40,    // Smoother movement
-    damping: 15,      // More natural bounce
-    restDelta: 0.001, // More precise stopping point
-    mass: 0.1         // Lighter feel
+    stiffness: 40,   
+    damping: 15,      
+    restDelta: 0.001, 
   })
 
   // Refined opacity transition
