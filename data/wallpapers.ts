@@ -1,4 +1,4 @@
-import { Wallpaper, WallpaperCollection } from "@/types/wallpaper"
+import { Wallpaper } from "@/types/wallpaper"
 
 // Store only the path part, not the full URL
 export const allWallpapers: Wallpaper[] = [
@@ -194,17 +194,4 @@ export const allWallpapers: Wallpaper[] = [
     description: "A beautiful view of the mushroom with flower in the ground at night with a beautiful view of the soil. The vibrant colors and unique artistic style make it perfect for nature lovers and modern art enthusiasts.",
     source: "pexels"
   }
-  
 ]
-
-// Optional: Organize by collections
-export const collections = {
-  featured: allWallpapers.slice(0, 4),
-  abstract: allWallpapers.filter(w => w.category === "Abstract"),
-  // Add more collections...
-}
-
-// Helper to get wallpapers by category
-export const getWallpapersByCategory = (category: string) => {
-  return allWallpapers.filter(w => w.category === category)
-}

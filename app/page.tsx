@@ -14,7 +14,7 @@ import { useAuth } from "@clerk/nextjs"
 import StructuredData from "@/components/StructuredData"
 import Image from 'next/image'
 
-const ITEMS_PER_PAGE = 8
+const ITEMS_PER_PAGE = 12
 
 // Get unique categories from allWallpapers
 const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
@@ -91,12 +91,11 @@ export default function Page() {
     const endIndex = nextPage * ITEMS_PER_PAGE
     const newItems = filteredWallpapers.slice(startIndex, endIndex)
     
-    // Append new items to displayed wallpapers instead of replacing them
+   
     setDisplayedWallpapers(prev => [...prev, ...newItems])
     setPage(nextPage)
     setLoading(false)
     
-    // Only hide button if we've loaded all wallpapers
     if (endIndex >= filteredWallpapers.length) {
       setHasMore(false)
     }
@@ -113,12 +112,11 @@ export default function Page() {
       <div className="space-y-8 pb-16">
         <Hero />
         
-        {/* Category Filter */}
+       
         <section className="container mx-auto px-4 -mt-4">
           <CategoryFilter categories={categories} />
         </section>
-        
-        {/* Search Results Section */}
+       
         {searchQuery && (
           <section id="search-results" className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-6">
@@ -148,7 +146,6 @@ export default function Page() {
           </section>
         )}
 
-        {/* Show regular content only when not searching */}
         {!searchQuery && (
           <section id="wallpapers-section" className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-6">
@@ -170,7 +167,6 @@ export default function Page() {
               isLoading={loading && displayedWallpapers.length === 0}
             />
 
-            {/* Load More Button */}
             {hasMore && (
               <div className="flex justify-center mt-10">
                 <Button 
@@ -193,7 +189,6 @@ export default function Page() {
           </section>
         )}
 
-        {/* No results message */}
         {filteredWallpapers.length === 0 && !searchQuery && (
           <div className="text-center py-16 container mx-auto px-4">
             <p className="text-lg text-muted-foreground">

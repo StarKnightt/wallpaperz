@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.11.3",
@@ -39,7 +39,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/file-saver": "^2.0.7",
+    "@next/bundle-analyzer": "^14.2.18",
     "@types/lodash": "^4.17.15",
     "@types/node": "^20",
     "@types/react": "^18",
@@ -50,9 +50,5 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node"
   }
 }

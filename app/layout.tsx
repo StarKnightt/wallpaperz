@@ -103,11 +103,6 @@ export const metadata: Metadata = {
     nocache: true,
   },
   category: 'Technology',
-  verification: {
-    google: 'your-google-verification-code',
-    // yandex: "YOUR_YANDEX_VERIFICATION", // Optional
-    // bing: "YOUR_BING_VERIFICATION", // Optional
-  },
   other: {
     'og:logo': 'https://wallpaperz.in/web-app-manifest-512x512.png',
   },

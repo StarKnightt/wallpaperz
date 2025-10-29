@@ -1,7 +1,5 @@
 # Wallpaperz 🖼️
 
-<video controls src="wallpaperz-1741971911269.mp4" title="Title"></video>
-
 <p align="center">
   <img src="https://img.shields.io/github/stars/StarKnightt/wallpaperz?style=social" alt="GitHub stars">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">

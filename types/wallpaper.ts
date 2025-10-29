@@ -1,4 +1,4 @@
-export type WallpaperCategory = "Abstract" | "Anime" | "Art" | "Cars" | "City" | "Fantasy" | "Nature" | "Space" | "Technology" | "Other" | "Minimalist" | "Fantasy" | "4k"
+export type WallpaperCategory = "Abstract" | "Anime" | "Art" | "Cars" | "City" | "Fantasy" | "Nature" | "Space" | "Technology" | "Other" | "Minimalist" | "4k"
 
 export interface Wallpaper {
   id: string
@@ -6,31 +6,6 @@ export interface Wallpaper {
   imageUrl: string
   category: WallpaperCategory
   description: string
-  source: string;    // 'pexels' | 'pixabay' | 'unsplash'
+  source: string;    // 'pexels' | 'pixabay' | 'unsplash' | 'goodfon' | 'flickr' etc.
   sourceUrl?: string; // optional link to original
-}
-
-export interface WallpaperCollection {
-  id: string
-  name: string
-  description: string
-  thumbnail: string
-  wallpapers: Wallpaper[]
-}
-
-export interface Favorite {
-  id: string
-  wallpaperId: string
-  userId: string
-  createdAt: Date
-}
-
-// Update User type
-export interface User {
-  id: string
-  name?: string | null
-  email?: string | null
-  image?: string | null
-  username?: string | null
-  favorites?: Favorite[]
 }
