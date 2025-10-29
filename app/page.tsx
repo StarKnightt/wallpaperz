@@ -13,11 +13,19 @@ import { allWallpapers } from "@/data/wallpapers"
 import { useAuth } from "@clerk/nextjs"
 import StructuredData from "@/components/StructuredData"
 import Image from 'next/image'
+import { toast } from "sonner"
 
 const ITEMS_PER_PAGE = 12
 
-// Get unique categories from allWallpapers
-const categories = Array.from(new Set(allWallpapers.map(w => w.category)))
+// Fisher-Yates shuffle algorithm for randomizing wallpapers
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array] // Create a copy to avoid mutating original
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
 
 export default function Page() {
   const { isSignedIn } = useAuth()
@@ -29,6 +37,11 @@ export default function Page() {
   const [hasMore, setHasMore] = useState(true)
   const [filteredWallpapers, setFilteredWallpapers] = useState<Wallpaper[]>([])
   const [displayedWallpapers, setDisplayedWallpapers] = useState<Wallpaper[]>([])
+  
+  // State for ImageKit wallpapers - start with shuffled fallback
+  const [allWallpapersData, setAllWallpapersData] = useState<Wallpaper[]>(() => shuffleArray(allWallpapers))
+  const [isFetchingWallpapers, setIsFetchingWallpapers] = useState(false)
+  const [categories, setCategories] = useState<string[]>(Array.from(new Set(allWallpapers.map(w => w.category))))
 
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -42,12 +55,53 @@ export default function Page() {
     }
   }
 
+  // Fetch wallpapers from ImageKit on mount
+  useEffect(() => {
+    const fetchWallpapers = async () => {
+      setIsFetchingWallpapers(true)
+      try {
+        const response = await fetch('/api/wallpapers/sync')
+        const data = await response.json()
+        
+        if (data.success && data.wallpapers && data.wallpapers.length > 0) {
+          // Successfully fetched from ImageKit - shuffle for variety
+          const shuffledWallpapers = shuffleArray(data.wallpapers as Wallpaper[])
+          setAllWallpapersData(shuffledWallpapers)
+          
+          // Update categories
+          const uniqueCategories = Array.from(new Set(shuffledWallpapers.map((w) => w.category))) as string[]
+          setCategories(uniqueCategories)
+          
+          // Show success message only if fetched from ImageKit (not cache)
+          if (!data.cached) {
+            console.log(`✅ Loaded ${data.wallpapers.length} wallpapers from ImageKit`)
+          } else {
+            console.log(`✅ Loaded ${data.wallpapers.length} wallpapers from cache`)
+          }
+        } else {
+          // No wallpapers from ImageKit, use fallback (shuffled)
+          console.log('ℹ️ Using fallback wallpapers')
+          setAllWallpapersData(shuffleArray(allWallpapers))
+        }
+      } catch (error) {
+        // Error fetching from ImageKit, use fallback (shuffled)
+        console.error('Failed to fetch wallpapers from ImageKit:', error)
+        console.log('ℹ️ Using fallback wallpapers')
+        setAllWallpapersData(shuffleArray(allWallpapers))
+      } finally {
+        setIsFetchingWallpapers(false)
+      }
+    }
+
+    fetchWallpapers()
+  }, [])
+
   // Filter wallpapers based on search query or category
   useEffect(() => {
-    let filtered = allWallpapers
+    let filtered = allWallpapersData
     
     if (searchQuery) {
-      filtered = allWallpapers.filter(w => {
+      filtered = allWallpapersData.filter(w => {
         const searchableText = [
           w.title,
           w.category,
@@ -56,7 +110,7 @@ export default function Page() {
         return searchableText.includes(searchQuery.toLowerCase())
       })
     } else if (activeCategory !== DEFAULT_CATEGORY) {
-      filtered = allWallpapers.filter(w => w.category === activeCategory)
+      filtered = allWallpapersData.filter(w => w.category === activeCategory)
     }
     
     setFilteredWallpapers(filtered)
@@ -65,7 +119,7 @@ export default function Page() {
     setHasMore(filtered.length > ITEMS_PER_PAGE)
     // Initialize displayed wallpapers with first page
     setDisplayedWallpapers(filtered.slice(0, ITEMS_PER_PAGE))
-  }, [searchQuery, activeCategory])
+  }, [searchQuery, activeCategory, allWallpapersData])
 
   // Update URL params effect
   useEffect(() => {

@@ -85,7 +85,7 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
   })
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[180px] md:auto-rows-[220px] gap-3 md:gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[180px] md:auto-rows-[220px] gap-3 md:gap-4" style={{ gridAutoFlow: 'dense' }}>
       {wallpaperCards}
     </div>
   )
@@ -93,7 +93,7 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
 
 function LoadingSkeleton() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[180px] md:auto-rows-[220px] gap-3 md:gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[180px] md:auto-rows-[220px] gap-3 md:gap-4" style={{ gridAutoFlow: 'dense' }}>
       {[...Array(8)].map((_, i) => {
         const isMobileFull = i % 3 === 0
         const gridClass = `

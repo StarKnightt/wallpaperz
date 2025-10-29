@@ -180,14 +180,6 @@ export const allWallpapers: Wallpaper[] = [
   },
   {
     id: "23",
-    title: "Moon in sky with beautiful view of flowers in the ground",
-    imageUrl: "All/Petal.jpg",
-    category: "Fantasy",
-    description: "A beautiful view of the moon with beautiful view of flowers in the ground. The vibrant colors and unique artistic style make it perfect for nature lovers and modern art enthusiasts.",
-    source: "Flickr"
-  },
-  {
-    id: "24",
     title: "Mushroom with flower in the ground at night with a beautiful view of the soil",
     imageUrl: "All/mushroom-flower.jpg",
     category: "Fantasy",
