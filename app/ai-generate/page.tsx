@@ -11,7 +11,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth, SignInButton } from "@clerk/nextjs"
 import Image from "next/image"
-import { saveAs } from "file-saver"
 import { motion } from "framer-motion"
 
 interface FormValues {
@@ -87,12 +86,18 @@ export default function AIGeneratePage() {
 
   const handleDownload = () => {
     if (generatedImage) {
-      // Convert base64 to blob
       fetch(generatedImage)
         .then((res) => res.blob())
         .then((blob) => {
           const timestamp = new Date().getTime()
-          saveAs(blob, `wallpaperz-ai-${timestamp}.png`)
+          const url = window.URL.createObjectURL(blob)
+          const link = document.createElement('a')
+          link.href = url
+          link.download = `wallpaperz-ai-${timestamp}.png`
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          window.URL.revokeObjectURL(url)
         })
         .catch((err) => {
           console.error("Download error:", err)

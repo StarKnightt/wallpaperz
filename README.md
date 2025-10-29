@@ -57,9 +57,9 @@ Check out the live demo: [wallpaperz.in](https://wallpaperz.in)
 
 3. Set up environment variables
    ```bash
-   cp .env.example .env.local
+   cp env.example.txt .env.local
    ```
-   Then fill in your API keys in the `.env.local` file.
+   Then fill in your API keys in the `.env.local` file (see `env.example.txt` for required variables).
 
 4. Start the development server
    ```bash

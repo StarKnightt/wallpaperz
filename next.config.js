@@ -10,8 +10,8 @@ const nextConfig = {
     ],
     domains: [
       'ik.imagekit.io',
-      'lh3.googleusercontent.com', // Google profile images
-      'avatars.githubusercontent.com', // GitHub profile images
+      'lh3.googleusercontent.com', // Google profile image
+      'avatars.githubusercontent.com', // GitHub profile image
       'images.pexels.com'  // Update this line
     ],
   },

@@ -1,10 +1,11 @@
 "use client"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { Wallpaper } from "@/types/wallpaper"
 import Image from "next/image"
 import { Download, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import { getImageUrl } from "@/lib/imagekit"
 
 interface WallpaperCardProps {
   wallpaper: Wallpaper
@@ -28,21 +29,19 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
     e.stopPropagation()
     
     try {
-      const response = await fetch(wallpaper.imageUrl)
+      const imageUrl = getImageUrl(wallpaper.imageUrl)
+      const response = await fetch(imageUrl)
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
       link.download = `wallpaper-${wallpaper.id || Date.now()}.jpg`
-      // Append to body and click programmatically
       document.body.appendChild(link)
       link.click()
-      // Cleanup
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Download failed:', error)
-      // Optionally show an error toast here
     }
   }
 
@@ -75,15 +74,13 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
           transition={{ duration: 0.5 }}
         >
           <Image
-            src={wallpaper.imageUrl}
+            src={getImageUrl(wallpaper.imageUrl)}
             alt={wallpaper.title}
             fill
             loading="lazy"
             className="object-cover transform transition-all duration-500 group-hover:scale-110"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
             quality={75}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRseHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/2wBDAR"
           />
         </motion.div>
 
