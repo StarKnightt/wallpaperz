@@ -11,12 +11,64 @@ interface GenerationResponse {
   }>;
 }
 
+// Simple in-memory rate limiter
+// In production, use Redis or a database
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+
+const RATE_LIMIT = {
+  maxRequests: 5, // Max requests per window
+  windowMs: 60 * 60 * 1000, // 1 hour window
+}
+
+function checkRateLimit(userId: string): { allowed: boolean; remaining: number; resetTime: number } {
+  const now = Date.now()
+  const userLimit = rateLimitMap.get(userId)
+
+  if (!userLimit || now > userLimit.resetTime) {
+    // Reset or create new limit
+    const resetTime = now + RATE_LIMIT.windowMs
+    rateLimitMap.set(userId, { count: 1, resetTime })
+    return { allowed: true, remaining: RATE_LIMIT.maxRequests - 1, resetTime }
+  }
+
+  if (userLimit.count >= RATE_LIMIT.maxRequests) {
+    // Rate limit exceeded
+    return { allowed: false, remaining: 0, resetTime: userLimit.resetTime }
+  }
+
+  // Increment count
+  userLimit.count++
+  rateLimitMap.set(userId, userLimit)
+  return { allowed: true, remaining: RATE_LIMIT.maxRequests - userLimit.count, resetTime: userLimit.resetTime }
+}
+
 export async function POST(req: NextRequest) {
   try {
     // Check authentication
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Check rate limit
+    const rateLimit = checkRateLimit(userId)
+    if (!rateLimit.allowed) {
+      const resetDate = new Date(rateLimit.resetTime)
+      return NextResponse.json(
+        { 
+          error: "Rate limit exceeded. Please try again later.",
+          resetTime: resetDate.toISOString(),
+          message: `You've reached the maximum of ${RATE_LIMIT.maxRequests} generations per hour. Resets at ${resetDate.toLocaleTimeString()}`
+        }, 
+        { 
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': String(RATE_LIMIT.maxRequests),
+            'X-RateLimit-Remaining': String(rateLimit.remaining),
+            'X-RateLimit-Reset': String(rateLimit.resetTime),
+          }
+        }
+      );
     }
 
     // Parse the request body
@@ -97,11 +149,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      image: `data:image/png;base64,${generatedImage}`,
-      seed: responseData.artifacts[0]?.seed,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        image: `data:image/png;base64,${generatedImage}`,
+        seed: responseData.artifacts[0]?.seed,
+      },
+      {
+        headers: {
+          'X-RateLimit-Limit': String(RATE_LIMIT.maxRequests),
+          'X-RateLimit-Remaining': String(rateLimit.remaining),
+          'X-RateLimit-Reset': String(rateLimit.resetTime),
+        }
+      }
+    );
 
   } catch (error) {
     console.error("AI generation error:", error);

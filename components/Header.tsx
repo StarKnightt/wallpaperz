@@ -43,17 +43,46 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Fetch GitHub stars count
+  // Fetch GitHub stars count with caching
   useEffect(() => {
+    const CACHE_KEY = 'github_star_count'
+    const CACHE_DURATION = 1000 * 60 * 60 // 1 hour in milliseconds
+
     const fetchStarCount = async () => {
       try {
+        // Check cache first
+        const cached = localStorage.getItem(CACHE_KEY)
+        if (cached) {
+          const { count, timestamp } = JSON.parse(cached)
+          const isExpired = Date.now() - timestamp > CACHE_DURATION
+          
+          if (!isExpired) {
+            setStarCount(count)
+            return
+          }
+        }
+
+        // Fetch from API if cache is expired or doesn't exist
         const response = await fetch('https://api.github.com/repos/StarKnightt/wallpaperz')
         if (response.ok) {
           const data = await response.json()
-          setStarCount(data.stargazers_count)
+          const count = data.stargazers_count
+          
+          // Update state and cache
+          setStarCount(count)
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            count,
+            timestamp: Date.now()
+          }))
         }
       } catch (error) {
         console.error('Failed to fetch star count:', error)
+        // Try to use stale cache as fallback
+        const cached = localStorage.getItem(CACHE_KEY)
+        if (cached) {
+          const { count } = JSON.parse(cached)
+          setStarCount(count)
+        }
       }
     }
     
@@ -77,6 +106,13 @@ export default function Header() {
     () => debounce(debouncedSearch, 600),
     [debouncedSearch]
   )
+
+  // Cleanup debounce on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      debouncedSearchHandler.cancel()
+    }
+  }, [debouncedSearchHandler])
 
   const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault()

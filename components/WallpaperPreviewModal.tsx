@@ -120,7 +120,13 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
               className="w-full sm:w-auto"
               onClick={async () => {
                 try {
+                  toast.info('Preparing download...')
                   const response = await fetch(imageUrl);
+                  
+                  if (!response.ok) {
+                    throw new Error('Failed to fetch image')
+                  }
+                  
                   const blob = await response.blob();
                   const url = window.URL.createObjectURL(blob);
                   const link = document.createElement('a');
@@ -130,8 +136,11 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
                   link.click();
                   document.body.removeChild(link);
                   window.URL.revokeObjectURL(url);
+                  
+                  toast.success('Wallpaper downloaded successfully!')
                 } catch (error) {
                   console.error('Download failed:', error);
+                  toast.error('Failed to download wallpaper. Please try again.')
                 }
               }}
             >

@@ -6,6 +6,7 @@ import { Download, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { getImageUrl } from "@/lib/imagekit"
+import { toast } from "sonner"
 
 interface WallpaperCardProps {
   wallpaper: Wallpaper
@@ -29,8 +30,14 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
     e.stopPropagation()
     
     try {
+      toast.info('Preparing download...')
       const imageUrl = getImageUrl(wallpaper.imageUrl)
       const response = await fetch(imageUrl)
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch image')
+      }
+      
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -40,8 +47,11 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
+      
+      toast.success('Wallpaper downloaded successfully!')
     } catch (error) {
       console.error('Download failed:', error)
+      toast.error('Failed to download wallpaper. Please try again.')
     }
   }
 

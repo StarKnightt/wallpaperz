@@ -5,24 +5,24 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'ik.imagekit.io',
-        pathname: '/starknight/**'
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com', // Google profile images
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com', // GitHub profile images
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com', // Clerk user avatars
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
     ],
-    domains: [
-      'ik.imagekit.io',
-      'lh3.googleusercontent.com', // Google profile image
-      'avatars.githubusercontent.com', // GitHub profile image
-      'images.pexels.com'  // Update this line
-    ],
-  },
-  env: {
-    NEXT_PUBLIC_SITE_URL: 'https://wallpaperz.in',
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NODE_ENV === 'production' 
-      ? process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_PROD 
-      : process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_DEV,
-    CLERK_SECRET_KEY: process.env.NODE_ENV === 'production'
-      ? process.env.CLERK_SECRET_KEY_PROD
-      : process.env.CLERK_SECRET_KEY_DEV,
   },
   async redirects() {
     return [
@@ -33,10 +33,6 @@ const nextConfig = {
       },
     ]
   },
-  async headers() {
-    return []
-  },
-  // Add external links
   async rewrites() {
     return [
       {
