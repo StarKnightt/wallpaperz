@@ -67,7 +67,6 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
         backgroundImage: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.1) 0%, transparent 50%)`
       }}
     >
-      {/* Shine effect */}
       <div 
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
         style={{
@@ -76,7 +75,6 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
         }}
       />
 
-      {/* Card content */}
       <div className="aspect-[16/10] relative overflow-hidden">
         <motion.div
           initial={{ scale: 1.2, opacity: 0 }}
@@ -94,7 +92,6 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
           />
         </motion.div>
 
-        {/* Enhanced overlay with shine */}
         <motion.div 
           className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent"
           initial={{ opacity: 0 }}
@@ -109,7 +106,6 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
           />
         </motion.div>
 
-        {/* Enhanced buttons */}
         <motion.div 
           className="absolute bottom-0 left-0 right-0 p-4 flex gap-2"
           initial={{ y: 20, opacity: 0 }}
@@ -121,7 +117,6 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
             className="flex-1 bg-white text-black hover:bg-white/90 backdrop-blur-sm relative overflow-hidden"
             onClick={onPreview}
           >
-            {/* Button shine effect */}
             <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-300 bg-gradient-to-r from-transparent via-black/10 to-transparent" />
             <Eye className="w-4 h-4 mr-2" />
             Preview
@@ -131,7 +126,6 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
             className="flex-1 bg-white text-black hover:bg-white/90 backdrop-blur-sm relative overflow-hidden"
             onClick={handleDownload}
           >
-            {/* Button shine effect */}
             <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-300 bg-gradient-to-r from-transparent via-black/10 to-transparent" />
             <Download className="w-4 h-4 mr-2" />
             Download

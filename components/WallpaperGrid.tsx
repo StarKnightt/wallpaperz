@@ -19,12 +19,9 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
   }
 
   const wallpaperCards = wallpapers.map((wallpaper, index) => {
-    // Responsive sizing
-    const isLarge = index % 8 === 0 // Every 8th item is large
-    const isMedium = index % 6 === 3 // Every 6th item is medium
-    
-    // Mobile sizing
-    const isMobileFull = index % 3 === 0 // Every 3rd item spans full width on mobile
+    const isLarge = index % 8 === 0
+    const isMedium = index % 6 === 3
+    const isMobileFull = index % 3 === 0
     
     const gridClass = `
       ${isMobileFull ? "col-span-2 sm:col-span-1" : ""} 
@@ -56,10 +53,8 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
           />
         </div>
 
-        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-        {/* Content */}
         <div className="absolute inset-0 p-3 md:p-4 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all">
           <h3 className="text-white font-semibold text-sm md:text-base mb-2 line-clamp-2">{wallpaper.title}</h3>
           <div className="flex gap-2">
@@ -76,7 +71,6 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
           </div>
         </div>
 
-        {/* Always visible category tag */}
         <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
           {wallpaper.category}
         </div>

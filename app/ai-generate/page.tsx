@@ -64,7 +64,6 @@ export default function AIGeneratePage() {
         body: JSON.stringify({
           prompt: data.prompt,
           negative_prompt: data.negativePrompt,
-          // Default to desktop size with 16:9 aspect ratio
           size: "desktop"
         }),
       })
@@ -120,7 +119,6 @@ export default function AIGeneratePage() {
     
     try {
       if (navigator.share) {
-        // Use Web Share API if available
         const blob = await fetch(generatedImage).then(r => r.blob())
         const file = new File([blob], 'wallpaper.png', { type: 'image/png' })
         
@@ -130,7 +128,6 @@ export default function AIGeneratePage() {
           files: [file]
         })
       } else {
-        // Fallback: Copy image URL to clipboard
         await navigator.clipboard.writeText(window.location.href)
         alert('Link copied to clipboard!')
       }
@@ -150,7 +147,6 @@ export default function AIGeneratePage() {
   if (!isSignedIn) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-background/80">
-        {/* Grid background */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0" style={{
             backgroundImage: `
@@ -177,7 +173,6 @@ export default function AIGeneratePage() {
               transition={{ duration: 0.5 }}
             >
               <div className="relative">
-                {/* Animated glow effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-25 animate-pulse" />
                 <div className="relative bg-background/80 backdrop-blur-lg rounded-lg p-10 space-y-6">
                   <div className="inline-flex items-center justify-center p-4 bg-purple-500/10 rounded-full mb-2">
@@ -213,7 +208,6 @@ export default function AIGeneratePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95">
-      {/* Grid background */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0" style={{
           backgroundImage: `
@@ -250,7 +244,6 @@ export default function AIGeneratePage() {
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Form Column */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -362,7 +355,6 @@ export default function AIGeneratePage() {
               </div>
             </motion.div>
 
-            {/* Result Column */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -446,7 +438,6 @@ export default function AIGeneratePage() {
                 </CardContent>
               </Card>
               
-              {/* Pro tips */}
               {!isGenerating && !generatedImage && (
                 <Card className="mt-6 bg-background/30 backdrop-blur-sm border">
                   <CardContent className="p-4">

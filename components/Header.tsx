@@ -33,7 +33,6 @@ export default function Header() {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
   const [starCount, setStarCount] = useState<number | null>(null)
 
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
@@ -43,14 +42,12 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Fetch GitHub stars count with caching
   useEffect(() => {
     const CACHE_KEY = 'github_star_count'
-    const CACHE_DURATION = 1000 * 60 * 60 // 1 hour in milliseconds
+    const CACHE_DURATION = 1000 * 60 * 60
 
     const fetchStarCount = async () => {
       try {
-        // Check cache first
         const cached = localStorage.getItem(CACHE_KEY)
         if (cached) {
           const { count, timestamp } = JSON.parse(cached)
@@ -62,13 +59,11 @@ export default function Header() {
           }
         }
 
-        // Fetch from API if cache is expired or doesn't exist
         const response = await fetch('https://api.github.com/repos/StarKnightt/wallpaperz')
         if (response.ok) {
           const data = await response.json()
           const count = data.stargazers_count
           
-          // Update state and cache
           setStarCount(count)
           localStorage.setItem(CACHE_KEY, JSON.stringify({
             count,
@@ -77,7 +72,6 @@ export default function Header() {
         }
       } catch (error) {
         console.error('Failed to fetch star count:', error)
-        // Try to use stale cache as fallback
         const cached = localStorage.getItem(CACHE_KEY)
         if (cached) {
           const { count } = JSON.parse(cached)
@@ -89,7 +83,6 @@ export default function Header() {
     fetchStarCount()
   }, [])
 
-  // Debounced search handler
   const debouncedSearch = useCallback((value: string) => {
     setIsSearching(true)
     try {
@@ -101,13 +94,11 @@ export default function Header() {
     }
   }, [router])
 
-  // Memoize the debounced version
   const debouncedSearchHandler = useMemo(
     () => debounce(debouncedSearch, 600),
     [debouncedSearch]
   )
 
-  // Cleanup debounce on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
       debouncedSearchHandler.cancel()
@@ -139,7 +130,6 @@ export default function Header() {
       isScrolled ? "bg-background/80 backdrop-blur-md border-b" : "bg-transparent"
     )}>
       <div className="container mx-auto px-4">
-        {/* Desktop Layout */}
         <div className="hidden md:flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="text-xl font-bold">
@@ -147,7 +137,6 @@ export default function Header() {
             </Link>
             <Navigation />
             
-            {/* GitHub Star Counter - Desktop (moved here) */}
             <Link
               href="https://github.com/StarKnightt/wallpaperz"
               target="_blank"
@@ -198,7 +187,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Layout */}
         <div className="md:hidden flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Sheet>
@@ -217,7 +205,6 @@ export default function Header() {
                   </div>
                   <Navigation />
                   
-                  {/* GitHub Star Counter - Mobile Menu */}
                   <div className="mt-4">
                     <Link
                       href="https://github.com/StarKnightt/wallpaperz"
@@ -272,7 +259,6 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* GitHub link - Mobile compact (simplified) */}
             <Link
               href="https://github.com/StarKnightt/wallpaperz"
               target="_blank"

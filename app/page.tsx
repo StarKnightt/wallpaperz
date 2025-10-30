@@ -17,9 +17,8 @@ import { toast } from "sonner"
 
 const ITEMS_PER_PAGE = 12
 
-// Fisher-Yates shuffle algorithm for randomizing wallpapers
 function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array] // Create a copy to avoid mutating original
+  const shuffled = [...array]
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
@@ -37,8 +36,6 @@ export default function Page() {
   const [hasMore, setHasMore] = useState(true)
   const [filteredWallpapers, setFilteredWallpapers] = useState<Wallpaper[]>([])
   const [displayedWallpapers, setDisplayedWallpapers] = useState<Wallpaper[]>([])
-  
-  // State for ImageKit wallpapers - start with shuffled fallback
   const [allWallpapersData, setAllWallpapersData] = useState<Wallpaper[]>(() => shuffleArray(allWallpapers))
   const [isFetchingWallpapers, setIsFetchingWallpapers] = useState(false)
   const [categories, setCategories] = useState<string[]>(Array.from(new Set(allWallpapers.map(w => w.category))))
@@ -55,7 +52,6 @@ export default function Page() {
     }
   }
 
-  // Fetch wallpapers from ImageKit on mount
   useEffect(() => {
     const fetchWallpapers = async () => {
       setIsFetchingWallpapers(true)
@@ -64,27 +60,22 @@ export default function Page() {
         const data = await response.json()
         
         if (data.success && data.wallpapers && data.wallpapers.length > 0) {
-          // Successfully fetched from ImageKit - shuffle for variety
           const shuffledWallpapers = shuffleArray(data.wallpapers as Wallpaper[])
           setAllWallpapersData(shuffledWallpapers)
           
-          // Update categories
           const uniqueCategories = Array.from(new Set(shuffledWallpapers.map((w) => w.category))) as string[]
           setCategories(uniqueCategories)
           
-          // Show success message only if fetched from ImageKit (not cache)
           if (!data.cached) {
             console.log(`✅ Loaded ${data.wallpapers.length} wallpapers from ImageKit`)
           } else {
             console.log(`✅ Loaded ${data.wallpapers.length} wallpapers from cache`)
           }
         } else {
-          // No wallpapers from ImageKit, use fallback (shuffled)
           console.log('ℹ️ Using fallback wallpapers')
           setAllWallpapersData(shuffleArray(allWallpapers))
         }
       } catch (error) {
-        // Error fetching from ImageKit, use fallback (shuffled)
         console.error('Failed to fetch wallpapers from ImageKit:', error)
         console.log('ℹ️ Using fallback wallpapers')
         setAllWallpapersData(shuffleArray(allWallpapers))
@@ -96,7 +87,6 @@ export default function Page() {
     fetchWallpapers()
   }, [])
 
-  // Filter wallpapers based on search query or category
   useEffect(() => {
     let filtered = allWallpapersData
     
@@ -114,14 +104,11 @@ export default function Page() {
     }
     
     setFilteredWallpapers(filtered)
-    // Reset pagination when filters change
     setPage(1)
     setHasMore(filtered.length > ITEMS_PER_PAGE)
-    // Initialize displayed wallpapers with first page
     setDisplayedWallpapers(filtered.slice(0, ITEMS_PER_PAGE))
   }, [searchQuery, activeCategory, allWallpapersData])
 
-  // Update URL params effect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const searchParam = params.get('search')
@@ -136,8 +123,6 @@ export default function Page() {
 
   const loadMore = async () => {
     setLoading(true)
-    
-    // Simulate loading delay for better UX
     await new Promise(resolve => setTimeout(resolve, 500))
     
     const nextPage = page + 1
@@ -145,7 +130,6 @@ export default function Page() {
     const endIndex = nextPage * ITEMS_PER_PAGE
     const newItems = filteredWallpapers.slice(startIndex, endIndex)
     
-   
     setDisplayedWallpapers(prev => [...prev, ...newItems])
     setPage(nextPage)
     setLoading(false)
