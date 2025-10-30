@@ -13,7 +13,6 @@ interface ComingSoonModalProps {
 
 export default function ComingSoonModal({ isOpen, onClose, feature }: ComingSoonModalProps) {
   const [isNotifying, setIsNotifying] = useState(false)
-
   const handleNotify = () => {
     setIsNotifying(true)
     // Simulate API call

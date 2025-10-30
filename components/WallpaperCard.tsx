@@ -2,7 +2,7 @@
 import { useState, useRef } from "react"
 import { Wallpaper } from "@/types/wallpaper"
 import Image from "next/image"
-import { Download, Eye } from "lucide-react"
+import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { getImageUrl } from "@/lib/imagekit"
@@ -58,17 +58,18 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
   return (
     <motion.div 
       ref={cardRef}
-      className="group relative rounded-lg overflow-hidden bg-black/20 backdrop-blur-sm"
+      className="group relative rounded-lg overflow-hidden bg-black/20 backdrop-blur-sm cursor-pointer"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
       onMouseMove={handleMouseMove}
+      onClick={onPreview}
       style={{
         backgroundImage: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.1) 0%, transparent 50%)`
       }}
     >
       <div 
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
         style={{
           background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.2) 0%, transparent 50%)`,
           transition: 'opacity 0.3s'
@@ -93,7 +94,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
         </motion.div>
 
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent pointer-events-none"
           initial={{ opacity: 0 }}
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
@@ -107,23 +108,14 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
         </motion.div>
 
         <motion.div 
-          className="absolute bottom-0 left-0 right-0 p-4 flex gap-2"
+          className="absolute bottom-0 left-0 right-0 p-4"
           initial={{ y: 20, opacity: 0 }}
           whileHover={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.2 }}
         >
           <Button 
             variant="secondary"
-            className="flex-1 bg-white text-black hover:bg-white/90 backdrop-blur-sm relative overflow-hidden"
-            onClick={onPreview}
-          >
-            <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-300 bg-gradient-to-r from-transparent via-black/10 to-transparent" />
-            <Eye className="w-4 h-4 mr-2" />
-            Preview
-          </Button>
-          <Button 
-            variant="secondary"
-            className="flex-1 bg-white text-black hover:bg-white/90 backdrop-blur-sm relative overflow-hidden"
+            className="w-full bg-white text-black hover:bg-white/90 backdrop-blur-sm relative overflow-hidden"
             onClick={handleDownload}
           >
             <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-300 bg-gradient-to-r from-transparent via-black/10 to-transparent" />
