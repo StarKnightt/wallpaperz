@@ -117,13 +117,24 @@ export default function Page() {
     const params = new URLSearchParams(window.location.search)
     const searchParam = params.get('search')
     const categoryParam = params.get('category')
+    const wallpaperParam = params.get('wallpaper')
     
     if (searchParam) {
       setSearchQuery(searchParam)
     } else if (categoryParam) {
       setActiveCategory(categoryParam)
     }
-  }, [setSearchQuery, setActiveCategory])
+    
+    if (wallpaperParam && allWallpapersData.length > 0) {
+      const wallpaper = allWallpapersData.find(w => w.id === wallpaperParam)
+      if (wallpaper) {
+        setSelectedWallpaper(wallpaper)
+        setIsPreviewOpen(true)
+        
+        window.history.replaceState({}, '', window.location.pathname)
+      }
+    }
+  }, [setSearchQuery, setActiveCategory, allWallpapersData])
 
   const loadMore = async () => {
     setLoading(true)
