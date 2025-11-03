@@ -48,7 +48,10 @@ function transformToWallpaper(file: any): Wallpaper {
     category: category as any,
     description: file.customMetadata?.description || `A beautiful ${category.toLowerCase()} wallpaper`,
     source: file.customMetadata?.source || file.tags?.find((t: string) => ['pexels', 'unsplash', 'pixabay'].includes(t.toLowerCase())) || 'imagekit',
-    sourceUrl: file.customMetadata?.sourceUrl || undefined
+    sourceUrl: file.customMetadata?.sourceUrl || undefined,
+    width: file.width,
+    height: file.height,
+    fileSize: file.size
   }
 }
 

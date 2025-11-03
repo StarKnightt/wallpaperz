@@ -17,7 +17,6 @@ import Navigation from "@/components/Navigation"
 
 const navigationItems = [
   { name: 'Home', href: '/' },
-  { name: 'Gallery', href: '/gallery' },
   { name: 'AI Generate', href: '/ai-generate' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },

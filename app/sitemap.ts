@@ -39,12 +39,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: 'https://wallpaperz.in/gallery',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
       url: 'https://wallpaperz.in/license',
       lastModified: new Date(),
       changeFrequency: 'monthly',

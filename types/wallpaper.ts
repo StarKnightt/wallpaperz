@@ -6,6 +6,9 @@ export interface Wallpaper {
   imageUrl: string
   category: WallpaperCategory
   description: string
-  source: string;    // 'pexels' | 'pixabay' | 'unsplash' | 'goodfon' | 'flickr' etc.
-  sourceUrl?: string; // optional link to original
+  source: string;    
+  sourceUrl?: string; 
+  width?: number    
+  height?: number   
+  fileSize?: number  
 }

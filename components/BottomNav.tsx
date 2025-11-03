@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Image as ImageIcon, Sparkles, Info } from "lucide-react"
+import { Home, Sparkles, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function BottomNav() {
@@ -13,11 +13,6 @@ export default function BottomNav() {
       name: 'Home',
       href: '/',
       icon: Home
-    },
-    {
-      name: 'Gallery',
-      href: '/gallery',
-      icon: ImageIcon
     },
     {
       name: 'AI Generate',

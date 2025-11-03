@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { getImageUrl } from "@/lib/imagekit"
 import { toast } from "sonner"
+import { getBlurDataURLClient } from "@/lib/blur-placeholder"
 
 interface WallpaperCardProps {
   wallpaper: Wallpaper
@@ -90,6 +91,8 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
             className="object-cover transform transition-all duration-500 group-hover:scale-110"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
             quality={75}
+            placeholder="blur"
+            blurDataURL={getBlurDataURLClient()}
           />
         </motion.div>
 

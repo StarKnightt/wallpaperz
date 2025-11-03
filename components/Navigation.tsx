@@ -19,10 +19,6 @@ export default function Navigation() {
       href: '/ai-generate',
     },
     {
-      name: 'Gallery',
-      href: '/gallery',
-    },
-    {
       name: 'About',
       href: '/about',
     },

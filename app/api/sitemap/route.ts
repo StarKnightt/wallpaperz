@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { allWallpapers } from '@/data/wallpapers';
 
 export async function GET() {
   const baseUrl = 'https://wallpaperz.in';
@@ -12,7 +11,6 @@ export async function GET() {
     '/terms',
     '/contact',
     '/ai-generate',
-    '/gallery',
     '/profile',
     '/license',
   ].map(path => ({
@@ -20,12 +18,22 @@ export async function GET() {
     lastmod: new Date().toISOString().split('T')[0],
   }));
   
-  // Get categories from wallpapers with proper typing
-  const categories = [...new Set(allWallpapers.map(w => w.category))];
-  const categoryPages = categories.map((category: string) => ({
-    url: `${baseUrl}/category/${category.toLowerCase()}`,
-    lastmod: new Date().toISOString().split('T')[0],
-  }));
+  // Fetch categories from ImageKit dynamically
+  let categoryPages: Array<{ url: string; lastmod: string }> = [];
+  try {
+    const response = await fetch(`${baseUrl}/api/wallpapers/sync`);
+    const data = await response.json();
+    
+    if (data.success && data.wallpapers) {
+      const categories = [...new Set(data.wallpapers.map((w: any) => w.category))] as string[];
+      categoryPages = categories.map((category) => ({
+        url: `${baseUrl}/category/${category.toLowerCase()}`,
+        lastmod: new Date().toISOString().split('T')[0],
+      }));
+    }
+  } catch (error) {
+    console.error('Failed to fetch categories for sitemap:', error);
+  }
   
   // Combine all URLs
   const allPages = [...staticPages, ...categoryPages];

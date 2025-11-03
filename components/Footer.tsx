@@ -54,11 +54,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/gallery" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Gallery
-                </Link>
-              </li>
-              <li>
                 <Link href="/ai-generate" className="text-muted-foreground hover:text-foreground transition-colors">
                   AI Generate
                 </Link>

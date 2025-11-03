@@ -1,44 +1,91 @@
 "use client"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Facebook, Twitter, Link as LinkIcon, Download, Loader2, X } from "lucide-react"
+import { Facebook, Twitter, Link as LinkIcon, Download, Loader2, X, ArrowLeft, ArrowRight, Info } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { getImageUrl } from '@/lib/imagekit'
+import { getBlurDataURLClient, getImageMetadata, ImageMetadata, getResolutionName } from '@/lib/blur-placeholder'
 
 interface WallpaperPreviewModalProps {
   wallpaper: Wallpaper | null
   isOpen: boolean
   onClose: () => void
+  onNavigate?: (direction: 'prev' | 'next') => void
+  canNavigatePrev?: boolean
+  canNavigateNext?: boolean
 }
 
-export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: WallpaperPreviewModalProps) {
+export default function WallpaperPreviewModal({ 
+  wallpaper, 
+  isOpen, 
+  onClose, 
+  onNavigate,
+  canNavigatePrev = false,
+  canNavigateNext = false 
+}: WallpaperPreviewModalProps) {
   const [isLoading, setIsLoading] = useState(true)
+  const [metadata, setMetadata] = useState<ImageMetadata>({})
+  const [showMetadata, setShowMetadata] = useState(false)
+
+  useEffect(() => {
+    if (isOpen && wallpaper) {
+      setIsLoading(true)
+      setMetadata({})
+      
+      const imageUrl = getImageUrl(wallpaper.imageUrl)
+      getImageMetadata(imageUrl).then(setMetadata)
+    }
+  }, [wallpaper, isOpen])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      } else if (e.key === 'ArrowLeft' && canNavigatePrev && onNavigate) {
+        onNavigate('prev')
+      } else if (e.key === 'ArrowRight' && canNavigateNext && onNavigate) {
+        onNavigate('next')
+      } else if (e.key === 'i' || e.key === 'I') {
+        setShowMetadata(prev => !prev)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose, onNavigate, canNavigatePrev, canNavigateNext])
 
   if (!wallpaper) return null
 
+  const imageUrl = getImageUrl(wallpaper.imageUrl)
+
   const handleShare = async (platform: string) => {
-    const url = window.location.href
+    const shareUrl = `${window.location.origin}?wallpaper=${wallpaper.id}`
     const text = `Check out this amazing wallpaper: ${wallpaper.title}`
     
     switch (platform) {
       case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`)
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400')
+        toast.success("Opened Facebook share dialog")
         break
       case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`)
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400')
+        toast.success("Opened Twitter share dialog")
+        break
+      case 'whatsapp':
+        window.open(`https://wa.me/?text=${encodeURIComponent(`${text} ${shareUrl}`)}`, '_blank')
+        toast.success("Opened WhatsApp")
         break
       case 'copy':
-        await navigator.clipboard.writeText(url)
+        await navigator.clipboard.writeText(shareUrl)
         toast.success("Link copied to clipboard!")
         break
     }
   }
-
-  const imageUrl = getImageUrl(wallpaper.imageUrl)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -66,17 +113,55 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
         )}
 
         <div className="relative aspect-[16/9] w-full">
+          {onNavigate && canNavigatePrev && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+              onClick={() => onNavigate('prev')}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          )}
+
+          {onNavigate && canNavigateNext && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+              onClick={() => onNavigate('next')}
+            >
+              <ArrowRight className="h-5 w-5" />
+            </Button>
+          )}
+
           <Image 
             src={imageUrl || "/placeholder.svg"} 
             alt={wallpaper.title} 
             fill 
             className="object-contain"
-            onLoadingComplete={() => setIsLoading(false)}
             onLoad={() => setIsLoading(false)}
             priority
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
             loading="eager"
+            placeholder="blur"
+            blurDataURL={getBlurDataURLClient()}
           />
+
+          {showMetadata && (wallpaper.width || metadata.format) && (
+            <div className="absolute top-2 left-2 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs space-y-1 z-20">
+              {wallpaper.width && wallpaper.height && (
+                <p className="font-mono">
+                  <span className="font-semibold">Quality:</span> {getResolutionName(wallpaper.width, wallpaper.height)}
+                </p>
+              )}
+              {metadata.format && (
+                <p className="font-mono">
+                  <span className="font-semibold">Format:</span> {metadata.format}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="p-4 space-y-4">
@@ -110,6 +195,15 @@ export default function WallpaperPreviewModal({ wallpaper, isOpen, onClose }: Wa
               >
                 <LinkIcon className="h-4 w-4 mr-2" />
                 Copy Link
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowMetadata(!showMetadata)}
+                title="Toggle metadata (or press 'I')"
+              >
+                <Info className="h-4 w-4 mr-2" />
+                Info
               </Button>
             </div>
 

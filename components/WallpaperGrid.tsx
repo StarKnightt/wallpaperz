@@ -3,6 +3,7 @@ import { Wallpaper } from "@/types/wallpaper"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { getImageUrl } from '@/lib/imagekit'
+import { getBlurDataURLClient } from '@/lib/blur-placeholder'
 
 
 interface Props {
@@ -49,6 +50,8 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
               ${isLarge || isMedium ? '50vw' : '25vw'}
             `}
             loading={index < 6 ? "eager" : "lazy"}
+            placeholder="blur"
+            blurDataURL={getBlurDataURLClient()}
           />
         </div>
 
