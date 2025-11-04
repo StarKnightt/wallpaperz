@@ -23,7 +23,22 @@ export const metadata: Metadata = {
     template: '%s | Wallpaperz'
   },
   description: 'Discover and download high-quality HD and 4K wallpapers for desktop, mobile, and tablet. Create custom AI-generated wallpapers for free.',
-  keywords: ['wallpapers', 'HD wallpapers', '4K wallpapers', 'desktop wallpapers', 'mobile wallpapers', 'AI wallpapers', 'free wallpapers'],
+  keywords: [
+    'wallpapers', 
+    'HD wallpapers', 
+    '4K wallpapers', 
+    'desktop wallpapers', 
+    'mobile wallpapers', 
+    'AI wallpapers', 
+    'free wallpapers',
+    'abstract wallpapers',
+    'anime wallpapers',
+    'nature wallpapers',
+    'space wallpapers',
+    'minimalist wallpapers',
+    'download wallpapers',
+    'high quality wallpapers'
+  ],
   authors: [{ name: 'Wallpaperz Team' }],
   creator: 'Wallpaperz',
   publisher: 'Wallpaperz',

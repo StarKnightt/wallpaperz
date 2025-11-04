@@ -1,19 +1,15 @@
+# Allow all crawlers
 User-agent: *
 Allow: /
-Allow: /category/*
-Allow: /about
-Allow: /privacy
 
-Disallow: /api/*
-Disallow: /admin/*
-Disallow: /*?search=*
-
-Sitemap: https://www.wallpaperz.in/api/sitemap
-
-# Disallow crawling of authentication pages
+# Disallow admin/private paths
+Disallow: /api/
 Disallow: /sign-in
 Disallow: /sign-up
-Disallow: /auth/
 
-# Crawl delay for bots
+# Sitemaps
+Sitemap: https://wallpaperz.in/sitemap.xml
+Sitemap: https://wallpaperz.in/api/sitemap
+
+# Crawl delay (optional, be nice to servers)
 Crawl-delay: 1
