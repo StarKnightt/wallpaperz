@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Loader2, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll"
 
 const ITEMS_PER_PAGE = 12
 
@@ -52,9 +53,11 @@ export default function CategoryPage() {
     fetchWallpapers()
   }, [fetchWallpapers])
 
-  const loadMore = async () => {
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return
+    
     setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(resolve, 300))
     
     const nextPage = page + 1
     const startIndex = page * ITEMS_PER_PAGE
@@ -68,7 +71,14 @@ export default function CategoryPage() {
     if (endIndex >= wallpapers.length) {
       setHasMore(false)
     }
-  }
+  }, [loading, hasMore, page, wallpapers])
+
+  const sentinelRef = useInfiniteScroll({
+    onLoadMore: loadMore,
+    hasMore,
+    loading,
+    threshold: 0.5
+  })
 
   const handlePreview = (wallpaper: Wallpaper) => {
     setSelectedWallpaper(wallpaper)
@@ -135,25 +145,14 @@ export default function CategoryPage() {
             isLoading={loading}
           />
 
-          {hasMore && (
-            <div className="flex justify-center mt-10">
-              <Button 
-                onClick={loadMore} 
-                disabled={loading}
-                size="lg"
-                className="min-w-[140px]"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  'Load More'
-                )}
-              </Button>
-            </div>
-          )}
+          <div ref={sentinelRef} className="h-10 flex justify-center items-center mt-8">
+            {loading && hasMore && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span>Loading more wallpapers...</span>
+              </div>
+            )}
+          </div>
         </>
       )}
 
