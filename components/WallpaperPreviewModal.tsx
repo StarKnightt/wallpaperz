@@ -1,12 +1,11 @@
 "use client"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Facebook, Twitter, Link as LinkIcon, Download, Loader2, X, ArrowLeft, ArrowRight, Info } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
 import { useState, useEffect } from "react"
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { getImageUrl } from '@/lib/imagekit'
 import { getBlurDataURLClient, getImageMetadata, ImageMetadata, getResolutionName } from '@/lib/blur-placeholder'
 
@@ -101,6 +100,9 @@ export default function WallpaperPreviewModal({
           <DialogTitle className="sr-only">
             {wallpaper.title}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Preview of {wallpaper.title} wallpaper. Use arrow keys to navigate, I to toggle info, Escape to close.
+          </DialogDescription>
         </DialogHeader>
 
         {isLoading && (

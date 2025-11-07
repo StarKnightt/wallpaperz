@@ -13,6 +13,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
 import BottomNav from "@/components/BottomNav"
 import LocalStorageWarning from "@/components/LocalStorageWarning"
+import CookieConsent from "@/components/CookieConsent"
 import { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -156,6 +157,7 @@ export default function RootLayout({
                 <Footer />
                 <BottomNav />
                 <LocalStorageWarning />
+                <CookieConsent />
               </div>
               <Toaster position="bottom-right" />
               <Analytics />
@@ -169,6 +171,12 @@ export default function RootLayout({
                   })(window, document, "clarity", "script", "q9tt7wi9dk");
                 `}
               </Script>
+              <Script
+                async
+                src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID || 'ca-pub-9812963383908086'}`}
+                crossOrigin="anonymous"
+                strategy="afterInteractive"
+              />
             </SearchProvider>
           </ThemeProvider>
         </body>

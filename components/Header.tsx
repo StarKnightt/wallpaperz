@@ -12,7 +12,7 @@ import debounce from 'lodash/debounce'
 import { UserButton, SignInButton } from "@clerk/nextjs"
 import { useAuth } from "@clerk/nextjs"
 import { cn } from "@/lib/utils"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import Navigation from "@/components/Navigation"
 
 const navigationItems = [
@@ -196,6 +196,10 @@ export default function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[80%] sm:w-[350px]">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Navigation Menu</SheetTitle>
+                  <SheetDescription>Access site navigation, GitHub link, and account settings</SheetDescription>
+                </SheetHeader>
                 <div className="flex flex-col h-full">
                   <div className="py-6">
                     <Link href="/" className="text-xl font-bold">
