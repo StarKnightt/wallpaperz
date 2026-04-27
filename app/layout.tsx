@@ -12,8 +12,6 @@ import Script from 'next/script'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
 import BottomNav from "@/components/BottomNav"
-import LocalStorageWarning from "@/components/LocalStorageWarning"
-import CookieConsent from "@/components/CookieConsent"
 import { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -162,8 +160,6 @@ export default function RootLayout({
                 </main>
                 <Footer />
                 <BottomNav />
-                <LocalStorageWarning />
-                <CookieConsent />
               </div>
               <Toaster position="bottom-right" />
               <Analytics />

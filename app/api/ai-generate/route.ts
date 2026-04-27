@@ -79,9 +79,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
 
-    // Fixed dimensions - use default square format for best quality
-    const width = 1024;
-    const height = 1024;
+    // 16:9 widescreen dimensions (SDXL supported pair)
+    const width = 1344;
+    const height = 768;
     const cfg_scale = 7;
     const steps = 30;
     

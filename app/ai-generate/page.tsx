@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye, User } from "lucide-react"
+import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye, X, ZoomIn } from "lucide-react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
@@ -10,8 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth, SignInButton } from "@clerk/nextjs"
-import Image from "next/image"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface FormValues {
   prompt: string
@@ -26,11 +25,14 @@ export default function AIGeneratePage() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   
   const promptSuggestions = [
-    "A breathtaking mountain landscape at sunset with vibrant colors",
-    "Futuristic city skyline with neon lights and flying cars",
-    "Tropical beach paradise with crystal clear water and palm trees",
-    "Enchanted forest with glowing mushrooms and mystical creatures",
-    "Abstract geometric patterns with vibrant gradient colors"
+    "Massive aurora borealis over a snow-covered mountain range reflected in a still lake, photorealistic, 8K, cinematic lighting",
+    "Cyberpunk Tokyo alleyway at night, rain-soaked neon signs, holographic billboards, volumetric fog, ultra detailed digital art",
+    "Vast alien desert with two moons rising, bioluminescent sand dunes, sci-fi concept art, dramatic sky, wide angle",
+    "Dark enchanted forest with glowing fireflies, mystical fog, ancient trees with twisted roots, fantasy matte painting, moody atmosphere",
+    "Minimalist abstract waves in deep ocean blue and soft gold gradients, smooth flowing shapes, elegant wallpaper design, 4K",
+    "Japanese garden in autumn with a red torii gate, falling maple leaves, koi pond reflection, golden hour light, serene and peaceful",
+    "Floating islands above the clouds at sunset, waterfalls cascading into the void, lush greenery, epic fantasy landscape, wide panoramic view",
+    "Retro synthwave grid stretching into a neon sunset horizon, chrome mountains, vaporwave aesthetic, vibrant purple and pink palette"
   ]
 
   const demoImages = [
@@ -386,17 +388,28 @@ export default function AIGeneratePage() {
                         animate={{ opacity: 1, scale: 1 }}
                         className="w-full"
                       >
-                        <div className="relative w-full aspect-video mx-auto border rounded-lg overflow-hidden shadow-lg">
-                          <Image
+                        <div 
+                          className="relative w-full aspect-video mx-auto border rounded-lg overflow-hidden shadow-lg cursor-pointer group"
+                          onClick={() => setIsPreviewOpen(true)}
+                        >
+                          <img
                             src={generatedImage}
                             alt="Generated wallpaper"
-                            fill
-                            sizes="(max-width: 768px) 100vw, 600px"
-                            className="object-cover"
-                            priority
+                            className="w-full h-full object-cover"
                           />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                            <ZoomIn className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
                         </div>
-                        <div className="flex flex-wrap justify-center gap-4 mt-6">
+                        <div className="flex flex-wrap justify-center gap-3 mt-6">
+                          <Button 
+                            variant="outline" 
+                            onClick={() => setIsPreviewOpen(true)}
+                            className="flex gap-2 bg-background/80 backdrop-blur-sm hover:bg-background"
+                          >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                          </Button>
                           <Button 
                             variant="outline" 
                             onClick={handleDownload} 
@@ -416,10 +429,10 @@ export default function AIGeneratePage() {
                           <Button
                             variant="outline"
                             onClick={handleReset}
-                            className="flex gap-2 bg-background/80 backdrop-blur-sm hover:bg-background mt-3 sm:mt-0 w-full sm:w-auto"
+                            className="flex gap-2 bg-background/80 backdrop-blur-sm hover:bg-background"
                           >
                             <Sparkles className="h-4 w-4" />
-                            Generate New Image
+                            New Image
                           </Button>
                         </div>
                       </motion.div>
@@ -458,6 +471,51 @@ export default function AIGeneratePage() {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {isPreviewOpen && generatedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+            onClick={() => setIsPreviewOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative max-w-[95vw] max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={generatedImage}
+                alt="Generated wallpaper preview"
+                className="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain"
+              />
+              <div className="absolute top-3 right-3 flex gap-2">
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="h-9 w-9 rounded-full bg-black/50 hover:bg-black/70 text-white border-0"
+                  onClick={handleDownload}
+                >
+                  <Download className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="h-9 w-9 rounded-full bg-black/50 hover:bg-black/70 text-white border-0"
+                  onClick={() => setIsPreviewOpen(false)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
