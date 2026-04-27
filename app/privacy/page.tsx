@@ -1,103 +1,64 @@
 "use client"
 import { motion } from "framer-motion"
 import { Shield, Lock, FileText, Mail } from "lucide-react"
-import { Container } from "@/components/ui/container"
 
 export default function PrivacyPage() {
   const sections = [
     {
       icon: Shield,
-      title: "Data Collection & Usage",
+      title: "What We Collect",
       content: (
         <div className="space-y-4">
-          <p className="text-lg">We are committed to protecting your privacy and handling your data with transparency:</p>
-          <div className="space-y-3">
-            <p>1. Account Information Collection</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Email address (for registered users only)</li>
-              <li>• Display name (optional)</li>
-              <li>• Profile picture (optional)</li>
-            </ul>
-
-            <p>2. Usage Information</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Wallpaper download history</li>
-              <li>• Favorite wallpapers</li>
-              <li>• Search queries</li>
-              <li>• Device type and browser information</li>
-            </ul>
-          </div>
+          <p className="text-lg">Honestly, not much:</p>
+          <ul className="list-none pl-6 space-y-2">
+            <li>• Your email and profile info if you sign in (handled by Clerk)</li>
+            <li>• Basic analytics like page views and device type (Google Analytics, Vercel Analytics, Microsoft Clarity)</li>
+            <li>• Your AI prompts are sent to Stability AI to generate images — we don&apos;t store them</li>
+          </ul>
+          <p className="text-muted-foreground">We don&apos;t have a database. No download history, no search logs, no tracking profiles. Everything happens in your browser.</p>
         </div>
       )
     },
     {
       icon: Lock,
-      title: "Data Security",
+      title: "Cookies & Storage",
       content: (
         <div className="space-y-4">
-          <p className="text-lg">Your data security is our priority:</p>
-          <div className="space-y-3">
-            <p>1. Data Protection Measures</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Industry-standard SSL encryption</li>
-              <li>• Secure cloud storage</li>
-              <li>• Regular security audits</li>
-            </ul>
-
-            <p>2. Third-Party Services</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Clerk.com for authentication</li>
-              <li>• Vercel Analytics for usage statistics</li>
-              <li>• Microsoft Clarity for UX improvement</li>
-            </ul>
-          </div>
+          <ul className="list-none pl-6 space-y-2">
+            <li>• Clerk sets cookies to keep you logged in</li>
+            <li>• Analytics services may set their own cookies</li>
+            <li>• Your theme preference (dark/light) is saved in your browser</li>
+            <li>• AI-generated images only live in your browser tab — refresh and they&apos;re gone</li>
+          </ul>
         </div>
       )
     },
     {
       icon: FileText,
-      title: "Cookie Policy",
+      title: "Third-Party Services",
       content: (
         <div className="space-y-4">
-          <p className="text-lg">We use cookies to enhance your experience:</p>
-          <div className="space-y-3">
-            <p>1. Essential Cookies</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Authentication status</li>
-              <li>• Session management</li>
-              <li>• Security features</li>
-            </ul>
-
-            <p>2. Analytics Cookies</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Usage patterns</li>
-              <li>• Performance monitoring</li>
-              <li>• Feature optimization</li>
-            </ul>
-          </div>
+          <p className="text-lg">We use these services to keep things running:</p>
+          <ul className="list-none pl-6 space-y-2">
+            <li>• <strong>Clerk</strong> — authentication</li>
+            <li>• <strong>ImageKit</strong> — hosts all the wallpapers</li>
+            <li>• <strong>Stability AI</strong> — powers AI image generation</li>
+            <li>• <strong>Google Analytics</strong> &amp; <strong>Microsoft Clarity</strong> — helps us see if anyone actually visits</li>
+            <li>• <strong>Vercel</strong> — hosting and deployment</li>
+          </ul>
+          <p className="text-muted-foreground">Each of these has their own privacy policy. We don&apos;t control what they collect on their end.</p>
         </div>
       )
     },
     {
       icon: Mail,
-      title: "Your Rights & Contact",
+      title: "Contact",
       content: (
         <div className="space-y-4">
-          <p className="text-lg">You have the right to:</p>
-          <div className="space-y-3">
-            <p>1. Access and Control</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Request your data</li>
-              <li>• Delete your account</li>
-              <li>• Opt-out of analytics</li>
-            </ul>
-
-            <p>2. Contact Information</p>
-            <ul className="list-none pl-6 space-y-2">
-              <li>• Email: prasen.nayak@hotmail.com</li>
-              <li>• Response time: Within 48 hours</li>
-            </ul>
-          </div>
+          <p>If you have questions or want your data deleted, reach out:</p>
+          <ul className="list-none pl-6 space-y-2">
+            <li>• Email: prasen.nayak@hotmail.com</li>
+          </ul>
         </div>
       )
     }

@@ -17,7 +17,6 @@ export default function CategoryPage() {
   const params = useParams()
   const slug = (params?.slug as string) || ''
   const category = slug.charAt(0).toUpperCase() + slug.slice(1)
-
   const [wallpapers, setWallpapers] = useState<Wallpaper[]>([])
   const [displayedWallpapers, setDisplayedWallpapers] = useState<Wallpaper[]>([])
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null)

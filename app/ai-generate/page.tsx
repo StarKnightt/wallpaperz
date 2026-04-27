@@ -392,6 +392,7 @@ export default function AIGeneratePage() {
                           className="relative w-full aspect-video mx-auto border rounded-lg overflow-hidden shadow-lg cursor-pointer group"
                           onClick={() => setIsPreviewOpen(true)}
                         >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={generatedImage}
                             alt="Generated wallpaper"
@@ -489,6 +490,7 @@ export default function AIGeneratePage() {
               className="relative max-w-[95vw] max-h-[90vh]"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={generatedImage}
                 alt="Generated wallpaper preview"
