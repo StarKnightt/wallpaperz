@@ -1,4 +1,4 @@
-# Wallpaperz 🖼️
+# Wallpaperz
 
 <p align="center">
   <img src="https://img.shields.io/github/stars/StarKnightt/wallpaperz?style=social" alt="GitHub stars">
@@ -6,72 +6,70 @@
   <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome">
 </p>
 
-A beautiful, open-source wallpaper platform built with Next.js. Find and create stunning wallpapers for your devices!
+An open-source wallpaper platform where you can browse HD/4K wallpapers and generate your own with AI. Built with Next.js, powered by ImageKit and Stability AI.
 
-## ✨ Features
+**Live at [wallpaperz.in](https://wallpaperz.in)**
 
-- 🖼️ Browse high-quality wallpapers
-- 🔍 Easy search and filtering
-- 🌓 Light and dark mode
-- 🤖 AI-powered wallpaper generation
-- 📱 Fully responsive design
-- 💾 Save your favorite wallpapers locally
+## Features
 
-## 🚀 Demo
+- Browse and download HD & 4K wallpapers across categories (nature, anime, space, minimalist, etc.)
+- Search and filter wallpapers in real time
+- Generate custom 16:9 wallpapers using AI (Stable Diffusion XL) — requires sign-in
+- Fullscreen preview with keyboard navigation and share links
+- Dark and light mode
+- Responsive — works on desktop, tablet, and mobile
+- Pull-to-refresh to sync latest wallpapers from ImageKit
 
-Check out the live demo: [wallpaperz.in](https://wallpaperz.in)
+## Tech Stack
 
-## 🛠️ Built With
+| | |
+|---|---|
+| **Framework** | Next.js 14 (App Router) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS, Radix UI / shadcn |
+| **Animations** | Framer Motion |
+| **Auth** | Clerk |
+| **Images** | ImageKit |
+| **AI Generation** | Stability AI (DreamStudio) |
+| **Hosting** | Vercel |
 
-- **[Next.js](https://nextjs.org/)** - React framework
-- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
-- **[Tailwind CSS](https://tailwindcss.com/)** - Styling
-- **[Framer Motion](https://www.framer.com/motion/)** - Animations
-- **[Clerk](https://clerk.dev/)** - Authentication
-- **[ImageKit](https://imagekit.io/)** - Image storage
-- **[Stability AI](https://stability.ai/)** - AI image generation
-
-## 🏁 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18 or newer
-- npm or yarn
+- Node.js 18+
+- API keys for [Clerk](https://clerk.dev), [ImageKit](https://imagekit.io), and [Stability AI](https://platform.stability.ai) (see `env.example.txt`)
 
-### Installation
+### Setup
 
-1. Clone the repo
-   ```bash
-   git clone https://github.com/StarKnightt/wallpaperz.git
-   cd wallpaperz
-   ```
+```bash
+git clone https://github.com/StarKnightt/wallpaperz.git
+cd wallpaperz
+npm install
+cp env.example.txt .env.local
+# Fill in your API keys in .env.local
+npm run dev
+```
 
-2. Install packages
-   ```bash
-   npm install
-   # or
-   yarn
-   ```
+Open [http://localhost:3000](http://localhost:3000).
 
-3. Set up environment variables
-   ```bash
-   cp env.example.txt .env.local
-   ```
-   Then fill in your API keys in the `.env.local` file (see `env.example.txt` for required variables).
+### Environment Variables
 
-4. Start the development server
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
+See `env.example.txt` for the full list. The main ones:
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+| Variable | What it's for |
+|---|---|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk auth (client) |
+| `CLERK_SECRET_KEY` | Clerk auth (server) |
+| `IMAGEKIT_PUBLIC_KEY` | ImageKit (client) |
+| `IMAGEKIT_PRIVATE_KEY` | ImageKit (server) |
+| `IMAGEKIT_URL_ENDPOINT` | ImageKit URL |
+| `DREAMSTUDIO_API_KEY` | Stability AI for image generation |
 
-## 📸 Screenshots
+## Screenshots
 
 <details>
-<summary>Click to see screenshots</summary>
+<summary>Click to expand</summary>
 <br>
 <p align="center">
   <img src="https://ik.imagekit.io/starknight/screenshots/home.png" alt="Home page" width="80%">
@@ -79,30 +77,37 @@ Check out the live demo: [wallpaperz.in](https://wallpaperz.in)
 </p>
 </details>
 
-## 🤝 Contributing
+## Project Structure
 
-Contributions are welcome! Feel free to:
+```
+app/
+  page.tsx              Home — wallpaper grid with search and filters
+  ai-generate/          AI image generation (Clerk-gated)
+  category/[slug]/      Category pages with SEO metadata
+  api/
+    wallpapers/sync/    Fetches wallpapers from ImageKit (cached 1hr)
+    ai-generate/        Calls Stability AI (rate-limited, 5/hr/user)
+    imagekit/           Client upload auth
+components/             UI components (Header, WallpaperGrid, Preview, etc.)
+lib/                    ImageKit client/server, hooks, utils
+types/                  TypeScript types
+```
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## Contributing
 
-## 📄 License
+1. Fork the repo
+2. Create a branch (`git checkout -b feature/something`)
+3. Commit your changes
+4. Push and open a PR
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+All contributions are welcome — features, bug fixes, or just improving the docs.
 
-<!-- ## ☕ Support
+## License
 
-If you find this project helpful, consider buying me a coffee!
+MIT — see [LICENSE](LICENSE).
 
-<a href="https://buymeacoffee.com/prasen" target="_blank">
-  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50">
-</a> -->
+## Contact
 
-## 📬 Contact
+Prasen — [prasen.dev](https://prasen.dev)
 
-Prasen - [prasen.dev](https://prasen.dev)
-
-Project Link: [https://github.com/StarKnightt/wallpaperz](https://github.com/StarKnightt/wallpaperz)
+Project: [github.com/StarKnightt/wallpaperz](https://github.com/StarKnightt/wallpaperz)
