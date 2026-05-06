@@ -129,7 +129,7 @@ export default function Header() {
       isScrolled ? "bg-background/80 backdrop-blur-md border-b" : "bg-transparent"
     )}>
       <div className="container mx-auto px-4">
-        <div className="hidden md:flex h-16 items-center justify-between">
+        <div className="hidden lg:flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="text-xl font-bold">
               Wallpaperz
@@ -186,7 +186,7 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="md:hidden flex h-16 items-center justify-between">
+        <div className="lg:hidden flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Sheet>
               <SheetTrigger asChild>

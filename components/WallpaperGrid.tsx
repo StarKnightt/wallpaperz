@@ -24,8 +24,8 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
     
     const gridClass = `
       ${isMobileFull ? "col-span-2 sm:col-span-1" : ""} 
-      ${isLarge ? "md:col-span-2 md:row-span-2" : ""} 
-      ${isMedium ? "md:col-span-2" : ""}
+      ${isLarge ? "sm:col-span-2 sm:row-span-2" : ""} 
+      ${isMedium ? "sm:col-span-2 lg:col-span-2" : ""}
     `.trim()
 
     return (
@@ -34,7 +34,7 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
         className={`relative rounded-xl overflow-hidden group cursor-pointer ${gridClass}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: index * 0.05 }}
+        transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.5) }}
         whileHover={{ y: -5 }}
         onClick={() => onPreview(wallpaper)}
       >
@@ -46,7 +46,8 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
             className="object-cover transition-transform duration-500 group-hover:scale-110"
             sizes={`
               (max-width: 640px) ${isMobileFull ? '100vw' : '50vw'},
-              (max-width: 1024px) ${isLarge || isMedium ? '66vw' : '33vw'},
+              (max-width: 768px) ${isLarge || isMedium ? '66vw' : '33vw'},
+              (max-width: 1024px) ${isLarge || isMedium ? '50vw' : '33vw'},
               ${isLarge || isMedium ? '50vw' : '25vw'}
             `}
             loading={index < 6 ? "eager" : "lazy"}
@@ -57,11 +58,11 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-        <div className="absolute inset-0 p-3 md:p-4 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
-          <h3 className="text-white font-semibold text-sm md:text-base line-clamp-2">{wallpaper.title}</h3>
+        <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
+          <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base line-clamp-2">{wallpaper.title}</h3>
         </div>
 
-        <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full pointer-events-none">
+        <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full pointer-events-none">
           {wallpaper.category}
         </div>
       </motion.div>
@@ -69,7 +70,7 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
   })
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[180px] md:auto-rows-[220px] gap-3 md:gap-4" style={{ gridAutoFlow: 'dense' }}>
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 auto-rows-[160px] sm:auto-rows-[200px] lg:auto-rows-[220px] gap-2 sm:gap-3 lg:gap-4" style={{ gridAutoFlow: 'dense' }}>
       {wallpaperCards}
     </div>
   )
@@ -77,13 +78,13 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
 
 function LoadingSkeleton() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[180px] md:auto-rows-[220px] gap-3 md:gap-4" style={{ gridAutoFlow: 'dense' }}>
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 auto-rows-[160px] sm:auto-rows-[200px] lg:auto-rows-[220px] gap-2 sm:gap-3 lg:gap-4" style={{ gridAutoFlow: 'dense' }}>
       {[...Array(8)].map((_, i) => {
         const isMobileFull = i % 3 === 0
         const gridClass = `
           ${isMobileFull ? "col-span-2 sm:col-span-1" : ""} 
-          ${i % 8 === 0 ? "md:col-span-2 md:row-span-2" : ""} 
-          ${i % 6 === 3 ? "md:col-span-2" : ""}
+          ${i % 8 === 0 ? "sm:col-span-2 sm:row-span-2" : ""} 
+          ${i % 6 === 3 ? "sm:col-span-2" : ""}
         `.trim()
 
         return (

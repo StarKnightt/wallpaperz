@@ -116,19 +116,19 @@ export default function Hero() {
   }
 
   return (
-    <div className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background to-background/50">
+    <div className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background to-background/50">
       <GridBackground />
       <div className="absolute inset-0 bg-background/30 backdrop-blur-xl" />
 
-      <div className="container px-4 py-8 relative z-10">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+      <div className="container px-4 py-6 sm:py-8 relative z-10">
+        <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
               Discover Stunning Wallpapers
             </span>
           </h1>
           
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+          <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">
             Transform your screen with our curated collection of high-resolution wallpapers
           </p>
 
@@ -170,7 +170,7 @@ export default function Hero() {
             )}
           </form>
 
-          <div className="flex flex-wrap justify-center gap-3 mt-8">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-6 sm:mt-8">
             {[DEFAULT_CATEGORY, 'Abstract', 'Minimalist', 'Fantasy', 'Art'].map((tag) => (
               <Button
                 key={tag}

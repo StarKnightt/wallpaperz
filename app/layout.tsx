@@ -153,7 +153,7 @@ export default function RootLayout({
           >
             <SearchProvider>
               <ScrollProgress />
-              <div className="min-h-screen flex flex-col relative pb-16 md:pb-0">
+              <div className="min-h-screen flex flex-col relative pb-16 lg:pb-0">
                 <Header />
                 <main className="flex-grow w-full max-w-[1920px] mx-auto">
                   {children}

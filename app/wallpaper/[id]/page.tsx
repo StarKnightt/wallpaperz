@@ -159,6 +159,7 @@ export default async function WallpaperPage({ params }: Props) {
                 return (
                   <a key={w.id} href={`/wallpaper/${w.id}`} className="group block rounded-lg overflow-hidden border">
                     <div className="aspect-[16/10] relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={relUrl}
                         alt={w.title}
