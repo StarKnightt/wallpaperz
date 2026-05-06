@@ -28,15 +28,6 @@ const nextConfig = {
       },
     ],
   },
-  async redirects() {
-    return [
-      {
-        source: '/api/sitemap.xml',
-        destination: '/api/sitemap',
-        permanent: true,
-      },
-    ]
-  },
   async rewrites() {
     return [
       {

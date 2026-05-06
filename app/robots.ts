@@ -5,8 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/private/', '/admin/'],
+      disallow: ['/api/', '/sign-in', '/sign-up'],
     },
     sitemap: 'https://wallpaperz.in/sitemap.xml',
   }
-} 
+}

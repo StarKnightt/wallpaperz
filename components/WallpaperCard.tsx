@@ -77,6 +77,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
         }}
       />
 
+      <a href={`/wallpaper/${wallpaper.id}`} className="sr-only">{wallpaper.title}</a>
       <div className="aspect-[16/10] relative overflow-hidden">
         <motion.div
           initial={{ scale: 1.2, opacity: 0 }}
