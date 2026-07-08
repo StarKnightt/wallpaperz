@@ -11,7 +11,10 @@ export function imagekitLoader({ src, width, quality }: { src: string; width: nu
 
   const path = src.startsWith('http') ? src.slice(ENDPOINT.length) : src
   const normalized = path.startsWith('/') ? path : `/${path}`
-  const transform = `tr=w-${width},q-${quality || 80},f-auto`
+  // Commas are URL-encoded because raw commas inside srcset URLs break some
+  // browsers' srcset/preload parsers (Firefox requests the "q-80,f-auto" tail
+  // as a relative URL). ImageKit decodes %2C back to commas server-side.
+  const transform = `tr=w-${width}%2Cq-${quality || 80}%2Cf-auto`
   const separator = normalized.includes('?') ? '&' : '?'
   return `${ENDPOINT}${normalized}${separator}${transform}`
 }
