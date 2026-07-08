@@ -7,6 +7,7 @@ import { Download, Share2, X, ZoomIn } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
 import { getBlurDataURLClient } from "@/lib/blur-placeholder"
+import { imagekitLoader } from "@/lib/imagekit-loader"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
 
 export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const isPortrait = !!(wallpaper.width && wallpaper.height && wallpaper.height > wallpaper.width)
 
   const handleDownload = async () => {
     try {
@@ -55,16 +57,19 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
   return (
     <>
       <div
-        className="relative aspect-[16/10] rounded-lg overflow-hidden border cursor-pointer group"
+        className={`relative rounded-lg overflow-hidden border cursor-pointer group ${
+          isPortrait ? 'aspect-[9/16] max-w-sm mx-auto' : 'aspect-[16/10]'
+        }`}
         onClick={() => setIsPreviewOpen(true)}
       >
         <Image
           src={imageUrl}
+          loader={imagekitLoader}
           alt={wallpaper.title}
           fill
           priority
           className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 66vw"
+          sizes={isPortrait ? "(max-width: 640px) 100vw, 384px" : "(max-width: 1024px) 100vw, 66vw"}
           placeholder="blur"
           blurDataURL={getBlurDataURLClient()}
         />

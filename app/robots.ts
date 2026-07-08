@@ -7,6 +7,9 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/sign-in', '/sign-up'],
     },
-    sitemap: 'https://wallpaperz.in/sitemap.xml',
+    sitemap: [
+      'https://wallpaperz.in/sitemap.xml',
+      'https://wallpaperz.in/wallpapers-sitemap.xml',
+    ],
   }
 }

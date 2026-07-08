@@ -33,8 +33,11 @@ export default function CategoryPage() {
       const data = await response.json()
       
       if (data.success && data.wallpapers) {
-        const filtered = data.wallpapers.filter(
-          (w: Wallpaper) => w.category.toLowerCase() === slug.toLowerCase()
+        // "mobile" is an orientation-based pseudo-category: any portrait wallpaper
+        const filtered = data.wallpapers.filter((w: Wallpaper) =>
+          slug.toLowerCase() === 'mobile'
+            ? (w.height ?? 0) > (w.width ?? 0)
+            : w.category.toLowerCase() === slug.toLowerCase()
         )
         setWallpapers(filtered)
         setDisplayedWallpapers(filtered.slice(0, ITEMS_PER_PAGE))

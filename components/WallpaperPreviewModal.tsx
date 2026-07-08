@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
 import { useState, useEffect } from "react"
 import { getImageUrl } from '@/lib/imagekit'
+import { imagekitLoader } from '@/lib/imagekit-loader'
 import { getBlurDataURLClient, getImageMetadata, ImageMetadata, getResolutionName } from '@/lib/blur-placeholder'
 
 interface WallpaperPreviewModalProps {
@@ -61,9 +62,11 @@ export default function WallpaperPreviewModal({
   if (!wallpaper) return null
 
   const imageUrl = getImageUrl(wallpaper.imageUrl)
+  const isPortrait = !!(wallpaper.width && wallpaper.height && wallpaper.height > wallpaper.width)
 
   const handleShare = async (platform: string) => {
-    const shareUrl = `${window.location.origin}?wallpaper=${wallpaper.id}`
+    // Canonical page URL so shares get proper OG previews and link equity
+    const shareUrl = `${window.location.origin}/wallpaper/${wallpaper.id}`
     const text = `Check out this amazing wallpaper: ${wallpaper.title}`
     
     switch (platform) {
@@ -114,7 +117,7 @@ export default function WallpaperPreviewModal({
           </div>
         )}
 
-        <div className="relative aspect-[16/9] w-full">
+        <div className={`relative w-full ${isPortrait ? 'h-[60vh]' : 'aspect-[16/9]'}`}>
           {onNavigate && canNavigatePrev && (
             <Button
               variant="ghost"
@@ -139,6 +142,7 @@ export default function WallpaperPreviewModal({
 
           <Image 
             src={imageUrl || "/placeholder.svg"} 
+            loader={imagekitLoader}
             alt={wallpaper.title} 
             fill 
             className="object-contain"
@@ -168,7 +172,11 @@ export default function WallpaperPreviewModal({
 
         <div className="p-4 space-y-4">
           <div>
-            <h3 className="text-xl font-semibold mb-2">{wallpaper.title}</h3>
+            <h3 className="text-xl font-semibold mb-2">
+              <a href={`/wallpaper/${wallpaper.id}`} className="hover:underline" title={`Open ${wallpaper.title} page`}>
+                {wallpaper.title}
+              </a>
+            </h3>
             <p className="text-muted-foreground text-sm">{wallpaper.description}</p>
           </div>
 

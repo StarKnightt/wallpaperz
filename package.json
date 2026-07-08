@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true next build",
+    "wallpapers:list": "node scripts/list-imagekit.mjs",
+    "wallpapers:upload": "node scripts/upload-wallpapers.mjs",
+    "wallpapers:metadata": "node scripts/set-metadata.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.11.3",

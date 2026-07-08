@@ -1,31 +1,9 @@
 import { imagekitServer } from './imagekit'
 import { Wallpaper, WallpaperCategory } from '@/types/wallpaper'
-
-const categoryTags = [
-  'Abstract', 'Art', 'Minimalist', 'Fantasy', 'Nature',
-  'Space', 'Technology', 'Anime', 'City', 'Cars',
-]
-
-function extractCategory(file: any): WallpaperCategory {
-  if (file.customMetadata?.category) return file.customMetadata.category
-  if (file.tags?.length) {
-    const match = file.tags.find((tag: string) =>
-      categoryTags.some((cat) => cat.toLowerCase() === tag.toLowerCase())
-    )
-    if (match) return (match.charAt(0).toUpperCase() + match.slice(1).toLowerCase()) as WallpaperCategory
-  }
-  return 'Other'
-}
-
-function cleanFilename(filename: string): string {
-  return filename
-    .replace(/\.[^/.]+$/, '')
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
-}
+import { resolveCategory, cleanFilename } from '@/lib/categories'
 
 function toWallpaper(file: any): Wallpaper {
-  const category = extractCategory(file)
+  const category = resolveCategory(file.customMetadata?.category, file.tags) as WallpaperCategory
   return {
     id: file.fileId,
     title: file.customMetadata?.title || cleanFilename(file.name),

@@ -1,13 +1,13 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { Search } from "lucide-react"
+import { Search, Sparkles, Download, ImageIcon } from "lucide-react"
 import { motion } from "framer-motion"
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { DEFAULT_CATEGORY } from "@/context/SearchContext"
-import { useTheme } from "next-themes"
+import Link from "next/link"
 
 interface SearchSuggestion {
   title: string;
@@ -15,31 +15,71 @@ interface SearchSuggestion {
   query: string;
 }
 
-const GridBackground = () => (
-  <div className="absolute inset-0 -z-10">
-    <div className="absolute inset-0 bg-gradient-to-b from-background/80 to-background" />
-    <div className="absolute inset-0" style={{
-      backgroundImage: `
-        linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)
-      `,
-      backgroundSize: '40px 40px',
-      maskImage: 'radial-gradient(circle at 50% 50%, black, transparent 80%)'
-    }} />
-  </div>
-)
+const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
+const thumb = (file: string) => `${IK}/wallpapers/${file}?tr=w-420,q-55,f-auto`
+
+// Curated backdrop collage - low-res transformed thumbnails, purely decorative
+const COLLAGE_COLUMNS: string[][] = [
+  [
+    'aurora-borealis-mountain-lake-2k-wallpaperz.jpg',
+    'synthwave-outrun-supercar-sunset-2k-wallpaperz.jpg',
+    'zen-garden-crimson-maple-mist-2k-wallpaperz.jpg',
+    'abstract-liquid-chrome-waves-2k-wallpaperz.jpg',
+  ],
+  [
+    'anime-torii-gate-sky-lanterns-2k-wallpaperz.jpg',
+    'violet-spiral-nebula-ringed-planet-2k-wallpaperz.jpg',
+    'minimal-desert-dunes-dusk-2k-wallpaperz.jpg',
+    'space-cosmic-nebula-4k-wallpaperz.jpg',
+  ],
+  [
+    'cyberpunk-rain-street-neon-2k-wallpaperz.jpg',
+    'fantasy-ember-dragon-above-clouds-2k-wallpaperz.jpg',
+    'circuit-board-city-data-streams-2k-wallpaperz.jpg',
+    'macos-big-sur-apple-layers-fluidic-colorful-wwdc-stock-wallpaperz.jpg',
+  ],
+]
+
+function CollageBackdrop() {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+      <div className="absolute inset-[-10%] flex gap-3 sm:gap-4 justify-center">
+        {COLLAGE_COLUMNS.map((column, colIndex) => (
+          <div
+            key={colIndex}
+            className={`flex flex-col gap-3 sm:gap-4 w-1/2 sm:w-1/3 shrink-0 ${
+              colIndex === 1
+                ? 'motion-safe:animate-hero-drift-down -mt-16'
+                : 'motion-safe:animate-hero-drift-up'
+            } ${colIndex === 2 ? 'hidden sm:flex' : ''}`}
+          >
+            {/* Duplicate the column so the drift loop never shows a gap */}
+            {[...column, ...column].map((file, i) => (
+              // eslint-disable-next-line @next/next/no-img-element -- decorative thumbs already optimized via ImageKit transforms
+              <img
+                key={`${file}-${i}`}
+                src={thumb(file)}
+                alt=""
+                loading={i < 2 ? 'eager' : 'lazy'}
+                decoding="async"
+                draggable={false}
+                className="w-full aspect-[16/10] object-cover rounded-xl select-none"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+      {/* Readability overlays */}
+      <div className="absolute inset-0 bg-background/70 dark:bg-background/75" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
+    </div>
+  )
+}
 
 export default function Hero() {
-  const [currentSuggestion, setCurrentSuggestion] = useState(0)
   const router = useRouter()
   const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
-  const { theme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const generateSuggestions = (value: string): SearchSuggestion[] => {
     if (!value) return [];
@@ -116,23 +156,44 @@ export default function Hero() {
   }
 
   return (
-    <div className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background to-background/50">
-      <GridBackground />
-      <div className="absolute inset-0 bg-background/30 backdrop-blur-xl" />
+    <div className="relative min-h-[55vh] sm:min-h-[60vh] md:min-h-[65vh] flex items-center justify-center overflow-hidden">
+      <CollageBackdrop />
 
-      <div className="container px-4 py-6 sm:py-8 relative z-10">
-        <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-6">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
-              Discover Stunning Wallpapers
-            </span>
-          </h1>
-          
-          <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">
-            Transform your screen with our curated collection of high-resolution wallpapers
-          </p>
+      <div className="container px-4 py-12 sm:py-16 relative z-10">
+        <div className="max-w-3xl mx-auto text-center space-y-5 sm:space-y-7">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 backdrop-blur-md px-3 py-1 text-xs sm:text-sm text-muted-foreground mb-4">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <span>Fresh drops weekly &middot; original AI art you won&apos;t find elsewhere</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-primary bg-[length:200%_auto] motion-safe:animate-text-shimmer">
+                Wallpapers Worth Staring At
+              </span>
+            </h1>
+          </motion.div>
 
-          <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto"
+          >
+            Hand-picked and AI-crafted HD &amp; 4K wallpapers for your desktop and phone.
+            Free forever, no sign-up, download in one click.
+          </motion.p>
+
+          <motion.form
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            onSubmit={handleSearch}
+            className="relative max-w-2xl mx-auto"
+          >
             <div className="relative flex items-center group">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-xl transition-all group-hover:blur-2xl" />
               <Search className="absolute left-4 w-5 h-5 text-muted-foreground z-10" />
@@ -140,8 +201,8 @@ export default function Hero() {
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-12 pr-4 h-14 text-base md:text-lg rounded-full border-2 bg-background/70 backdrop-blur-sm transition-all focus:bg-background/90 focus:ring-2 focus:ring-primary/20"
-                placeholder="Search wallpapers..."
+                className="w-full pl-12 pr-4 h-14 text-base md:text-lg rounded-full border-2 bg-background/80 backdrop-blur-md transition-all focus:bg-background/95 focus:ring-2 focus:ring-primary/20"
+                placeholder="Try &quot;space&quot;, &quot;anime&quot; or &quot;minimal&quot;..."
                 autoComplete="off"
                 spellCheck="false"
               />
@@ -159,6 +220,7 @@ export default function Hero() {
                 {suggestions.map((suggestion, i) => (
                   <button
                     key={i}
+                    type="button"
                     className="w-full px-4 py-3 text-left hover:bg-primary/10 transition-colors flex flex-col gap-0.5"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
@@ -168,27 +230,50 @@ export default function Hero() {
                 ))}
               </div>
             )}
-          </form>
+          </motion.form>
 
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-6 sm:mt-8">
-            {[DEFAULT_CATEGORY, 'Abstract', 'Minimalist', 'Fantasy', 'Art'].map((tag) => (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-wrap justify-center gap-2 sm:gap-3"
+          >
+            {[DEFAULT_CATEGORY, 'Abstract', 'Minimalist', 'Fantasy', 'Space', 'Anime'].map((tag) => (
               <Button
                 key={tag}
                 variant={activeCategory === tag ? "default" : "secondary"}
-                size="lg"
-                className="rounded-full px-6 backdrop-blur-sm hover:bg-primary/20 transition-colors"
+                size="sm"
+                className={`rounded-full px-4 sm:px-5 backdrop-blur-md border transition-colors ${
+                  activeCategory === tag ? '' : 'bg-background/60 hover:bg-primary/20'
+                }`}
                 onClick={() => handleCategoryClick(tag)}
               >
                 {tag}
               </Button>
             ))}
-          </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.45 }}
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-muted-foreground pt-1"
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <ImageIcon className="h-4 w-4 text-primary" />
+              85+ curated wallpapers
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Download className="h-4 w-4 text-primary" />
+              Full-res downloads, always free
+            </span>
+            <Link href="/ai-generate" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+              <Sparkles className="h-4 w-4 text-primary" />
+              Generate your own with AI
+            </Link>
+          </motion.div>
         </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
-      <div className="absolute -top-12 -left-12 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
-      <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
     </div>
   )
 }

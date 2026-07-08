@@ -1,9 +1,8 @@
 import { MetadataRoute } from 'next'
-import { getAllWallpapers } from '@/lib/server/wallpapers'
 
 const categories = [
-  'abstract', 'anime', 'art', 'cars', 'city', 'fantasy',
-  'nature', 'space', 'technology', 'minimalist', '4k', 'other',
+  'abstract', 'anime', 'art', 'cars', 'city', 'fantasy', 'gaming',
+  'nature', 'people', 'space', 'technology', 'minimalist', 'mobile', '4k', 'other',
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -26,18 +25,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  let wallpaperPages: MetadataRoute.Sitemap = []
-  try {
-    const wallpapers = await getAllWallpapers()
-    wallpaperPages = wallpapers.map((w) => ({
-      url: `${baseUrl}/wallpaper/${w.id}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }))
-  } catch {
-    console.error('Failed to fetch wallpapers for sitemap')
-  }
-
-  return [...staticPages, ...categoryPages, ...wallpaperPages]
+  // Wallpaper pages live in /wallpapers-sitemap.xml (route handler) because
+  // Next's MetadataRoute.Sitemap cannot emit <image:image> entries, which
+  // Google Images needs to index the actual wallpaper files.
+  return [...staticPages, ...categoryPages]
 }

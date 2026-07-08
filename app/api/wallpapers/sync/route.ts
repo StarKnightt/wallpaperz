@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { imagekitServer } from '@/lib/server/imagekit'
 import { Wallpaper } from '@/types/wallpaper'
+import { resolveCategory, cleanFilename } from '@/lib/categories'
 
 let cache: {
   data: Wallpaper[] | null
@@ -13,33 +14,8 @@ let cache: {
 const CACHE_DURATION = 60 * 60 * 1000
 const WALLPAPERS_FOLDER = '/wallpapers'
 
-function extractCategory(file: any): string {
-  if (file.customMetadata?.category) {
-    return file.customMetadata.category
-  }
-  
-  if (file.tags && file.tags.length > 0) {
-    const categoryTags = ['Abstract', 'Art', 'Minimalist', 'Fantasy', 'Nature', 'Space', 'Technology', 'Anime', 'City', 'Cars']
-    const foundCategory = file.tags.find((tag: string) => 
-      categoryTags.some(cat => cat.toLowerCase() === tag.toLowerCase())
-    )
-    if (foundCategory) {
-      return foundCategory.charAt(0).toUpperCase() + foundCategory.slice(1).toLowerCase()
-    }
-  }
-  
-  return 'Other'
-}
-
-function cleanFilename(filename: string): string {
-  return filename
-    .replace(/\.[^/.]+$/, '')
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, char => char.toUpperCase())
-}
-
 function transformToWallpaper(file: any): Wallpaper {
-  const category = extractCategory(file)
+  const category = resolveCategory(file.customMetadata?.category, file.tags)
   
   return {
     id: file.fileId,

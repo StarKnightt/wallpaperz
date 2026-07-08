@@ -80,7 +80,21 @@ export default async function WallpaperPage({ params }: Props) {
     ...(wallpaper.height && { height: { "@type": "QuantitativeValue", value: wallpaper.height } }),
     encodingFormat: "image/jpeg",
     isAccessibleForFree: true,
+    license: "https://wallpaperz.in/license",
+    acquireLicensePage: `https://wallpaperz.in/wallpaper/${wallpaper.id}`,
+    creditText: "Wallpaperz",
+    copyrightNotice: "Wallpaperz",
     creator: { "@type": "Organization", name: "Wallpaperz", url: "https://wallpaperz.in" },
+  }
+
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://wallpaperz.in" },
+      { "@type": "ListItem", position: 2, name: `${wallpaper.category} Wallpapers`, item: `https://wallpaperz.in/category/${wallpaper.category.toLowerCase()}` },
+      { "@type": "ListItem", position: 3, name: wallpaper.title, item: `https://wallpaperz.in/wallpaper/${wallpaper.id}` },
+    ],
   }
 
   return (
@@ -88,6 +102,10 @@ export default async function WallpaperPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -153,16 +171,19 @@ export default async function WallpaperPage({ params }: Props) {
             <h2 className="text-xl font-bold mb-6">More {wallpaper.category} Wallpapers</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {related.map((w) => {
-                const relUrl = w.imageUrl.startsWith('http')
+                const relBase = w.imageUrl.startsWith('http')
                   ? w.imageUrl
                   : `${process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT}${w.imageUrl}`
+                // Thumbnail via ImageKit transform instead of full-res original
+                const relUrl = `${relBase}?tr=w-480,q-70,f-auto`
+                const relPortrait = !!(w.width && w.height && w.height > w.width)
                 return (
                   <a key={w.id} href={`/wallpaper/${w.id}`} className="group block rounded-lg overflow-hidden border">
-                    <div className="aspect-[16/10] relative">
+                    <div className={`${relPortrait ? 'aspect-[9/14]' : 'aspect-[16/10]'} relative`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={relUrl}
-                        alt={w.title}
+                        alt={`${w.title} - ${w.category} wallpaper`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                       />

@@ -127,16 +127,28 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID
+
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
+          <link rel="preconnect" href="https://ik.imagekit.io" />
+          <link rel="dns-prefetch" href="https://ik.imagekit.io" />
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#000000" />
           <meta property="og:image" content="https://wallpaperz.in/theimage.png" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
           <meta property="twitter:image" content="https://wallpaperz.in/theimage.png" />
+          {/* Plain script tag (not next/script) so it lands in <head> for AdSense site verification */}
+          {adsenseId && (
+            <script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
+              crossOrigin="anonymous"
+            />
+          )}
         </head>
         <body className={inter.className}>
           <ThemeProvider

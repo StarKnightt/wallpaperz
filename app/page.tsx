@@ -7,11 +7,13 @@ const categories = [
   { name: "Cars", slug: "cars", description: "Supercars, classic vehicles, and automotive photography" },
   { name: "City", slug: "city", description: "Skylines, architecture, and metropolitan landscapes" },
   { name: "Fantasy", slug: "fantasy", description: "Dragons, mythical creatures, and enchanted worlds" },
+  { name: "Gaming", slug: "gaming", description: "Iconic characters and scenes from your favorite video games" },
   { name: "Nature", slug: "nature", description: "Landscapes, mountains, forests, and wildlife" },
+  { name: "People", slug: "people", description: "Celebrities, idols, and stunning portrait photography" },
   { name: "Space", slug: "space", description: "Planets, galaxies, nebulas, and astronomical wonders" },
   { name: "Technology", slug: "technology", description: "Futuristic designs, circuits, and digital innovation" },
   { name: "Minimalist", slug: "minimalist", description: "Clean designs, subtle colors, and elegant simplicity" },
-  { name: "4K", slug: "4k", description: "Ultra-high definition wallpapers with crystal-clear detail" },
+  { name: "Mobile", slug: "mobile", description: "Vertical 9:16 wallpapers sized for your phone screen" },
 ]
 
 const structuredData = {

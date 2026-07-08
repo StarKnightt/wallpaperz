@@ -1,9 +1,12 @@
 "use client"
 import { Wallpaper } from "@/types/wallpaper"
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "framer-motion"
+import { Smartphone } from "lucide-react"
 import { getImageUrl } from '@/lib/imagekit'
 import { getBlurDataURLClient } from '@/lib/blur-placeholder'
+import { imagekitLoader } from '@/lib/imagekit-loader'
 
 
 interface Props {
@@ -18,11 +21,16 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
   }
 
   const wallpaperCards = wallpapers.map((wallpaper, index) => {
-    const isLarge = index % 8 === 0
-    const isMedium = index % 6 === 3
-    const isMobileFull = index % 3 === 0
+    // Portrait (phone) wallpapers get a tall 1x2 cell so they aren't cropped
+    // into wide cells; landscape keeps the mixed bento pattern.
+    const isPortrait = !!(wallpaper.width && wallpaper.height && wallpaper.height > wallpaper.width)
+    const isLarge = !isPortrait && index % 8 === 0
+    const isMedium = !isPortrait && index % 6 === 3
+    const isMobileFull = !isPortrait && index % 3 === 0
     
-    const gridClass = `
+    const gridClass = isPortrait
+      ? "row-span-2"
+      : `
       ${isMobileFull ? "col-span-2 sm:col-span-1" : ""} 
       ${isLarge ? "sm:col-span-2 sm:row-span-2" : ""} 
       ${isMedium ? "sm:col-span-2 lg:col-span-2" : ""}
@@ -41,10 +49,13 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
         <div className="absolute inset-0 w-full h-full">
           <Image
             src={getImageUrl(wallpaper.imageUrl)}
-            alt={wallpaper.title}
+            loader={imagekitLoader}
+            alt={`${wallpaper.title} - free ${wallpaper.category.toLowerCase()} HD wallpaper`}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-110"
-            sizes={`
+            sizes={isPortrait
+              ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              : `
               (max-width: 640px) ${isMobileFull ? '100vw' : '50vw'},
               (max-width: 768px) ${isLarge || isMedium ? '66vw' : '33vw'},
               (max-width: 1024px) ${isLarge || isMedium ? '50vw' : '33vw'},
@@ -59,12 +70,27 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
         <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
-          <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base line-clamp-2">{wallpaper.title}</h3>
+          <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base line-clamp-2">
+            {/* Real link keeps wallpaper pages crawlable; modal preview stays on card click */}
+            <Link
+              href={`/wallpaper/${wallpaper.id}`}
+              className="pointer-events-auto hover:underline"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {wallpaper.title}
+            </Link>
+          </h3>
         </div>
 
         <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full pointer-events-none">
           {wallpaper.category}
         </div>
+
+        {isPortrait && (
+          <div className="absolute top-2 left-2 bg-black/50 backdrop-blur-sm text-white p-1 sm:p-1.5 rounded-full pointer-events-none" title="Phone wallpaper">
+            <Smartphone className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+          </div>
+        )}
       </motion.div>
     )
   })

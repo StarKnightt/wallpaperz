@@ -72,6 +72,26 @@ body {
 }
 
 @layer utilities {
+  .animate-hero-drift-up {
+    animation: hero-drift-up 60s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-hero-drift-down {
+    animation: hero-drift-down 70s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes hero-drift-up {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+
+  @keyframes hero-drift-down {
+    0% { transform: translateY(-50%); }
+    100% { transform: translateY(0); }
+  }
+
   .animate-gradient-x {
     background-size: 200% 200%;
     animation: gradient-x 20s ease infinite; /* Slower animation */
