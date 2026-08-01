@@ -11,4 +11,5 @@ export interface Wallpaper {
   width?: number    
   height?: number   
   fileSize?: number  
+  tags?: string[]
 }

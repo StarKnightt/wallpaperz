@@ -15,6 +15,7 @@ function toWallpaper(file: any): Wallpaper {
     width: file.width,
     height: file.height,
     fileSize: file.size,
+    tags: file.tags || [],
   }
 }
 

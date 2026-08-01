@@ -253,3 +253,91 @@ body {
     linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
   background-size: 20px 20px;
 }
+
+/* Blog article typography (no tailwind typography plugin needed) */
+.blog-prose {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.blog-prose > * + * {
+  margin-top: 1.1em;
+}
+.blog-prose h2 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  margin-top: 2.2em;
+  scroll-margin-top: 5rem;
+}
+.blog-prose h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1.8em;
+  scroll-margin-top: 5rem;
+}
+.blog-prose p,
+.blog-prose li {
+  color: hsl(var(--foreground) / 0.85);
+}
+.blog-prose ul,
+.blog-prose ol {
+  padding-left: 1.5rem;
+}
+.blog-prose ul {
+  list-style: disc;
+}
+.blog-prose ol {
+  list-style: decimal;
+}
+.blog-prose li + li {
+  margin-top: 0.4em;
+}
+.blog-prose a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.blog-prose a:hover {
+  opacity: 0.85;
+}
+.blog-prose strong {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+.blog-prose code {
+  background: hsl(var(--muted));
+  border-radius: 0.3rem;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.875em;
+}
+.blog-prose blockquote {
+  border-left: 3px solid hsl(var(--primary) / 0.5);
+  padding-left: 1rem;
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+}
+.blog-prose hr {
+  border-color: hsl(var(--border));
+  margin: 2.5em 0;
+}
+.blog-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925rem;
+  display: block;
+  overflow-x: auto;
+}
+.blog-prose th,
+.blog-prose td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.55rem 0.8rem;
+  text-align: left;
+  white-space: nowrap;
+}
+.blog-prose th {
+  background: hsl(var(--muted) / 0.6);
+  font-weight: 600;
+}
+.blog-prose img {
+  border-radius: 0.75rem;
+}

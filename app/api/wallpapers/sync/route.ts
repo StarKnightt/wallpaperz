@@ -27,7 +27,8 @@ function transformToWallpaper(file: any): Wallpaper {
     sourceUrl: file.customMetadata?.sourceUrl || undefined,
     width: file.width,
     height: file.height,
-    fileSize: file.size
+    fileSize: file.size,
+    tags: file.tags || []
   }
 }
 

@@ -21,7 +21,7 @@ export default function Footer() {
   return (
     <footer className="border-t bg-background/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Logo and Description */}
           <div className="md:col-span-1">
             <Link href="/" className="text-xl font-bold">
@@ -59,8 +59,45 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Blog
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
                   About
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Popular Colors */}
+          <div className="md:col-span-1">
+            <h3 className="font-medium mb-3">By Color</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/color/dark" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Dark Wallpapers
+                </Link>
+              </li>
+              <li>
+                <Link href="/color/black" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Black Wallpapers
+                </Link>
+              </li>
+              <li>
+                <Link href="/color/blue" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Blue Wallpapers
+                </Link>
+              </li>
+              <li>
+                <Link href="/color/pink" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Pink Wallpapers
+                </Link>
+              </li>
+              <li>
+                <Link href="/color/orange" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Orange Wallpapers
                 </Link>
               </li>
             </ul>
