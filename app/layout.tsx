@@ -127,7 +127,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID
+  // Publisher ID is public (it's served in /ads.txt); env var only overrides.
+  const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID || 'ca-pub-9812963383908086'
 
   return (
     <ClerkProvider>
@@ -142,13 +143,12 @@ export default function RootLayout({
           <meta property="og:image:height" content="630" />
           <meta property="twitter:image" content="https://wallpaperz.in/theimage.png" />
           {/* Plain script tag (not next/script) so it lands in <head> for AdSense site verification */}
-          {adsenseId && (
-            <script
-              async
-              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
-              crossOrigin="anonymous"
-            />
-          )}
+          <meta name="google-adsense-account" content={adsenseId} />
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
+            crossOrigin="anonymous"
+          />
         </head>
         <body className={inter.className}>
           <ThemeProvider
