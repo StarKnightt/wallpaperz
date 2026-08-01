@@ -36,7 +36,7 @@ const COLLAGE_COLUMNS: string[][] = [
     'cyberpunk-rain-street-neon-2k-wallpaperz.jpg',
     'fantasy-ember-dragon-above-clouds-2k-wallpaperz.jpg',
     'circuit-board-city-data-streams-2k-wallpaperz.jpg',
-    'macos-big-sur-apple-layers-fluidic-colorful-wwdc-stock-wallpaperz.jpg',
+    'sunken-city-whale-godrays-2k-wallpaperz.jpg',
   ],
 ]
 
