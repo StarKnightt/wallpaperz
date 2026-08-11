@@ -80,3 +80,6 @@ public/workbox-*.js
 # Dependency lock files (keep these for consistency)
 # package-lock.json
 # yarn.lock
+
+# Production screenshots
+screenshots/
