@@ -91,6 +91,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/color/purple" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Purple Wallpapers
+                </Link>
+              </li>
+              <li>
                 <Link href="/color/pink" className="text-muted-foreground hover:text-foreground transition-colors">
                   Pink Wallpapers
                 </Link>

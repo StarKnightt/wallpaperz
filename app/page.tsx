@@ -6,6 +6,7 @@ const colorLinks = [
   { name: "Dark", slug: "dark", swatch: "#0a0a0f" },
   { name: "Black", slug: "black", swatch: "#000000" },
   { name: "Blue", slug: "blue", swatch: "#2563eb" },
+  { name: "Purple", slug: "purple", swatch: "#8b5cf6" },
   { name: "Gray", slug: "gray", swatch: "#6b7280" },
   { name: "Orange", slug: "orange", swatch: "#f97316" },
   { name: "Teal", slug: "teal", swatch: "#14b8a6" },
