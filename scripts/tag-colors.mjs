@@ -101,8 +101,26 @@ const wallpapers = files.filter(f => {
 })
 console.log(`Analyzing ${wallpapers.length} wallpapers...\n`)
 
+function errorText(err) {
+  if (err?.message) return err.message
+  if (err?.help) return err.help
+  try {
+    return JSON.stringify(err).slice(0, 200)
+  } catch {
+    return String(err)
+  }
+}
+
+function sameTags(a, b) {
+  if (a.length !== b.length) return false
+  const set = new Set(a)
+  return b.every(t => set.has(t))
+}
+
 const tally = {}
 let updated = 0
+let unchanged = 0
+let failed = 0
 const CONCURRENCY = 6
 for (let i = 0; i < wallpapers.length; i += CONCURRENCY) {
   const batch = wallpapers.slice(i, i + CONCURRENCY)
@@ -114,11 +132,17 @@ for (let i = 0; i < wallpapers.length; i += CONCURRENCY) {
       const newTags = [...existing, ...tags]
       console.log(`${f.name}\n  -> [${tags.join(', ')}] (${top.join(', ')})`)
       if (!dryRun) {
-        await ik.updateFileDetails(f.fileId, { tags: newTags })
-        updated++
+        // ImageKit rejects no-op updates, so skip files whose tags already match.
+        if (sameTags(newTags, f.tags || [])) {
+          unchanged++
+        } else {
+          await ik.updateFileDetails(f.fileId, { tags: newTags })
+          updated++
+        }
       }
     } catch (err) {
-      console.error(`FAILED ${f.name}: ${err?.message || err}`)
+      failed++
+      console.error(`FAILED ${f.name}: ${errorText(err)}`)
     }
   }))
 }
@@ -127,4 +151,4 @@ console.log(`\n--- Tag distribution ---`)
 for (const [tag, n] of Object.entries(tally).sort((a, b) => b[1] - a[1])) {
   console.log(`${tag.padEnd(14)} ${n}`)
 }
-console.log(dryRun ? '\nDry run - nothing written.' : `\nUpdated ${updated}/${wallpapers.length} files.`)
+console.log(dryRun ? '\nDry run - nothing written.' : `\nUpdated ${updated}, unchanged ${unchanged}, failed ${failed} of ${wallpapers.length} files.`)
