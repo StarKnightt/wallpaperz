@@ -105,6 +105,21 @@ export default function Footer() {
                   Orange Wallpapers
                 </Link>
               </li>
+              <li>
+                <Link href="/color/green" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Green Wallpapers
+                </Link>
+              </li>
+              <li>
+                <Link href="/color/yellow" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Yellow Wallpapers
+                </Link>
+              </li>
+              <li>
+                <Link href="/color/white" className="text-muted-foreground hover:text-foreground transition-colors">
+                  White Wallpapers
+                </Link>
+              </li>
             </ul>
           </div>
 

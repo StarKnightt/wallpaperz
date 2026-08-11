@@ -8,10 +8,13 @@ const colorLinks = [
   { name: "Blue", slug: "blue", swatch: "#2563eb" },
   { name: "Purple", slug: "purple", swatch: "#8b5cf6" },
   { name: "Gray", slug: "gray", swatch: "#6b7280" },
+  { name: "Green", slug: "green", swatch: "#22c55e" },
   { name: "Orange", slug: "orange", swatch: "#f97316" },
   { name: "Teal", slug: "teal", swatch: "#14b8a6" },
   { name: "Red", slug: "red", swatch: "#ef4444" },
   { name: "Pink", slug: "pink", swatch: "#ec4899" },
+  { name: "White", slug: "white", swatch: "#f8fafc" },
+  { name: "Yellow", slug: "yellow", swatch: "#eab308" },
 ]
 
 const categories = [
