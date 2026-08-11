@@ -20,6 +20,42 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'fall-aesthetic-wallpapers',
+    title: 'Fall Aesthetic Wallpapers: Cozy Autumn Backgrounds for iPhone & Desktop (2026)',
+    metaTitle: 'Fall Aesthetic Wallpapers - Cozy Autumn Backgrounds (2026)',
+    description:
+      'The best fall aesthetic wallpapers for 2026: cozy cabin scenes, moody autumn palettes, and desert-highway golds - plus how to pick the right resolution for iPhone, Android, and desktop.',
+    date: '2026-08-11',
+    cluster: 'Inspiration',
+    minutes: 7,
+    cover: '/wallpapers/autumn-cabin-lake-reflection-2k-wallpaperz.jpg',
+    coverAlt: 'Cozy autumn cabin beside a lake with fall foliage reflected in still water',
+  },
+  {
+    slug: 'halloween-phone-wallpapers',
+    title: 'Halloween Phone Wallpapers: Spooky Lock Screens for iPhone & Android (2026)',
+    metaTitle: 'Halloween Phone Wallpapers - Spooky Lock Screens (2026)',
+    description:
+      'Free Halloween phone wallpapers and how to use them: moody pumpkin porches, OLED-friendly dark scenes, lock screen readability tips, and the right size for iPhone and Android.',
+    date: '2026-08-11',
+    cluster: 'Inspiration',
+    minutes: 6,
+    cover: '/wallpapers/halloween-pumpkin-porch-moonlight-mobile-wallpaperz.jpg',
+    coverAlt: 'Glowing jack-o-lantern on a porch under moonlight, Halloween phone wallpaper',
+  },
+  {
+    slug: 'americana-wallpapers',
+    title: 'Americana Wallpapers: Route 66, Muscle Cars & Desert Highways',
+    metaTitle: 'Americana Wallpapers - Route 66, Muscle Cars & Desert Highways',
+    description:
+      'A curated collection of Americana wallpapers - Route 66 sunsets, retro diners with muscle cars, Monument Valley mesas, and NYC blue hour - with tips for desktop, ultrawide, and phone.',
+    date: '2026-08-11',
+    cluster: 'Inspiration',
+    minutes: 7,
+    cover: '/wallpapers/route-66-desert-highway-sunset-2k-wallpaperz.jpg',
+    coverAlt: 'Empty Route 66 desert highway stretching toward a golden sunset',
+  },
+  {
     slug: 'how-to-set-live-wallpaper-windows-11',
     title: 'How to Set a Live Wallpaper on Windows 11 (2026 Guide)',
     metaTitle: 'How to Set a Live Wallpaper on Windows 11 - 2026 Guide',
