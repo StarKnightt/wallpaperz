@@ -7,8 +7,7 @@ import { Toaster } from "sonner"
 import type React from "react"
 import { SearchProvider } from "@/context/SearchContext"
 import { Analytics } from "@vercel/analytics/react"
-import { GoogleAnalytics } from "@next/third-parties/google"
-import Script from 'next/script'
+import DomainGatedScripts from "@/components/DomainGatedScripts"
 import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
 import BottomNav from "@/components/BottomNav"
@@ -142,13 +141,9 @@ export default function RootLayout({
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
           <meta property="twitter:image" content="https://wallpaperz.in/theimage.png" />
-          {/* Plain script tag (not next/script) so it lands in <head> for AdSense site verification */}
+          {/* Server-rendered so AdSense verification crawls see it; serves no ads by itself.
+              The ad-serving script is injected client-side by DomainGatedScripts. */}
           <meta name="google-adsense-account" content={adsenseId} />
-          <script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
-            crossOrigin="anonymous"
-          />
         </head>
         <body className={inter.className}>
           <ThemeProvider
@@ -168,17 +163,10 @@ export default function RootLayout({
                 <BottomNav />
               </div>
               <Toaster position="bottom-right" />
+              {/* Vercel Analytics stays ungated: tied to our Vercel project, not an ID */}
               <Analytics />
-              <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
-              <Script strategy="afterInteractive" id="microsoft-clarity">
-                {`
-                  (function(c,l,a,r,i,t,y){
-                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-                  })(window, document, "clarity", "script", "q9tt7wi9dk");
-                `}
-              </Script>
+              {/* AdSense + GA4 + Clarity, hostname-gated so repo clones can't fire our IDs */}
+              <DomainGatedScripts />
             </SearchProvider>
           </ThemeProvider>
         </body>
