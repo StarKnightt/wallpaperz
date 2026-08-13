@@ -1,15 +1,33 @@
 // Production verification: capture viewport screenshots of live pages.
-// Usage: node scripts/screenshot-pages.mjs
+// Usage: node scripts/screenshot-pages.mjs [path[:name[:scrollTo]] ...]
+//   e.g. node scripts/screenshot-pages.mjs /color/green /color/yellow:my-name:600
+// With no args, falls back to the default page list below.
 import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
-const PAGES = [
-  { url: 'https://www.wallpaperz.in', name: 'homepage-hero', scrollTo: 0 },
-  { url: 'https://www.wallpaperz.in', name: 'homepage-grid', scrollTo: 1200 },
-  { url: 'https://www.wallpaperz.in/color/purple', name: 'color-purple', scrollTo: 300 },
-  { url: 'https://www.wallpaperz.in/category/people', name: 'category-people', scrollTo: 300 },
+const BASE_URL = 'https://www.wallpaperz.in';
+
+const DEFAULT_PAGES = [
+  { url: BASE_URL, name: 'homepage-hero', scrollTo: 0 },
+  { url: BASE_URL, name: 'homepage-grid', scrollTo: 1200 },
+  { url: `${BASE_URL}/color/purple`, name: 'color-purple', scrollTo: 300 },
+  { url: `${BASE_URL}/category/people`, name: 'category-people', scrollTo: 300 },
 ];
+
+function parseArg(arg) {
+  const [pagePath, name, scrollTo] = arg.split(':');
+  const derivedName = pagePath.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'homepage';
+  return {
+    url: `${BASE_URL}${pagePath === '/' ? '' : pagePath}`,
+    name: name || derivedName,
+    scrollTo: scrollTo !== undefined ? Number(scrollTo) : 300,
+  };
+}
+
+const PAGES = process.argv.slice(2).length
+  ? process.argv.slice(2).map(parseArg)
+  : DEFAULT_PAGES;
 
 const OUT_DIR = path.resolve('screenshots');
 // Lazy-loaded thumbnails come from ImageKit client-side; give them time to fade in.
