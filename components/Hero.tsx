@@ -201,7 +201,7 @@ export default function Hero() {
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-12 pr-4 h-14 text-base md:text-lg rounded-full border-2 bg-background/80 backdrop-blur-md transition-all focus:bg-background/95 focus:ring-2 focus:ring-primary/20"
+                className="w-full pl-12 pr-28 h-14 text-base md:text-lg rounded-full border-2 bg-background/80 backdrop-blur-md transition-all focus:bg-background/95 focus:ring-2 focus:ring-primary/20"
                 placeholder="Try &quot;space&quot;, &quot;anime&quot; or &quot;minimal&quot;..."
                 autoComplete="off"
                 spellCheck="false"
