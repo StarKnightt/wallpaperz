@@ -116,6 +116,12 @@ export const metadata: Metadata = {
     nocache: true,
   },
   category: 'Technology',
+  verification: {
+    other: {
+      // Pinterest website-claim verification; must be server-rendered static HTML
+      'p:domain_verify': '5a51bc71c9a8b354e8b648a37980fa1c',
+    },
+  },
   other: {
     'og:logo': 'https://wallpaperz.in/web-app-manifest-512x512.png',
   },
