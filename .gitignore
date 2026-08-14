@@ -83,3 +83,7 @@ public/workbox-*.js
 
 # Production screenshots
 screenshots/
+.env*
+
+# Local Pinterest pinning kit (not for public repo)
+pinterest/
