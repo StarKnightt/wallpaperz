@@ -58,7 +58,7 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
     <>
       <div
         className={`relative rounded-lg overflow-hidden border cursor-pointer group ${
-          isPortrait ? 'aspect-[9/16] max-w-[min(24rem,33.75vh)] sm:max-w-sm mx-auto' : 'aspect-[16/10]'
+          isPortrait ? 'aspect-[9/16] max-w-[min(24rem,33.75dvh)] sm:max-w-sm mx-auto' : 'aspect-[16/10]'
         }`}
         onClick={() => setIsPreviewOpen(true)}
       >
@@ -103,14 +103,14 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-[95vw] max-h-[90vh]"
+              className="relative max-w-[95vw] max-h-[90dvh]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imageUrl}
                 alt={wallpaper.title}
-                className="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain"
+                className="max-w-full max-h-[85dvh] rounded-lg shadow-2xl object-contain"
               />
               <div className="absolute top-3 right-3 flex gap-2">
                 <Button

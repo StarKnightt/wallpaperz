@@ -91,7 +91,7 @@ export default function WallpaperPreviewModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-full p-0 overflow-hidden">
+      <DialogContent className="max-w-4xl w-full p-0 overflow-hidden flex flex-col gap-0 max-h-[90dvh]">
         <DialogClose className="absolute right-4 top-4 z-50">
           <div className="rounded-full p-2 bg-background/80 backdrop-blur-sm border shadow-sm hover:bg-background/90 transition-colors">
             <X className="h-4 w-4" />
@@ -99,7 +99,8 @@ export default function WallpaperPreviewModal({
           </div>
         </DialogClose>
 
-        <DialogHeader className="p-4">
+        {/* Header holds only sr-only content; zero padding so it takes no vertical space */}
+        <DialogHeader className="p-0 space-y-0">
           <DialogTitle className="sr-only">
             {wallpaper.title}
           </DialogTitle>
@@ -117,7 +118,8 @@ export default function WallpaperPreviewModal({
           </div>
         )}
 
-        <div className={`relative w-full ${isPortrait ? 'h-[45vh] sm:h-[60vh]' : 'aspect-[16/9]'}`}>
+        {/* Image area may shrink (min-h-0) so the footer below is never pushed out of the modal */}
+        <div className={`relative w-full min-h-0 ${isPortrait ? 'h-[45dvh] sm:h-[60dvh]' : 'aspect-[16/9]'}`}>
           {onNavigate && canNavigatePrev && (
             <Button
               variant="ghost"
@@ -170,7 +172,8 @@ export default function WallpaperPreviewModal({
           )}
         </div>
 
-        <div className="p-4 space-y-4">
+        {/* Non-shrinking footer: title + actions always laid out inside the visible modal */}
+        <div className="p-4 space-y-4 shrink-0">
           <div>
             <h3 className="text-xl font-semibold mb-2">
               <a href={`/wallpaper/${wallpaper.id}`} className="hover:underline" title={`Open ${wallpaper.title} page`}>
