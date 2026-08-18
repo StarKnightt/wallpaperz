@@ -117,7 +117,7 @@ export default function WallpaperPreviewModal({
           </div>
         )}
 
-        <div className={`relative w-full ${isPortrait ? 'h-[60vh]' : 'aspect-[16/9]'}`}>
+        <div className={`relative w-full ${isPortrait ? 'h-[45vh] sm:h-[60vh]' : 'aspect-[16/9]'}`}>
           {onNavigate && canNavigatePrev && (
             <Button
               variant="ghost"

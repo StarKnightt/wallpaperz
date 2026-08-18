@@ -58,7 +58,7 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
     <>
       <div
         className={`relative rounded-lg overflow-hidden border cursor-pointer group ${
-          isPortrait ? 'aspect-[9/16] max-w-sm mx-auto' : 'aspect-[16/10]'
+          isPortrait ? 'aspect-[9/16] max-w-[min(24rem,33.75vh)] sm:max-w-sm mx-auto' : 'aspect-[16/10]'
         }`}
         onClick={() => setIsPreviewOpen(true)}
       >
