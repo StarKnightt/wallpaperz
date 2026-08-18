@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import WallpaperGrid from "@/components/WallpaperGrid"
 import CategoryFilter from "@/components/CategoryFilter"
+import DeviceFilter, { DeviceFilterValue, isPortraitWallpaper, matchesDeviceFilter } from "@/components/DeviceFilter"
 import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
 import { Wallpaper } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
@@ -41,6 +42,7 @@ export default function HomeClient() {
   const [isFetchingWallpapers, setIsFetchingWallpapers] = useState(true)
   const [categories, setCategories] = useState<string[]>([])
   const [fetchError, setFetchError] = useState(false)
+  const [deviceFilter, setDeviceFilter] = useState<DeviceFilterValue>("all")
 
   const fetchWallpapers = useCallback(async () => {
     setIsFetchingWallpapers(true)
@@ -79,11 +81,10 @@ export default function HomeClient() {
     fetchWallpapers()
   }, [fetchWallpapers])
 
-  useEffect(() => {
-    let filtered = allWallpapersData
-    
+  // Search/category filtering, before the device (orientation) filter is applied
+  const baseFilteredWallpapers = useMemo(() => {
     if (searchQuery) {
-      filtered = allWallpapersData.filter(w => {
+      return allWallpapersData.filter(w => {
         const searchableText = [
           w.title,
           w.category,
@@ -91,21 +92,50 @@ export default function HomeClient() {
         ].join(' ').toLowerCase()
         return searchableText.includes(searchQuery.toLowerCase())
       })
-    } else if (activeCategory !== DEFAULT_CATEGORY) {
-      filtered = allWallpapersData.filter(w => w.category === activeCategory)
     }
-    
+    if (activeCategory !== DEFAULT_CATEGORY) {
+      return allWallpapersData.filter(w => w.category === activeCategory)
+    }
+    return allWallpapersData
+  }, [searchQuery, activeCategory, allWallpapersData])
+
+  const deviceCounts = useMemo(() => ({
+    all: baseFilteredWallpapers.length,
+    mobile: baseFilteredWallpapers.filter(isPortraitWallpaper).length,
+    desktop: baseFilteredWallpapers.filter(w => !isPortraitWallpaper(w)).length,
+  }), [baseFilteredWallpapers])
+
+  useEffect(() => {
+    const filtered = baseFilteredWallpapers.filter(w => matchesDeviceFilter(w, deviceFilter))
     setFilteredWallpapers(filtered)
     setPage(1)
     setHasMore(filtered.length > ITEMS_PER_PAGE)
     setDisplayedWallpapers(filtered.slice(0, ITEMS_PER_PAGE))
-  }, [searchQuery, activeCategory, allWallpapersData])
+  }, [baseFilteredWallpapers, deviceFilter])
+
+  const handleDeviceFilterChange = useCallback((value: DeviceFilterValue) => {
+    setDeviceFilter(value)
+    // Keep the ?device= param in sync so filtered views are shareable
+    const params = new URLSearchParams(window.location.search)
+    if (value === "all") {
+      params.delete("device")
+    } else {
+      params.set("device", value)
+    }
+    const query = params.toString()
+    window.history.replaceState({}, "", query ? `${window.location.pathname}?${query}` : window.location.pathname)
+  }, [])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const searchParam = params.get('search')
     const categoryParam = params.get('category')
     const wallpaperParam = params.get('wallpaper')
+    const deviceParam = params.get('device')
+    
+    if (deviceParam === 'mobile' || deviceParam === 'desktop') {
+      setDeviceFilter(deviceParam)
+    }
     
     if (searchParam) {
       setSearchQuery(searchParam)
@@ -208,7 +238,7 @@ export default function HomeClient() {
        
         {searchQuery && (
           <section id="search-results" className="container mx-auto px-4">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold mb-2">
                   Search Results for &quot;{searchQuery}&quot;
@@ -217,6 +247,7 @@ export default function HomeClient() {
                   Found {filteredWallpapers.length} wallpapers
                 </p>
               </div>
+              <DeviceFilter value={deviceFilter} onChange={handleDeviceFilterChange} counts={deviceCounts} />
             </div>
 
             <WallpaperGrid 
@@ -246,7 +277,7 @@ export default function HomeClient() {
 
         {!searchQuery && (
           <section id="wallpapers-section" className="container mx-auto px-4">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold mb-2">
                   {activeCategory === DEFAULT_CATEGORY ? "All Wallpapers" : activeCategory}
@@ -257,6 +288,7 @@ export default function HomeClient() {
                   </p>
                 )}
               </div>
+              <DeviceFilter value={deviceFilter} onChange={handleDeviceFilterChange} counts={deviceCounts} />
             </div>
 
             <WallpaperGrid 

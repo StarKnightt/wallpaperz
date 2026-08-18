@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { useParams } from "next/navigation"
 import WallpaperGrid from "@/components/WallpaperGrid"
+import DeviceFilter, { DeviceFilterValue, isPortraitWallpaper, matchesDeviceFilter } from "@/components/DeviceFilter"
 import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
 import { Wallpaper } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,9 @@ export default function CategoryPage() {
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [isFetching, setIsFetching] = useState(true)
+  // Redundant on /category/mobile, which is already an orientation pseudo-category
+  const showDeviceFilter = slug.toLowerCase() !== 'mobile'
+  const [deviceFilter, setDeviceFilter] = useState<DeviceFilterValue>("all")
 
   const fetchWallpapers = useCallback(async () => {
     setIsFetching(true)
@@ -40,8 +44,6 @@ export default function CategoryPage() {
             : w.category.toLowerCase() === slug.toLowerCase()
         )
         setWallpapers(filtered)
-        setDisplayedWallpapers(filtered.slice(0, ITEMS_PER_PAGE))
-        setHasMore(filtered.length > ITEMS_PER_PAGE)
       }
     } catch (error) {
       console.error('Failed to fetch wallpapers:', error)
@@ -55,6 +57,23 @@ export default function CategoryPage() {
     fetchWallpapers()
   }, [fetchWallpapers])
 
+  const deviceFilteredWallpapers = useMemo(
+    () => wallpapers.filter(w => matchesDeviceFilter(w, deviceFilter)),
+    [wallpapers, deviceFilter]
+  )
+
+  const deviceCounts = useMemo(() => ({
+    all: wallpapers.length,
+    mobile: wallpapers.filter(isPortraitWallpaper).length,
+    desktop: wallpapers.filter(w => !isPortraitWallpaper(w)).length,
+  }), [wallpapers])
+
+  useEffect(() => {
+    setDisplayedWallpapers(deviceFilteredWallpapers.slice(0, ITEMS_PER_PAGE))
+    setPage(1)
+    setHasMore(deviceFilteredWallpapers.length > ITEMS_PER_PAGE)
+  }, [deviceFilteredWallpapers])
+
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return
     
@@ -64,16 +83,16 @@ export default function CategoryPage() {
     const nextPage = page + 1
     const startIndex = page * ITEMS_PER_PAGE
     const endIndex = nextPage * ITEMS_PER_PAGE
-    const newItems = wallpapers.slice(startIndex, endIndex)
+    const newItems = deviceFilteredWallpapers.slice(startIndex, endIndex)
     
     setDisplayedWallpapers(prev => [...prev, ...newItems])
     setPage(nextPage)
     setLoading(false)
     
-    if (endIndex >= wallpapers.length) {
+    if (endIndex >= deviceFilteredWallpapers.length) {
       setHasMore(false)
     }
-  }, [loading, hasMore, page, wallpapers])
+  }, [loading, hasMore, page, deviceFilteredWallpapers])
 
   const sentinelRef = useInfiniteScroll({
     onLoadMore: loadMore,
@@ -124,6 +143,12 @@ export default function CategoryPage() {
           Explore our collection of high-quality {category.toLowerCase()} wallpapers ({wallpapers.length} wallpapers)
         </p>
       </div>
+
+      {showDeviceFilter && !isFetching && wallpapers.length > 0 && (
+        <div className="mb-6">
+          <DeviceFilter value={deviceFilter} onChange={setDeviceFilter} counts={deviceCounts} />
+        </div>
+      )}
 
       {isFetching && displayedWallpapers.length === 0 ? (
         <div className="text-center py-16">
