@@ -8,6 +8,7 @@ import Image from "next/image"
 import { toast } from "sonner"
 import { getBlurDataURLClient } from "@/lib/blur-placeholder"
 import { imagekitLoader } from "@/lib/imagekit-loader"
+import { getOriginalDownloadUrl } from "@/lib/imagekit"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Props {
@@ -22,7 +23,7 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
   const handleDownload = async () => {
     try {
       toast.info("Preparing download...")
-      const response = await fetch(imageUrl)
+      const response = await fetch(getOriginalDownloadUrl(imageUrl))
       if (!response.ok) throw new Error("Failed to fetch image")
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)

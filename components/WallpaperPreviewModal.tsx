@@ -6,7 +6,7 @@ import Image from "next/image"
 import { toast } from "sonner"
 import { Wallpaper } from "@/types/wallpaper"
 import { useState, useEffect } from "react"
-import { getImageUrl } from '@/lib/imagekit'
+import { getImageUrl, getOriginalDownloadUrl } from '@/lib/imagekit'
 import { imagekitLoader } from '@/lib/imagekit-loader'
 import { getBlurDataURLClient, getImageMetadata, ImageMetadata, getResolutionName } from '@/lib/blur-placeholder'
 
@@ -226,7 +226,7 @@ export default function WallpaperPreviewModal({
               onClick={async () => {
                 try {
                   toast.info('Preparing download...')
-                  const response = await fetch(imageUrl);
+                  const response = await fetch(getOriginalDownloadUrl(wallpaper.imageUrl));
                   
                   if (!response.ok) {
                     throw new Error('Failed to fetch image')

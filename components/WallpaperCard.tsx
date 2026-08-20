@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { getImageUrl } from "@/lib/imagekit"
+import { getImageUrl, getOriginalDownloadUrl } from "@/lib/imagekit"
 import { toast } from "sonner"
 import { getBlurDataURLClient } from "@/lib/blur-placeholder"
 
@@ -32,8 +32,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
     
     try {
       toast.info('Preparing download...')
-      const imageUrl = getImageUrl(wallpaper.imageUrl)
-      const response = await fetch(imageUrl)
+      const response = await fetch(getOriginalDownloadUrl(wallpaper.imageUrl))
       
       if (!response.ok) {
         throw new Error('Failed to fetch image')

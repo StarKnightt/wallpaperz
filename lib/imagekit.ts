@@ -19,7 +19,21 @@ export function getImageUrl(path: string): string {
   }
   
   const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight';
-  return `${endpoint}/${path}`;
+  // filePath from the ImageKit API starts with '/', avoid a double slash
+  const normalized = path.startsWith('/') ? path.slice(1) : path;
+  return `${endpoint}/${normalized}`;
+}
+
+/**
+ * URL for downloading the ORIGINAL stored file, byte-for-byte.
+ * ImageKit applies account-level compression even to untransformed URLs;
+ * `tr=orig-true` bypasses it, and `ik-attachment=true` sets
+ * Content-Disposition: attachment as a fallback if the URL is opened directly.
+ */
+export function getOriginalDownloadUrl(pathOrUrl: string): string {
+  const baseUrl = getImageUrl(pathOrUrl);
+  const separator = baseUrl.includes('?') ? '&' : '?';
+  return `${baseUrl}${separator}tr=orig-true&ik-attachment=true`;
 }
 
 export function getTransformedUrl(path: string, options: {
