@@ -1,6 +1,8 @@
 import HomeClient from "./HomeClient"
 import { BLOG_POSTS } from "@/lib/blog/registry"
 
+export const revalidate = 3600
+
 // Colors with enough inventory for a landing page (see lib/colors.ts + tag-colors script)
 const colorLinks = [
   { name: "Dark", slug: "dark", swatch: "#0a0a0f" },

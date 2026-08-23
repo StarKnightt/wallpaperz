@@ -1,5 +1,9 @@
 import { MetadataRoute } from 'next'
 import { getAllWallpapers } from '@/lib/server/wallpapers'
+
+// Refresh hourly instead of only on deploy, so new color pages appear
+// without a redeploy and crawl hits never recompute per request.
+export const revalidate = 3600
 import { qualifyingColors, COLOR_DEFS } from '@/lib/colors'
 import { BLOG_POSTS } from '@/lib/blog/registry'
 

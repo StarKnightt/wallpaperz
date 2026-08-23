@@ -1,5 +1,14 @@
 import { Metadata } from 'next'
 
+// The page itself is a client component, so segment config lives here.
+// generateStaticParams opts the route into static generation (it was fully
+// dynamic before, SSR'd on every crawler hit); revalidate makes it ISR.
+export const revalidate = 3600
+
+export function generateStaticParams() {
+  return Object.keys(categoryDescriptions).map((slug) => ({ slug }))
+}
+
 type Props = {
   params: { slug: string }
 }

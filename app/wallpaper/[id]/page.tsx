@@ -4,6 +4,15 @@ import { getWallpaperById, getRelatedWallpapers } from '@/lib/server/wallpapers'
 import { getResolutionName, formatFileSize } from '@/lib/blur-placeholder'
 import WallpaperPageClient from './WallpaperPageClient'
 
+// ISR: pages render on first request, then serve from cache for an hour.
+// An empty generateStaticParams opts the route into static generation without
+// hitting ImageKit at build time (it was fully dynamic before).
+export const revalidate = 3600
+
+export function generateStaticParams() {
+  return []
+}
+
 type Props = {
   params: { id: string }
 }

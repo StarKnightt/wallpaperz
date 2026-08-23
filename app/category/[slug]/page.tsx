@@ -33,7 +33,7 @@ export default function CategoryPage() {
   const fetchWallpapers = useCallback(async () => {
     setIsFetching(true)
     try {
-      const response = await fetch('/api/wallpapers/sync')
+      const response = await fetch('/api/wallpapers')
       const data = await response.json()
       
       if (data.success && data.wallpapers) {

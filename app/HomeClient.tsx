@@ -48,7 +48,7 @@ export default function HomeClient() {
     setIsFetchingWallpapers(true)
     setFetchError(false)
     try {
-      const response = await fetch('/api/wallpapers/sync')
+      const response = await fetch('/api/wallpapers')
       const data = await response.json()
       
       if (data.success && data.wallpapers && data.wallpapers.length > 0) {

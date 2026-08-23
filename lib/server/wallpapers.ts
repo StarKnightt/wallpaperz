@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { imagekitServer } from './imagekit'
 import { Wallpaper, WallpaperCategory } from '@/types/wallpaper'
 import { resolveCategory, cleanFilename } from '@/lib/categories'
@@ -19,26 +20,23 @@ function toWallpaper(file: any): Wallpaper {
   }
 }
 
-let cachedWallpapers: Wallpaper[] | null = null
-let cacheTime = 0
-const CACHE_TTL = 60 * 60 * 1000
-
-export async function getAllWallpapers(): Promise<Wallpaper[]> {
-  const now = Date.now()
-  if (cachedWallpapers && now - cacheTime < CACHE_TTL) return cachedWallpapers
-
+async function fetchAllWallpapers(): Promise<Wallpaper[]> {
   const files = await imagekitServer.listFiles({ limit: 1000 })
-  const wallpapers = (files || [])
+  return (files || [])
     .filter((f: any) => {
       const parts = f.filePath.split('/')
       return parts.length === 3 && parts[1] === 'wallpapers' && f.fileType === 'image'
     })
     .map(toWallpaper)
-
-  cachedWallpapers = wallpapers
-  cacheTime = now
-  return wallpapers
 }
+
+// Vercel Data Cache (shared across lambda instances, unlike module-level memory).
+// One ImageKit list call per hour serves every route; POST /api/wallpapers/sync
+// purges the 'wallpapers' tag for an instant refresh.
+export const getAllWallpapers = unstable_cache(fetchAllWallpapers, ['all-wallpapers'], {
+  revalidate: 3600,
+  tags: ['wallpapers'],
+})
 
 export async function getWallpaperById(id: string): Promise<Wallpaper | null> {
   const all = await getAllWallpapers()

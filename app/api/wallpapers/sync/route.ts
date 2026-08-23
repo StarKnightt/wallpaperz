@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { imagekitServer } from '@/lib/server/imagekit'
 import { Wallpaper } from '@/types/wallpaper'
 import { resolveCategory, cleanFilename } from '@/lib/categories'
@@ -113,7 +114,18 @@ export async function POST() {
     data: null,
     timestamp: 0
   }
-  
+
+  // Purge the shared data cache and every ISR page that renders wallpaper data,
+  // so new uploads show up immediately instead of waiting out the 1h revalidate.
+  revalidateTag('wallpapers')
+  revalidatePath('/')
+  revalidatePath('/api/wallpapers')
+  revalidatePath('/category/[slug]', 'page')
+  revalidatePath('/color/[slug]', 'page')
+  revalidatePath('/wallpaper/[id]', 'page')
+  revalidatePath('/sitemap.xml')
+  revalidatePath('/wallpapers-sitemap.xml')
+
   return NextResponse.json({
     success: true,
     message: 'Cache cleared successfully. Next request will fetch fresh data from ImageKit.'
