@@ -11,6 +11,10 @@
     "start": "next start",
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true next build",
+    "cf:build": "opennextjs-cloudflare build",
+    "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "wallpapers:list": "node scripts/list-imagekit.mjs",
     "wallpapers:upload": "node scripts/upload-wallpapers.mjs",
     "wallpapers:metadata": "node scripts/set-metadata.mjs"
@@ -46,6 +50,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.6",
     "@next/bundle-analyzer": "^15.5.24",
+    "@opennextjs/cloudflare": "^1.20.3",
     "@types/lodash": "^4.17.15",
     "@types/node": "^20",
     "@types/react": "^19.2.18",
@@ -57,6 +62,7 @@
     "playwright": "^1.62.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.126.0"
   }
 }

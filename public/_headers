@@ -1,0 +1,15 @@
+# Cloudflare Workers Static Assets headers (ignored by Vercel — next.config.js
+# headers() handles the equivalent there). Immutable Next build assets should
+# skip the default max-age=0 revalidation round-trip.
+/_next/static/*
+  Cache-Control: public,max-age=31536000,immutable
+/favicon.png
+  Cache-Control: public,max-age=31536000,immutable
+/theimage.png
+  Cache-Control: public,max-age=31536000,immutable
+/web-app-manifest-192x192.png
+  Cache-Control: public,max-age=31536000,immutable
+/web-app-manifest-512x512.png
+  Cache-Control: public,max-age=31536000,immutable
+/manifest.json
+  Cache-Control: public,max-age=86400

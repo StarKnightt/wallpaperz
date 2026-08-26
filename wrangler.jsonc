@@ -1,0 +1,55 @@
+// Cloudflare Workers config for the OpenNext deployment (cf:* npm scripts).
+// Vercel ignores this file; it does not affect `npm run build` / `npm run dev`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wallpaperz",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  // Self-reference used by the OpenNext revalidation machinery.
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "wallpaperz"
+    }
+  ],
+  // Incremental cache (ISR + data cache). KV because R2 is not enabled on this
+  // account yet — see open-next.config.ts for the swap instructions.
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "9b34e89e50da40ae94c4b508c8873433"
+    }
+  ],
+  // Durable Object queue that dedupes/synchronizes ISR revalidations.
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "NEXT_CACHE_DO_QUEUE",
+        "class_name": "DOQueueHandler"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["DOQueueHandler"]
+    }
+  ],
+  // Tag cache backing revalidateTag('wallpapers') / revalidatePath(...).
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "wallpaperz-tag-cache",
+      "database_id": "69126f83-7ab4-4603-9798-631a1e60b8b7"
+    }
+  ]
+}
