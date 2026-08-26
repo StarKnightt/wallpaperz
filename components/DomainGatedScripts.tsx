@@ -40,6 +40,16 @@ export default function DomainGatedScripts() {
         strategy="afterInteractive"
       />
       <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
+      {/* Cloudflare Web Analytics (RUM) beacon: like the AdSense ID, the token is
+          public by nature; the hostname gate above keeps clones from reporting.
+          Cloudflare also validates the reporting hostname server-side. */}
+      <Script
+        id="cloudflare-web-analytics"
+        strategy="afterInteractive"
+        type="module"
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "5d0b9c1fc2e14572b69d581aa56c39b2"}'
+      />
       <Script strategy="afterInteractive" id="microsoft-clarity">
         {`
           (function(c,l,a,r,i,t,y){
