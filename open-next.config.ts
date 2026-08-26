@@ -16,4 +16,8 @@ export default defineCloudflareConfig({
   incrementalCache: r2IncrementalCache,
   queue: doQueue,
   tagCache: d1NextTagCache,
+  // Serve cached ISR/SSG responses directly from R2 without booting NextServer.
+  // Cache HITs previously cost ~10ms CPU (the whole free-plan budget) just to
+  // load Next; with interception they cost ~1ms. Runs after middleware.
+  enableCacheInterception: true,
 });

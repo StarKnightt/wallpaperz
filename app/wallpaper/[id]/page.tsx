@@ -1,16 +1,18 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getWallpaperById, getRelatedWallpapers } from '@/lib/server/wallpapers'
+import { getAllWallpapers, getWallpaperById, getRelatedWallpapers } from '@/lib/server/wallpapers'
 import { getResolutionName, formatFileSize } from '@/lib/blur-placeholder'
 import WallpaperPageClient from './WallpaperPageClient'
 
-// ISR: pages render on first request, then serve from cache for an hour.
-// An empty generateStaticParams opts the route into static generation without
-// hitting ImageKit at build time (it was fully dynamic before).
+// ISR with full build-time prerendering: every wallpaper page is generated at
+// build (one ImageKit list call, same as the sitemaps) so no visitor request
+// ever pays a fresh SSR render — critical on the Workers free plan (10ms CPU).
+// New IDs uploaded after a build still render on demand (dynamicParams default).
 export const revalidate = 3600
 
-export function generateStaticParams() {
-  return []
+export async function generateStaticParams() {
+  const wallpapers = await getAllWallpapers()
+  return wallpapers.map((w) => ({ id: w.id }))
 }
 
 type Props = {
