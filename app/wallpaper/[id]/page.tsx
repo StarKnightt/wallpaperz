@@ -14,10 +14,11 @@ export function generateStaticParams() {
 }
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const wallpaper = await getWallpaperById(params.id)
   if (!wallpaper) return { title: 'Wallpaper Not Found' }
 
@@ -65,7 +66,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function WallpaperPage({ params }: Props) {
+export default async function WallpaperPage(props: Props) {
+  const params = await props.params;
   const wallpaper = await getWallpaperById(params.id)
   if (!wallpaper) notFound()
 

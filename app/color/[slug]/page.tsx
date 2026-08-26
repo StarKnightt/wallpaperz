@@ -21,7 +21,8 @@ export function generateStaticParams() {
   return COLOR_DEFS.map((c) => ({ slug: c.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const color = getColorBySlug(params.slug)
   if (!color) return {}
   return {
@@ -36,7 +37,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function ColorPage({ params }: { params: { slug: string } }) {
+export default async function ColorPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const color = getColorBySlug(params.slug)
   if (!color) notFound()
 

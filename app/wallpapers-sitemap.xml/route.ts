@@ -3,6 +3,9 @@ import { getAllWallpapers } from '@/lib/server/wallpapers'
 const BASE_URL = 'https://wallpaperz.in'
 const IMAGEKIT_ENDPOINT = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
 
+// Next 15 stopped caching GET route handlers by default; force-static keeps
+// this sitemap served from cache instead of rebuilding per crawler hit.
+export const dynamic = 'force-static'
 export const revalidate = 3600
 
 function escapeXml(value: string): string {

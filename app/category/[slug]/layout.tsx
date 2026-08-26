@@ -10,7 +10,7 @@ export function generateStaticParams() {
 }
 
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 const categoryDescriptions: Record<string, string> = {
@@ -31,7 +31,8 @@ const categoryDescriptions: Record<string, string> = {
   other: "Discover unique wallpapers that don't fit traditional categories, featuring diverse themes and creative concepts."
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const slug = params.slug
   const category = slug.charAt(0).toUpperCase() + slug.slice(1)
   const description = categoryDescriptions[slug.toLowerCase()] || 
