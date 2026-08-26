@@ -21,12 +21,11 @@
       "service": "wallpaperz"
     }
   ],
-  // Incremental cache (ISR + data cache). KV because R2 is not enabled on this
-  // account yet — see open-next.config.ts for the swap instructions.
-  "kv_namespaces": [
+  // Incremental cache (ISR + data cache) backed by R2.
+  "r2_buckets": [
     {
-      "binding": "NEXT_INC_CACHE_KV",
-      "id": "9b34e89e50da40ae94c4b508c8873433"
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "wallpaperz-inc-cache"
     }
   ],
   // Durable Object queue that dedupes/synchronizes ISR revalidations.
