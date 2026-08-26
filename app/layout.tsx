@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "sonner"
 import type React from "react"
 import { SearchProvider } from "@/context/SearchContext"
-import { Analytics } from "@vercel/analytics/react"
 import DomainGatedScripts from "@/components/DomainGatedScripts"
 import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
@@ -169,8 +168,6 @@ export default function RootLayout({
                 <BottomNav />
               </div>
               <Toaster position="bottom-right" />
-              {/* Vercel Analytics stays ungated: tied to our Vercel project, not an ID */}
-              <Analytics />
               {/* AdSense + GA4 + Clarity, hostname-gated so repo clones can't fire our IDs */}
               <DomainGatedScripts />
             </SearchProvider>

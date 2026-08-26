@@ -28,6 +28,27 @@ const nextConfig = {
       },
     ],
   },
+  // Vercel serves /public files with `max-age=0, must-revalidate`, so browsers
+  // send a conditional GET for these on every page load and each 304 counts
+  // against the edge-request quota. These assets never change in place (any
+  // change ships under a new filename), so mark them immutable.
+  async headers() {
+    return [
+      {
+        source: '/:file(favicon.png|theimage.png|web-app-manifest-192x192.png|web-app-manifest-512x512.png)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        // Manifest content can change, so cache for a day instead of forever
+        source: '/manifest.json',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400' },
+        ],
+      },
+    ]
+  },
   async rewrites() {
     return [
       {
