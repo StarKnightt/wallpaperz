@@ -7,6 +7,13 @@
   "compatibility_date": "2026-08-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "workers_dev": true,
+  // Lets app code detect the Workers deployment (OpenNext copies vars into
+  // process.env). Used to disable the hard cache purge in /api/wallpapers/sync,
+  // which is unaffordable on the free plan (10ms CPU): a purge forces foreground
+  // SSR of every page and cascades into exceededCpu/1102 errors (verified twice).
+  "vars": {
+    "DEPLOY_TARGET": "cloudflare"
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
