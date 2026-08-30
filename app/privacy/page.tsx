@@ -57,7 +57,7 @@ export default function PrivacyPage() {
         <div className="space-y-4">
           <p>If you have questions or want your data deleted, reach out:</p>
           <ul className="list-none pl-6 space-y-2">
-            <li>• Email: prasen.nayak@hotmail.com</li>
+            <li>• Email: contact@wallpaperz.in</li>
           </ul>
         </div>
       )

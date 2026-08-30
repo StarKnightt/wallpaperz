@@ -101,7 +101,7 @@ export default function ContactPage() {
                   {
                     icon: Mail,
                     title: "Email Us",
-                    details: "prasen.nayak@hotmail.com",
+                    details: "contact@wallpaperz.in",
                     description: "For general inquiries and support"
                   },
                   {
