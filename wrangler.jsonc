@@ -35,19 +35,16 @@
       "bucket_name": "wallpaperz-inc-cache"
     }
   ],
-  // Durable Object queue that dedupes/synchronizes ISR revalidations.
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "NEXT_CACHE_DO_QUEUE",
-        "class_name": "DOQueueHandler"
-      }
-    ]
-  },
+  // The DO revalidation queue was replaced by the memory queue (direct
+  // revalidation) in open-next.config.ts; v2 deletes the DO class and its data.
   "migrations": [
     {
       "tag": "v1",
       "new_sqlite_classes": ["DOQueueHandler"]
+    },
+    {
+      "tag": "v2",
+      "deleted_classes": ["DOQueueHandler"]
     }
   ],
   // Tag cache backing revalidateTag('wallpapers') / revalidatePath(...).
