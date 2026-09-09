@@ -76,8 +76,16 @@ function CollageBackdrop() {
   )
 }
 
-export default function Hero() {
+interface HeroProps {
+  /** Real library size from the server page; rendered rounded down to the nearest 10 */
+  wallpaperCount?: number
+}
+
+export default function Hero({ wallpaperCount }: HeroProps) {
   const router = useRouter()
+  const countLabel = wallpaperCount && wallpaperCount >= 10
+    ? `${Math.floor(wallpaperCount / 10) * 10}+ free wallpapers`
+    : '85+ curated wallpapers'
   const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearch()
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
 
@@ -261,7 +269,7 @@ export default function Hero() {
           >
             <span className="inline-flex items-center gap-1.5">
               <ImageIcon className="h-4 w-4 text-primary" />
-              85+ curated wallpapers
+              {countLabel}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Download className="h-4 w-4 text-primary" />

@@ -202,7 +202,7 @@ export default function HomeClient({ wallpapers, page, totalPages, total, catego
       />
       <div className="space-y-8 pb-16">
         {showHero ? (
-          <Hero />
+          <Hero wallpaperCount={total} />
         ) : (
           <section className="container mx-auto px-4 pt-8">
             <h1 className="text-3xl md:text-4xl font-bold">
