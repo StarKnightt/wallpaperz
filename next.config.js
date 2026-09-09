@@ -49,6 +49,15 @@ const nextConfig = {
       },
     ]
   },
+  // Page 1 of every paginated list is the bare list URL; /page/1 variants
+  // 308 there so there is exactly one canonical URL per page.
+  async redirects() {
+    return [
+      { source: '/page/1', destination: '/', permanent: true },
+      { source: '/category/:slug/page/1', destination: '/category/:slug', permanent: true },
+      { source: '/color/:slug/page/1', destination: '/color/:slug', permanent: true },
+    ]
+  },
   async rewrites() {
     return [
       {

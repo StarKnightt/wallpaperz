@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getAllWallpapers, getWallpaperById, getRelatedWallpapers } from '@/lib/server/wallpapers'
+import { getAllWallpapers, getWallpaperById, getRelatedWallpapers, getHomePageNumberFor } from '@/lib/server/wallpapers'
+import { pageHref } from '@/lib/pagination'
 import { getResolutionName, formatFileSize } from '@/lib/blur-placeholder'
 import WallpaperPageClient from './WallpaperPageClient'
 
@@ -74,6 +75,9 @@ export default async function WallpaperPage(props: Props) {
   if (!wallpaper) notFound()
 
   const related = await getRelatedWallpapers(wallpaper, 6)
+  // Homepage list page this wallpaper appears on - links deep list pages from
+  // every detail page so crawlers discover /page/N beyond the sitemap.
+  const homePage = await getHomePageNumberFor(wallpaper.id)
 
   const resolution = wallpaper.width && wallpaper.height
     ? getResolutionName(wallpaper.width, wallpaper.height)
@@ -181,7 +185,22 @@ export default async function WallpaperPage(props: Props) {
 
         {related.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-xl font-bold mb-6">More {wallpaper.category} Wallpapers</h2>
+            <div className="flex flex-wrap items-baseline justify-between gap-2 mb-6">
+              <h2 className="text-xl font-bold">More {wallpaper.category} Wallpapers</h2>
+              <p className="text-sm text-muted-foreground">
+                <a href={`/category/${wallpaper.category.toLowerCase()}`} className="text-primary hover:underline">
+                  All {wallpaper.category.toLowerCase()} wallpapers
+                </a>
+                {homePage && (
+                  <>
+                    <span className="mx-2">&middot;</span>
+                    <a href={pageHref('/', homePage)} className="text-primary hover:underline">
+                      Browse all wallpapers{homePage > 1 ? ` (page ${homePage})` : ''}
+                    </a>
+                  </>
+                )}
+              </p>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {related.map((w) => {
                 const relBase = w.imageUrl.startsWith('http')

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import PostLayout from '@/components/blog/PostLayout'
 import { postMetadata } from '@/lib/blog/registry'
 import { getAllWallpapers } from '@/lib/server/wallpapers'
-import ColorPageClient from '@/components/ColorPageClient'
+import WallpaperListingClient from "@/components/WallpaperListingClient"
 
 export const metadata: Metadata = postMetadata('dark-aesthetic-wallpapers')
 export const revalidate = 3600
@@ -58,7 +58,7 @@ export default async function Page() {
       </p>
 
       <div className="not-prose my-8">
-        <ColorPageClient wallpapers={darkPicks} />
+        <WallpaperListingClient wallpapers={darkPicks} showDeviceFilter={false} />
       </div>
 
       <p>

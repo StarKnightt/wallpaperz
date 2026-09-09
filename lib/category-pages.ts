@@ -1,19 +1,12 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import { Wallpaper } from '@/types/wallpaper'
+import { pageHref } from '@/lib/pagination'
 
-// The page itself is a client component, so segment config lives here.
-// generateStaticParams opts the route into static generation (it was fully
-// dynamic before, SSR'd on every crawler hit); revalidate makes it ISR.
-export const revalidate = 3600
+const BASE_URL = 'https://wallpaperz.in'
 
-export function generateStaticParams() {
-  return Object.keys(categoryDescriptions).map((slug) => ({ slug }))
-}
-
-type Props = {
-  params: Promise<{ slug: string }>
-}
-
-const categoryDescriptions: Record<string, string> = {
+// Category landing-page definitions shared by /category/[slug], its paginated
+// child route, the homepage chips and the sitemap.
+export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   abstract: "Discover stunning abstract wallpapers featuring geometric patterns, vibrant colors, and modern artistic designs. Perfect for adding a contemporary touch to your desktop or mobile device.",
   anime: "Browse our collection of high-quality anime wallpapers featuring your favorite characters, epic scenes, and stunning artwork from popular anime series.",
   art: "Explore beautiful artistic wallpapers showcasing paintings, illustrations, and creative masterpieces from talented artists around the world.",
@@ -31,17 +24,30 @@ const categoryDescriptions: Record<string, string> = {
   other: "Discover unique wallpapers that don't fit traditional categories, featuring diverse themes and creative concepts."
 }
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
-  const slug = params.slug
-  const category = slug.charAt(0).toUpperCase() + slug.slice(1)
-  const description = categoryDescriptions[slug.toLowerCase()] || 
-    `Browse our collection of high-quality ${category} wallpapers for desktop and mobile devices.`
+export const CATEGORY_SLUGS = Object.keys(CATEGORY_DESCRIPTIONS)
 
+export function categoryNameFromSlug(slug: string): string {
+  return slug.charAt(0).toUpperCase() + slug.slice(1)
+}
+
+export function categoryDescription(slug: string): string {
+  return (
+    CATEGORY_DESCRIPTIONS[slug.toLowerCase()] ||
+    `Browse our collection of high-quality ${categoryNameFromSlug(slug)} wallpapers for desktop and mobile devices.`
+  )
+}
+
+/** Metadata for /category/[slug] (page 1) and /category/[slug]/page/[n]. */
+export function categoryMetadata(slug: string, page = 1): Metadata {
+  const category = categoryNameFromSlug(slug)
+  const description = categoryDescription(slug)
+  const basePath = `/category/${slug}`
+  const suffix = page > 1 ? ` – Page ${page}` : ''
+  // Root layout template appends "| Wallpaperz"
+  const title = `${category} Wallpapers - Free HD & 4K Downloads${suffix}`
   return {
-    // Root layout template appends "| Wallpaperz"
-    title: `${category} Wallpapers - Free HD & 4K Downloads`,
-    description,
+    title,
+    description: page > 1 ? `Page ${page}: ${description}` : description,
     keywords: [
       `${category} wallpapers`,
       `${category} backgrounds`,
@@ -49,31 +55,35 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       `4K ${category} wallpapers`,
       `free ${category} wallpapers`,
       `${category} desktop wallpapers`,
-      `${category} mobile wallpapers`
+      `${category} mobile wallpapers`,
     ],
+    robots: { index: true, follow: true },
     openGraph: {
-      title: `${category} Wallpapers - Free HD & 4K Downloads`,
+      title,
       description,
-      url: `https://wallpaperz.in/category/${slug}`,
+      url: `${BASE_URL}${pageHref(basePath, page)}`,
       siteName: 'Wallpaperz',
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${category} Wallpapers - Free HD & 4K Downloads`,
+      title,
       description,
     },
     alternates: {
-      canonical: `/category/${slug}`,
+      canonical: pageHref(basePath, page),
     },
   }
 }
 
-export default function CategoryLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return children
+/** Distinct category names present in the library, alphabetical (chip row). */
+export function categoryNamesOf(all: Wallpaper[]): string[] {
+  return Array.from(new Set(all.map((w) => w.category))).sort()
 }
 
+/** "mobile" is an orientation pseudo-category: any portrait wallpaper qualifies. */
+export function wallpapersForCategory(all: Wallpaper[], slug: string): Wallpaper[] {
+  const key = slug.toLowerCase()
+  if (key === 'mobile') return all.filter((w) => (w.height ?? 0) > (w.width ?? 0))
+  return all.filter((w) => w.category.toLowerCase() === key)
+}
