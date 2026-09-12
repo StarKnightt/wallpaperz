@@ -10,11 +10,28 @@ import DomainGatedScripts from "@/components/DomainGatedScripts"
 import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
 import BottomNav from "@/components/BottomNav"
-import { Metadata } from "next"
+import PwaRegister from "@/components/PwaRegister"
+import InstallPrompt from "@/components/InstallPrompt"
+import type { Metadata, Viewport } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
 
+// Matches manifest.json theme_color/background_color (dark theme --background).
+export const viewport: Viewport = {
+  themeColor: '#020817',
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+}
+
 export const metadata: Metadata = {
+  manifest: '/manifest.json',
+  applicationName: 'Wallpaperz',
+  appleWebApp: {
+    capable: true,
+    title: 'Wallpaperz',
+    statusBarStyle: 'black-translucent',
+  },
   title: {
     default: 'Wallpaperz - Premium HD & 4K Wallpapers',
     template: '%s | Wallpaperz'
@@ -85,8 +102,8 @@ export const metadata: Metadata = {
     ],
     apple: [
       {
-        url: '/web-app-manifest-192x192.png',
-        sizes: '192x192',
+        url: '/apple-touch-icon.png',
+        sizes: '180x180',
         type: 'image/png',
       },
     ],
@@ -123,6 +140,9 @@ export const metadata: Metadata = {
   },
   other: {
     'og:logo': 'https://wallpaperz.in/web-app-manifest-512x512.png',
+    // Next 15 emits the standard `mobile-web-app-capable`; older iOS (<17.4)
+    // only honours the apple-prefixed one.
+    'apple-mobile-web-app-capable': 'yes',
   },
 }
 
@@ -140,8 +160,6 @@ export default function RootLayout({
         <head>
           <link rel="preconnect" href="https://ik.imagekit.io" />
           <link rel="dns-prefetch" href="https://ik.imagekit.io" />
-          <link rel="manifest" href="/manifest.json" />
-          <meta name="theme-color" content="#000000" />
           <meta property="og:image" content="https://wallpaperz.in/theimage.png" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
@@ -167,6 +185,8 @@ export default function RootLayout({
                 <Footer />
                 <BottomNav />
               </div>
+              <InstallPrompt />
+              <PwaRegister />
               <Toaster position="bottom-right" />
               {/* AdSense + GA4 + Clarity, hostname-gated so repo clones can't fire our IDs */}
               <DomainGatedScripts />

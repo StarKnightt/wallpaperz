@@ -1,23 +1,41 @@
 {
-  "name": "Wallpaperz - Premium HD & 4K Wallpapers",
+  "id": "/",
+  "name": "Wallpaperz - Free HD & 4K Wallpapers",
   "short_name": "Wallpaperz",
+  "description": "Free HD and 4K wallpapers for your phone, tablet and desktop. Browse by category or color, or generate your own with AI.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#020817",
+  "theme_color": "#020817",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["personalization", "photo", "entertainment"],
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/web-app-manifest-192x192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ],
-  "theme_color": "#ffffff",
-  "background_color": "#000000",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "portrait"
-} 
+  ]
+}

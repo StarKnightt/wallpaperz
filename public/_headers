@@ -7,9 +7,24 @@
   Cache-Control: public,max-age=31536000,immutable
 /theimage.png
   Cache-Control: public,max-age=31536000,immutable
+/apple-touch-icon.png
+  Cache-Control: public,max-age=31536000,immutable
 /web-app-manifest-192x192.png
   Cache-Control: public,max-age=31536000,immutable
 /web-app-manifest-512x512.png
   Cache-Control: public,max-age=31536000,immutable
+/web-app-manifest-192x192-maskable.png
+  Cache-Control: public,max-age=31536000,immutable
+/web-app-manifest-512x512-maskable.png
+  Cache-Control: public,max-age=31536000,immutable
 /manifest.json
   Cache-Control: public,max-age=86400
+# Service worker: always revalidate so a new deploy takes over promptly.
+/sw.js
+  Cache-Control: no-cache,must-revalidate
+  Service-Worker-Allowed: /
+# Workers Assets serves offline.html at /offline (auto trailing-slash handling)
+/offline.html
+  Cache-Control: no-cache,must-revalidate
+/offline
+  Cache-Control: no-cache,must-revalidate

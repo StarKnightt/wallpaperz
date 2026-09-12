@@ -35,7 +35,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/:file(favicon.png|theimage.png|web-app-manifest-192x192.png|web-app-manifest-512x512.png)',
+        source: '/:file(favicon.png|theimage.png|apple-touch-icon.png|web-app-manifest-192x192.png|web-app-manifest-512x512.png|web-app-manifest-192x192-maskable.png|web-app-manifest-512x512-maskable.png)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
@@ -45,6 +45,21 @@ const nextConfig = {
         source: '/manifest.json',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=86400' },
+        ],
+      },
+      {
+        // Service worker must always be revalidated so a new deploy takes over
+        // promptly (the browser also caps SW script caching at 24h).
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
+      {
+        source: '/offline.html',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, must-revalidate' },
         ],
       },
     ]

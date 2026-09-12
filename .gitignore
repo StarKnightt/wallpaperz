@@ -72,7 +72,7 @@ next-env.d.ts
 .temp/
 
 # Image optimization cache
-public/sw.js
+# (public/sw.js is hand-written and committed; only generated workbox bundles are ignored)
 public/workbox-*.js
 .swc/
 
