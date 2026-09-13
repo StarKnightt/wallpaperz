@@ -7,7 +7,7 @@ import { getAllWallpapers } from "@/lib/server/wallpapers"
 import { extraPageParams, pageHref, paginate, parsePageParam } from "@/lib/pagination"
 import { categoryNamesOf } from "@/lib/category-pages"
 
-const BASE_URL = "https://wallpaperz.in"
+const BASE_URL = "https://www.wallpaperz.in"
 
 // Every list page is prerendered at build (Workers free plan: no SSR budget).
 // A page that only becomes valid after new uploads renders on demand once

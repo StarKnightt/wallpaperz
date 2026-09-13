@@ -141,7 +141,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
 ]
 
-const BASE_URL = 'https://wallpaperz.in'
+const BASE_URL = 'https://www.wallpaperz.in'
 const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
 
 export function getPost(slug: string): BlogPost | undefined {

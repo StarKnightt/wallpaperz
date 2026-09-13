@@ -7,7 +7,7 @@ import WallpaperListingClient from '@/components/WallpaperListingClient'
 import Pagination from '@/components/Pagination'
 import PaginationHead from '@/components/PaginationHead'
 
-const BASE_URL = 'https://wallpaperz.in'
+const BASE_URL = 'https://www.wallpaperz.in'
 const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
 
 interface Props {

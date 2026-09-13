@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ChevronRight, Clock, Sparkles } from 'lucide-react'
 import { getPost, relatedPosts, coverUrl } from '@/lib/blog/registry'
 
-const BASE_URL = 'https://wallpaperz.in'
+const BASE_URL = 'https://www.wallpaperz.in'
 
 function formatDate(iso: string) {
   return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {

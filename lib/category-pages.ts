@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Wallpaper } from '@/types/wallpaper'
 import { pageHref } from '@/lib/pagination'
 
-const BASE_URL = 'https://wallpaperz.in'
+const BASE_URL = 'https://www.wallpaperz.in'
 
 // Category landing-page definitions shared by /category/[slug], its paginated
 // child route, the homepage chips and the sitemap.

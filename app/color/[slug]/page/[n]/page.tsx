@@ -10,7 +10,7 @@ import {
 import { extraPageParams, pageHref, paginate, parsePageParam } from '@/lib/pagination'
 import ColorListing from '@/components/ColorListing'
 
-const BASE_URL = 'https://wallpaperz.in'
+const BASE_URL = 'https://www.wallpaperz.in'
 
 export const revalidate = 3600
 

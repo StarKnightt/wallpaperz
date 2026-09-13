@@ -9,7 +9,7 @@ import PaginationHead from "@/components/PaginationHead"
 import CategoryChips from "@/components/CategoryChips"
 import { Button } from "@/components/ui/button"
 
-const BASE_URL = "https://wallpaperz.in"
+const BASE_URL = "https://www.wallpaperz.in"
 const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || "https://ik.imagekit.io/starknight"
 
 interface Props {

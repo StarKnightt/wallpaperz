@@ -71,20 +71,13 @@ const nextConfig = {
       { source: '/page/1', destination: '/', permanent: true },
       { source: '/category/:slug/page/1', destination: '/category/:slug', permanent: true },
       { source: '/color/:slug/page/1', destination: '/color/:slug', permanent: true },
+      // Vanity links. These used to be rewrites, which proxied github.com's
+      // profile HTML under wallpaperz.in/github (a duplicate of an external
+      // page for Google) and 404'd for x.com, which refuses to be proxied.
+      { source: '/github', destination: 'https://github.com/StarKnightt', permanent: false },
+      { source: '/twitter', destination: 'https://x.com/Star_Knight12', permanent: false },
     ]
   },
-  async rewrites() {
-    return [
-      {
-        source: '/github',
-        destination: 'https://github.com/StarKnightt',
-      },
-      {
-        source: '/twitter',
-        destination: 'https://x.com/Star_Knight12',
-      },
-    ]
-  }
 }
 
 module.exports = withBundleAnalyzer(nextConfig)

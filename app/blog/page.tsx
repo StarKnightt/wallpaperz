@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Clock } from 'lucide-react'
 import { BLOG_POSTS, coverUrl, BlogCluster } from '@/lib/blog/registry'
 
-const BASE_URL = 'https://wallpaperz.in'
+const BASE_URL = 'https://www.wallpaperz.in'
 
 export const metadata: Metadata = {
   title: 'Wallpaper Guides & Tips',

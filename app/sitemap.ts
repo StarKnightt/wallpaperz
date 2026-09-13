@@ -12,12 +12,15 @@ import { Wallpaper } from '@/types/wallpaper'
 
 const categories = CATEGORY_SLUGS
 
+// No <lastmod> on list/static pages: it used to be `new Date()` on every
+// hourly regeneration, which Google detects as fake and then ignores for the
+// whole file. Blog posts keep their real publish date.
+
 /** /base/page/2 ... /base/page/N for a list of `count` wallpapers (page 1 is the base URL). */
 function paginatedEntries(basePath: string, count: number, priority: number): MetadataRoute.Sitemap {
   const pages = totalPagesFor(count)
   return Array.from({ length: Math.max(0, pages - 1) }, (_, i) => ({
-    url: `https://wallpaperz.in${pageHref(basePath, i + 2)}`,
-    lastModified: new Date(),
+    url: `https://www.wallpaperz.in${pageHref(basePath, i + 2)}`,
     changeFrequency: 'daily' as const,
     priority,
   }))
@@ -27,22 +30,21 @@ function paginatedEntries(basePath: string, count: number, priority: number): Me
 const FALLBACK_COLOR_SLUGS = ['dark', 'black', 'blue', 'gray', 'orange', 'teal', 'red', 'pink']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://wallpaperz.in'
+  const baseUrl = 'https://www.wallpaperz.in'
 
   const staticPages: MetadataRoute.Sitemap = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
-    { url: `${baseUrl}/ai-generate`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/privacy`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
-    { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
-    { url: `${baseUrl}/license`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
+    { url: baseUrl, changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/ai-generate`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/blog`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/about`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/contact`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/privacy`, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${baseUrl}/terms`, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${baseUrl}/license`, changeFrequency: 'monthly', priority: 0.3 },
   ]
 
   const categoryPages: MetadataRoute.Sitemap = categories.map((slug) => ({
     url: `${baseUrl}/category/${slug}`,
-    lastModified: new Date(),
     changeFrequency: 'daily',
     priority: 0.8,
   }))
@@ -69,7 +71,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((slug) => COLOR_DEFS.some((c) => c.slug === slug))
     .map((slug) => ({
       url: `${baseUrl}/color/${slug}`,
-      lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     }))

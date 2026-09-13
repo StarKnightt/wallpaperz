@@ -4,18 +4,23 @@ import PaginationHead from "@/components/PaginationHead"
 import { getAllWallpapers } from "@/lib/server/wallpapers"
 import { paginate } from "@/lib/pagination"
 import { categoryNamesOf } from "@/lib/category-pages"
+import type { Metadata } from "next"
 
 export const revalidate = 3600
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+}
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Wallpaperz",
-  url: "https://wallpaperz.in",
+  url: "https://www.wallpaperz.in",
   description: "Browse and download free HD & 4K wallpapers for desktop and mobile. Generate custom wallpapers with AI.",
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://wallpaperz.in/?search={search_term_string}",
+    target: "https://www.wallpaperz.in/?search={search_term_string}",
     "query-input": "required name=search_term_string",
   },
 }
@@ -25,11 +30,11 @@ const collectionData = {
   "@type": "CollectionPage",
   name: "Free HD & 4K Wallpapers",
   description: "Curated collection of high-resolution wallpapers across categories like nature, anime, space, minimalist, and more.",
-  url: "https://wallpaperz.in",
+  url: "https://www.wallpaperz.in",
   provider: {
     "@type": "Organization",
     name: "Wallpaperz",
-    url: "https://wallpaperz.in",
+    url: "https://www.wallpaperz.in",
   },
 }
 

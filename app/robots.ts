@@ -5,11 +5,14 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/sign-in', '/sign-up'],
+      // /sign-in and /sign-up are deliberately NOT disallowed: they carry a
+      // noindex meta tag (see their layout.tsx), and Google can only honour
+      // that if it is allowed to fetch the page.
+      disallow: ['/api/'],
     },
     sitemap: [
-      'https://wallpaperz.in/sitemap.xml',
-      'https://wallpaperz.in/wallpapers-sitemap.xml',
+      'https://www.wallpaperz.in/sitemap.xml',
+      'https://www.wallpaperz.in/wallpapers-sitemap.xml',
     ],
   }
 }

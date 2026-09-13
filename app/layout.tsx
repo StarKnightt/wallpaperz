@@ -61,18 +61,20 @@ export const metadata: Metadata = {
     telephone: false,
     address: false,
   },
-  metadataBase: new URL('https://wallpaperz.in'),
-  alternates: {
-    canonical: '/',
-  },
+  // www is the canonical host: the apex 301s here (middleware.ts), Search
+  // Console sitemaps are registered under www, and Google already indexes www.
+  metadataBase: new URL('https://www.wallpaperz.in'),
+  // No root-level canonical on purpose: it is inherited by every route that
+  // does not set its own, which made /about, /contact, /ai-generate etc. all
+  // claim the homepage as their canonical. Each route sets alternates itself.
   openGraph: {
     title: 'Wallpaperz - Premium HD & 4K Wallpapers',
     description: 'Discover and download high-quality HD and 4K wallpapers for desktop, mobile, and tablet. Create custom AI-generated wallpapers for free.',
-    url: 'https://wallpaperz.in',
+    url: 'https://www.wallpaperz.in',
     siteName: 'Wallpaperz',
     images: [
       {
-        url: 'https://wallpaperz.in/theimage.png',
+        url: 'https://www.wallpaperz.in/theimage.png',
         width: 1200,
         height: 630,
         alt: 'Wallpaperz - Make your Day with fresh wallpapers',
@@ -85,7 +87,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Wallpaperz - Premium HD & 4K Wallpapers',
     description: 'Discover and download high-quality HD and 4K wallpapers for desktop, mobile, and tablet. Create custom AI-generated wallpapers for free.',
-    images: ['https://wallpaperz.in/theimage.png'],
+    images: ['https://www.wallpaperz.in/theimage.png'],
   },
   icons: {
     icon: [
@@ -139,7 +141,7 @@ export const metadata: Metadata = {
     },
   },
   other: {
-    'og:logo': 'https://wallpaperz.in/web-app-manifest-512x512.png',
+    'og:logo': 'https://www.wallpaperz.in/web-app-manifest-512x512.png',
     // Next 15 emits the standard `mobile-web-app-capable`; older iOS (<17.4)
     // only honours the apple-prefixed one.
     'apple-mobile-web-app-capable': 'yes',
@@ -160,10 +162,10 @@ export default function RootLayout({
         <head>
           <link rel="preconnect" href="https://ik.imagekit.io" />
           <link rel="dns-prefetch" href="https://ik.imagekit.io" />
-          <meta property="og:image" content="https://wallpaperz.in/theimage.png" />
+          <meta property="og:image" content="https://www.wallpaperz.in/theimage.png" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
-          <meta property="twitter:image" content="https://wallpaperz.in/theimage.png" />
+          <meta property="twitter:image" content="https://www.wallpaperz.in/theimage.png" />
           {/* Server-rendered so AdSense verification crawls see it; serves no ads by itself.
               The ad-serving script is injected client-side by DomainGatedScripts. */}
           <meta name="google-adsense-account" content={adsenseId} />

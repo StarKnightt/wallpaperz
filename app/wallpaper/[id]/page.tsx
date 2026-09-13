@@ -52,7 +52,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://wallpaperz.in/wallpaper/${params.id}`,
+      url: `https://www.wallpaperz.in/wallpaper/${params.id}`,
       siteName: 'Wallpaperz',
       images: [{ url: imageUrl, width: wallpaper.width, height: wallpaper.height, alt: wallpaper.title }],
       type: 'article',
@@ -97,20 +97,20 @@ export default async function WallpaperPage(props: Props) {
     ...(wallpaper.height && { height: { "@type": "QuantitativeValue", value: wallpaper.height } }),
     encodingFormat: "image/jpeg",
     isAccessibleForFree: true,
-    license: "https://wallpaperz.in/license",
-    acquireLicensePage: `https://wallpaperz.in/wallpaper/${wallpaper.id}`,
+    license: "https://www.wallpaperz.in/license",
+    acquireLicensePage: `https://www.wallpaperz.in/wallpaper/${wallpaper.id}`,
     creditText: "Wallpaperz",
     copyrightNotice: "Wallpaperz",
-    creator: { "@type": "Organization", name: "Wallpaperz", url: "https://wallpaperz.in" },
+    creator: { "@type": "Organization", name: "Wallpaperz", url: "https://www.wallpaperz.in" },
   }
 
   const breadcrumbData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://wallpaperz.in" },
-      { "@type": "ListItem", position: 2, name: `${wallpaper.category} Wallpapers`, item: `https://wallpaperz.in/category/${wallpaper.category.toLowerCase()}` },
-      { "@type": "ListItem", position: 3, name: wallpaper.title, item: `https://wallpaperz.in/wallpaper/${wallpaper.id}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.wallpaperz.in" },
+      { "@type": "ListItem", position: 2, name: `${wallpaper.category} Wallpapers`, item: `https://www.wallpaperz.in/category/${wallpaper.category.toLowerCase()}` },
+      { "@type": "ListItem", position: 3, name: wallpaper.title, item: `https://www.wallpaperz.in/wallpaper/${wallpaper.id}` },
     ],
   }
 

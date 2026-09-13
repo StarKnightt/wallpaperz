@@ -1,6 +1,6 @@
 import { getAllWallpapers } from '@/lib/server/wallpapers'
 
-const BASE_URL = 'https://wallpaperz.in'
+const BASE_URL = 'https://www.wallpaperz.in'
 const IMAGEKIT_ENDPOINT = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
 
 // Next 15 stopped caching GET route handlers by default; force-static keeps
