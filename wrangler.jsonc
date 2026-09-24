@@ -1,5 +1,5 @@
 // Cloudflare Workers config for the OpenNext deployment (cf:* npm scripts).
-// Vercel ignores this file; it does not affect `npm run build` / `npm run dev`.
+// It does not affect `npm run build` / `npm run dev`.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "wallpaperz",

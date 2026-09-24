@@ -12,7 +12,7 @@ export default function PrivacyPage() {
           <p className="text-lg">Honestly, not much:</p>
           <ul className="list-none pl-6 space-y-2">
             <li>• Your email and profile info if you sign in (handled by Clerk)</li>
-            <li>• Basic analytics like page views and device type (Google Analytics, Vercel Analytics, Microsoft Clarity)</li>
+            <li>• Basic analytics like page views and device type (Google Analytics, Cloudflare Web Analytics, Microsoft Clarity)</li>
             <li>• Your AI prompts are sent to Stability AI to generate images — we don&apos;t store them</li>
           </ul>
           <p className="text-muted-foreground">We don&apos;t have a database. No download history, no search logs, no tracking profiles. Everything happens in your browser.</p>
@@ -27,6 +27,7 @@ export default function PrivacyPage() {
           <ul className="list-none pl-6 space-y-2">
             <li>• Clerk sets cookies to keep you logged in</li>
             <li>• Analytics services may set their own cookies</li>
+            <li>• Google AdSense uses cookies to show ads, including ads based on your visits to this and other sites. You can turn off personalized ads at <a href="https://adssettings.google.com" className="underline" target="_blank" rel="noopener noreferrer">Google Ad Settings</a></li>
             <li>• Your theme preference (dark/light) is saved in your browser</li>
             <li>• AI-generated images only live in your browser tab — refresh and they&apos;re gone</li>
           </ul>
@@ -44,7 +45,8 @@ export default function PrivacyPage() {
             <li>• <strong>ImageKit</strong> — hosts all the wallpapers</li>
             <li>• <strong>Stability AI</strong> — powers AI image generation</li>
             <li>• <strong>Google Analytics</strong> &amp; <strong>Microsoft Clarity</strong> — helps us see if anyone actually visits</li>
-            <li>• <strong>Vercel</strong> — hosting and deployment</li>
+            <li>• <strong>Google AdSense</strong> — shows the ads that keep the site free</li>
+            <li>• <strong>Cloudflare</strong> — hosting, CDN and privacy-friendly analytics</li>
           </ul>
           <p className="text-muted-foreground">Each of these has their own privacy policy. We don&apos;t control what they collect on their end.</p>
         </div>

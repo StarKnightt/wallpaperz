@@ -31,7 +31,7 @@ An open-source wallpaper platform where you can browse HD/4K wallpapers and gene
 | **Auth** | Clerk |
 | **Images** | ImageKit |
 | **AI Generation** | Stability AI (DreamStudio) |
-| **Hosting** | Vercel |
+| **Hosting** | Cloudflare Workers (OpenNext) |
 
 ## Getting Started
 

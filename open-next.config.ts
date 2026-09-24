@@ -1,5 +1,4 @@
 // OpenNext adapter config for the Cloudflare Workers deployment (cf:* scripts).
-// Vercel ignores this file entirely.
 //
 // Cache architecture (per https://opennext.js.org/cloudflare/caching):
 // - Incremental cache: R2 (bucket wallpaperz-inc-cache, binding
