@@ -23,33 +23,39 @@ export default function DomainGatedScripts() {
   const [allowed, setAllowed] = useState(false)
 
   useEffect(() => {
-    if (ALLOWED_HOSTNAMES.includes(window.location.hostname)) {
-      setAllowed(true)
+    if (!ALLOWED_HOSTNAMES.includes(window.location.hostname)) return
+    setAllowed(true)
+
+    // Injected by hand rather than via next/script: AdSense warns about the
+    // data-nscript attribute next/script adds, and the module beacon's
+    // next/script preload is fetched without CORS so the browser discards it.
+    const add = (attrs: Record<string, string>) => {
+      if (document.querySelector(`script[src="${attrs.src}"]`)) return
+      const s = document.createElement("script")
+      for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v)
+      s.async = true
+      document.head.appendChild(s)
     }
+    // AdSense Auto ads: loading this script is all that's needed (no manual units)
+    add({
+      src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`,
+      crossorigin: "anonymous",
+    })
+    // Cloudflare Web Analytics (RUM) beacon, manual setup: reports to
+    // cloudflareinsights.com. Automatic edge injection is turned off for this
+    // zone because it reports to /cdn-cgi/rum, which 404s on Workers domains.
+    add({
+      src: "https://static.cloudflareinsights.com/beacon.min.js",
+      "data-cf-beacon": '{"token": "5d0b9c1fc2e14572b69d581aa56c39b2"}',
+      defer: "",
+    })
   }, [])
 
   if (!allowed) return null
 
   return (
     <>
-      {/* AdSense Auto ads: loading this script is all that's needed (no manual units) */}
-      <Script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
       <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
-      {/* Cloudflare Web Analytics (RUM) beacon: like the AdSense ID, the token is
-          public by nature; the hostname gate above keeps clones from reporting.
-          Cloudflare also validates the reporting hostname server-side. */}
-      <Script
-        id="cloudflare-web-analytics"
-        strategy="afterInteractive"
-        type="module"
-        src="https://static.cloudflareinsights.com/beacon.min.js"
-        data-cf-beacon='{"token": "5d0b9c1fc2e14572b69d581aa56c39b2"}'
-      />
       <Script strategy="afterInteractive" id="microsoft-clarity">
         {`
           (function(c,l,a,r,i,t,y){

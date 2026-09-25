@@ -7,6 +7,10 @@
   "compatibility_date": "2026-08-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "workers_dev": true,
+  // Wrangler's esbuild keep_names wraps functions in __name(); next-themes
+  // stringifies its anti-flash function into an inline <script>, where __name
+  // doesn't exist, so the theme script threw on every Worker-rendered page.
+  "keep_names": false,
   // Lets app code detect the Workers deployment (OpenNext copies vars into
   // process.env). Used to disable the hard cache purge in /api/wallpapers/sync,
   // which is unaffordable on the free plan (10ms CPU): a purge forces foreground

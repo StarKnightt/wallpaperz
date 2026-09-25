@@ -176,9 +176,12 @@ export default function Hero({ wallpaperCount }: HeroProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 backdrop-blur-md px-3 py-1 text-xs sm:text-sm text-muted-foreground mb-4">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              <span>Fresh drops weekly &middot; original AI art you won&apos;t find elsewhere</span>
+            <div className="inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border bg-background/60 backdrop-blur-md px-3 py-1 text-xs sm:text-sm text-muted-foreground mb-4">
+              <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" />
+              <span>
+                Fresh drops weekly &middot; original AI art
+                <span className="hidden sm:inline"> you won&apos;t find elsewhere</span>
+              </span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-primary bg-[length:200%_auto] motion-safe:animate-text-shimmer">
