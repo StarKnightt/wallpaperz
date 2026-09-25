@@ -1,8 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye, X, ZoomIn } from "lucide-react"
+import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye, X, ZoomIn, MonitorSmartphone } from "lucide-react"
+import NoiseField from "@/components/ai/NoiseField"
+import GenerationDemo from "@/components/ai/GenerationDemo"
+import ScreenPreview from "@/components/ScreenPreview"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
@@ -11,6 +14,31 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth, SignInButton } from "@clerk/nextjs"
 import { motion, AnimatePresence } from "framer-motion"
+
+const GEN_STEPS = ["Reading your prompt", "Composing the scene", "Adding light and color", "Sharpening details", "Almost there"]
+
+/** Honest-ish progress: steps advance on a timer and hold on the last one until the API returns. */
+function GeneratingSteps() {
+  const [elapsed, setElapsed] = useState(0)
+  useEffect(() => {
+    const start = Date.now()
+    const id = setInterval(() => setElapsed((Date.now() - start) / 1000), 200)
+    return () => clearInterval(id)
+  }, [])
+  const step = Math.min(GEN_STEPS.length - 1, Math.floor(elapsed / 3.5))
+  const pct = Math.min(95, (elapsed / 18) * 100)
+  return (
+    <>
+      <div className="mb-2 flex justify-between text-xs font-medium text-white/85">
+        <span>{GEN_STEPS[step]}…</span>
+        <span className="tabular-nums">{elapsed.toFixed(0)}s</span>
+      </div>
+      <div className="h-1 overflow-hidden rounded-full bg-white/15">
+        <div className="h-full rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-amber-300 transition-[width] duration-200" style={{ width: `${pct}%` }} />
+      </div>
+    </>
+  )
+}
 
 interface FormValues {
   prompt: string
@@ -23,6 +51,7 @@ export default function AIGeneratePage() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [isMockupOpen, setIsMockupOpen] = useState(false)
   
   const promptSuggestions = [
     "Massive aurora borealis over a snow-covered mountain range reflected in a still lake, photorealistic, 8K, cinematic lighting",
@@ -36,9 +65,9 @@ export default function AIGeneratePage() {
   ]
 
   const demoImages = [
-    "https://ik.imagekit.io/starknight/AI-Demo/wallpaperz-ai-1741709708281_kQjMl55ZR.png?updatedAt=1741711241939",
-    "https://ik.imagekit.io/starknight/AI-Demo/wallpaperz-ai-1741710553378_w7IibV2QA.png?updatedAt=1741711329095",
-    "https://ik.imagekit.io/starknight/AI-Demo/wallpaperz-ai-1741711355599_X61ZQ9mv7.png?updatedAt=1741711391373"
+    "https://ik.imagekit.io/starknight/wallpapers/cyberpunk-rain-street-neon-2k-wallpaperz.jpg",
+    "https://ik.imagekit.io/starknight/wallpapers/anime-torii-gate-sky-lanterns-2k-wallpaperz.jpg",
+    "https://ik.imagekit.io/starknight/wallpapers/fantasy-ember-dragon-above-clouds-2k-wallpaperz.jpg",
   ]
 
   const {
@@ -148,61 +177,97 @@ export default function AIGeneratePage() {
 
   if (!isSignedIn) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-background/80">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-            maskImage: 'radial-gradient(circle at 50% 50%, black, transparent 80%)'
-          }} />
-        </div>
-        
-        <div className="container mx-auto px-4 pt-8">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-          </Link>
-          
-          <div className="max-w-xl mx-auto text-center py-20 space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-25 animate-pulse" />
-                <div className="relative bg-background/80 backdrop-blur-lg rounded-lg p-10 space-y-6">
-                  <div className="inline-flex items-center justify-center p-4 bg-purple-500/10 rounded-full mb-2">
-                    <Sparkles className="w-8 h-8 text-purple-500" />
-                  </div>
-                  
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                    AI Wallpaper Generator
-                  </h1>
-                  
-                  <p className="text-xl text-muted-foreground">
-                    Create stunning, unique wallpapers with AI
-                  </p>
-                  
-                  <p className="text-muted-foreground max-w-lg mx-auto mb-6">
-                    Transform your ideas into beautiful wallpapers in seconds.
-                    Sign in to start creating your own AI-generated masterpieces.
-                  </p>
-                  <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate">
-                    <Button size="lg" className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90">
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Sign in to Create
-                    </Button>
-                  </SignInButton>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+      <div className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.22),transparent_70%)]" />
+
+        <div className="container mx-auto px-4 pb-20 pt-10 sm:pt-12">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto max-w-2xl text-center"
+          >
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md sm:text-sm">
+              <Wand2 className="h-3.5 w-3.5 shrink-0 text-fuchsia-500" />
+              AI wallpaper generator
+            </span>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">
+              Type a sentence.
+              <span className="block bg-gradient-to-r from-violet-500 via-fuchsia-500 to-amber-400 bg-clip-text pb-1 text-transparent">
+                Get a wallpaper.
+              </span>
+            </h1>
+            <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground sm:text-lg">
+              Describe any scene and get an original 1344&times;768 wallpaper in about 15 seconds.
+              Nobody else will have it.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="mt-10"
+          >
+            <GenerationDemo />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.35 }}
+            className="mt-10 flex flex-col items-center gap-3"
+          >
+            <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate">
+              <Button size="lg" className="h-12 rounded-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 px-8 text-base text-white shadow-lg shadow-fuchsia-500/25 transition-transform hover:-translate-y-0.5 hover:opacity-95">
+                <Sparkles className="mr-2 h-4 w-4" />
+                Sign in to start creating
+              </Button>
+            </SignInButton>
+            <p className="text-xs text-muted-foreground">Free &middot; 5 wallpapers an hour &middot; download in full quality</p>
+          </motion.div>
+
+          <section className="mx-auto mt-20 max-w-5xl">
+            <h2 className="text-center text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">AI originals in our library</h2>
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {demoImages.map((src, n) => (
+                <motion.div
+                  key={src}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ delay: n * 0.08 }}
+                  className="group relative aspect-[16/9] overflow-hidden rounded-xl border"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- ImageKit-sized */}
+                  <img
+                    src={`${src.split("?")[0]}?tr=w-640,q-75,f-auto`}
+                    alt="Original AI wallpaper from the Wallpaperz library"
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </motion.div>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <Link href="/" className="text-sm font-medium text-fuchsia-500 hover:underline">
+                Browse the full library &rarr;
+              </Link>
+            </div>
+          </section>
+
+          <section className="mx-auto mt-16 max-w-3xl">
+            <h2 className="text-center text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">Prompts to steal</h2>
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+              {promptSuggestions.slice(0, 6).map((p) => (
+                <SignInButton key={p} mode="modal" fallbackRedirectUrl="/ai-generate">
+                  <button type="button" className="rounded-full border bg-card px-4 py-2 text-left text-sm text-muted-foreground transition-colors hover:border-fuchsia-500/50 hover:text-foreground">
+                    {p.split(",")[0]}
+                  </button>
+                </SignInButton>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
     )
@@ -370,17 +435,11 @@ export default function AIGeneratePage() {
 
                   <div className="p-6 flex items-center justify-center min-h-[500px]">
                     {isGenerating ? (
-                      <div className="flex flex-col items-center justify-center text-center">
-                        <div className="relative w-24 h-24">
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 blur-xl animate-pulse opacity-30"></div>
-                          <div className="relative flex items-center justify-center w-full h-full">
-                            <Loader2 className="h-12 w-12 animate-spin text-purple-600" />
-                          </div>
+                      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg">
+                        <NoiseField />
+                        <div className="absolute inset-x-0 bottom-0 p-4 text-left">
+                          <GeneratingSteps />
                         </div>
-                        <p className="text-muted-foreground mt-6 text-lg">Creating your masterpiece...</p>
-                        <p className="text-xs text-muted-foreground mt-2 max-w-xs text-center">
-                          This may take up to 30 seconds while our AI crafts your custom wallpaper
-                        </p>
                       </div>
                     ) : generatedImage ? (
                       <motion.div 
@@ -396,7 +455,7 @@ export default function AIGeneratePage() {
                           <img
                             src={generatedImage}
                             alt="Generated wallpaper"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover motion-safe:animate-diffuse-in"
                           />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                             <ZoomIn className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -410,6 +469,14 @@ export default function AIGeneratePage() {
                           >
                             <Eye className="h-4 w-4" />
                             Preview
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => setIsMockupOpen(true)}
+                            className="flex gap-2 bg-background/80 backdrop-blur-sm hover:bg-background"
+                          >
+                            <MonitorSmartphone className="h-4 w-4" />
+                            Try on screen
                           </Button>
                           <Button 
                             variant="outline" 
@@ -438,14 +505,15 @@ export default function AIGeneratePage() {
                         </div>
                       </motion.div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center text-center">
-                        <div className="bg-purple-500/5 p-6 rounded-full">
-                          <Sparkles className="h-14 w-14 text-purple-500/60" />
+                      <div className="relative flex w-full aspect-[16/9] flex-col items-center justify-center overflow-hidden rounded-lg border border-dashed text-center">
+                        <NoiseField className="opacity-25" intensity={0.4} />
+                        <div className="relative px-6">
+                          <Sparkles className="mx-auto h-10 w-10 text-fuchsia-400" />
+                          <p className="mt-4 font-medium text-lg">Your wallpaper will appear here</p>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            Describe a scene, then press Generate. Takes about 15 seconds.
+                          </p>
                         </div>
-                        <p className="text-muted-foreground mt-6 font-medium text-lg">Your wallpaper will appear here</p>
-                        <p className="text-xs text-muted-foreground mt-2 max-w-xs">
-                          Describe what you want to see in the form on the left, then click Generate
-                        </p>
                       </div>
                     )}
                   </div>
@@ -472,6 +540,16 @@ export default function AIGeneratePage() {
           </div>
         </div>
       </div>
+
+      {generatedImage && (
+        <ScreenPreview
+          open={isMockupOpen}
+          onClose={() => setIsMockupOpen(false)}
+          imageUrl={generatedImage}
+          title="Your AI wallpaper"
+          isPortrait={false}
+        />
+      )}
 
       <AnimatePresence>
         {isPreviewOpen && generatedImage && (

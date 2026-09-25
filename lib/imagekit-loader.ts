@@ -6,7 +6,8 @@
 const ENDPOINT = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
 
 export function imagekitLoader({ src, width, quality }: { src: string; width: number; quality?: number }): string {
-  // Leave non-ImageKit URLs (e.g. Clerk avatars) untouched
+  // Leave non-ImageKit URLs (e.g. Clerk avatars, AI results as data: URLs) untouched
+  if (src.startsWith('data:') || src.startsWith('blob:')) return src
   if (src.startsWith('http') && !src.startsWith(ENDPOINT)) return src
 
   const path = src.startsWith('http') ? src.slice(ENDPOINT.length) : src
