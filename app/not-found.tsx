@@ -3,7 +3,37 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Home, Search, ArrowLeft, Frown } from "lucide-react"
+import { Home, Search, ArrowLeft } from "lucide-react"
+import { PhoneFrame } from "@/components/Devices"
+
+const BARS = ["#c0c0c0", "#c0c000", "#00c0c0", "#00c000", "#c000c0", "#c00000", "#0000c0"]
+
+function NoSignalScreen() {
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-black">
+      <svg viewBox="0 0 70 150" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+        <g className="glitch-bars">
+          {BARS.map((c, i) => (
+            <rect key={c} x={i * 10} y="0" width="10" height="100" fill={c} />
+          ))}
+          {BARS.slice().reverse().map((c, i) => (
+            <rect key={`r-${c}`} x={i * 10} y="100" width="10" height="12" fill={i % 2 ? "#111" : c} />
+          ))}
+          <rect x="0" y="112" width="18" height="38" fill="#00214c" />
+          <rect x="18" y="112" width="18" height="38" fill="#fff" />
+          <rect x="36" y="112" width="18" height="38" fill="#32006a" />
+          <rect x="54" y="112" width="16" height="38" fill="#131313" />
+        </g>
+        <rect className="glitch-slice" x="0" y="40" width="70" height="9" fill="#c000c0" />
+        <rect className="glitch-slice glitch-slice-b" x="0" y="82" width="70" height="5" fill="#00c0c0" />
+      </svg>
+      <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.25)_0_1px,transparent_1px_3px)] motion-safe:animate-scanlines" />
+      <div className="absolute inset-x-0 top-[42%] text-center font-mono text-[10px] md:text-xs font-bold tracking-[0.25em] text-white [text-shadow:0_0_6px_#000]">
+        NO SIGNAL
+      </div>
+    </div>
+  )
+}
 
 export default function NotFound() {
   // Animation variants
@@ -24,7 +54,7 @@ export default function NotFound() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
@@ -60,30 +90,30 @@ export default function NotFound() {
         initial="hidden"
         animate="visible"
       >
-        <motion.div 
-          className="mb-6 flex justify-center"
+        <motion.div
+          className="mb-8 flex justify-center"
           variants={itemVariants}
         >
-          <div className="relative">
-            <div className="text-[120px] md:text-[180px] font-bold text-primary/10">404</div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Frown className="w-20 h-20 md:w-32 md:h-32 text-primary/50" />
-            </div>
+          <div className="w-32 md:w-40 -rotate-6 motion-safe:animate-device-bob" aria-hidden="true">
+            <PhoneFrame>
+              <NoSignalScreen />
+            </PhoneFrame>
           </div>
         </motion.div>
         
-        <motion.h1 
+        <motion.h1
           className="text-3xl md:text-5xl font-bold mb-4"
           variants={itemVariants}
         >
-          Page Not Found
+          <span className="glitch-text" data-text="404">404</span>
+          <span className="block mt-2 text-2xl md:text-3xl">No wallpaper on this screen</span>
         </motion.h1>
-        
-        <motion.p 
-          className="text-xl text-muted-foreground mb-8"
+
+        <motion.p
+          className="text-lg text-muted-foreground mb-8"
           variants={itemVariants}
         >
-          Oops! The page you're looking for seems to have wandered off.
+          This page doesn&apos;t exist, or the wallpaper was removed. Head back and pick another one.
         </motion.p>
         
         <motion.div 

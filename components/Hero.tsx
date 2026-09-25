@@ -8,6 +8,7 @@ import { useSearch } from "@/context/SearchContext"
 import { useRouter } from "next/navigation"
 import { DEFAULT_CATEGORY } from "@/context/SearchContext"
 import Link from "next/link"
+import HeroDevices from "@/components/HeroDevices"
 
 interface SearchSuggestion {
   title: string;
@@ -166,6 +167,7 @@ export default function Hero({ wallpaperCount }: HeroProps) {
   return (
     <div className="relative min-h-[55vh] sm:min-h-[60vh] md:min-h-[65vh] flex items-center justify-center overflow-hidden">
       <CollageBackdrop />
+      <HeroDevices />
 
       <div className="container px-4 py-12 sm:py-16 relative z-10">
         <div className="max-w-3xl mx-auto text-center space-y-5 sm:space-y-7">

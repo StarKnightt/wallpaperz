@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { Wallpaper } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
-import { Download, Share2, X, ZoomIn } from "lucide-react"
+import { Download, MonitorSmartphone, Share2, X, ZoomIn } from "lucide-react"
+import ScreenPreview from "@/components/ScreenPreview"
 import Image from "next/image"
 import { toast } from "sonner"
 import { getBlurDataURLClient } from "@/lib/blur-placeholder"
@@ -18,6 +19,7 @@ interface Props {
 
 export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [isMockupOpen, setIsMockupOpen] = useState(false)
   const isPortrait = !!(wallpaper.width && wallpaper.height && wallpaper.height > wallpaper.width)
 
   const handleDownload = async () => {
@@ -84,11 +86,23 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
           <Download className="h-4 w-4 mr-2" />
           Download
         </Button>
+        <Button variant="outline" onClick={() => setIsMockupOpen(true)}>
+          <MonitorSmartphone className="h-4 w-4 sm:mr-2" />
+          <span className="sr-only sm:not-sr-only">Try on screen</span>
+        </Button>
         <Button variant="outline" onClick={handleShare}>
-          <Share2 className="h-4 w-4 mr-2" />
-          Share
+          <Share2 className="h-4 w-4 sm:mr-2" />
+          <span className="sr-only sm:not-sr-only">Share</span>
         </Button>
       </div>
+
+      <ScreenPreview
+        open={isMockupOpen}
+        onClose={() => setIsMockupOpen(false)}
+        imageUrl={imageUrl}
+        title={wallpaper.title}
+        isPortrait={isPortrait}
+      />
 
       <AnimatePresence>
         {isPreviewOpen && (

@@ -1,7 +1,7 @@
 /**
  * Custom next/image loader that resizes through ImageKit transformations
- * (w-{width}, q-{quality}, f-auto) instead of Vercel's image optimizer.
- * Keeps bandwidth off Vercel's quota and serves WebP/AVIF from the CDN edge.
+ * (w-{width}, q-{quality}, f-auto) instead of the Next.js image optimizer,
+ * serving WebP/AVIF from ImageKit's CDN edge.
  */
 const ENDPOINT = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
 

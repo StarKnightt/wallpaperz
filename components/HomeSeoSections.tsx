@@ -1,4 +1,5 @@
 import { BLOG_POSTS } from "@/lib/blog/registry"
+import CategoryGlyph from "@/components/CategoryGlyph"
 
 // Colors with enough inventory for a landing page (see lib/colors.ts + tag-colors script)
 const colorLinks = [
@@ -42,10 +43,13 @@ export default function HomeSeoSections() {
           <a
             key={cat.slug}
             href={`/category/${cat.slug}`}
-            className="block p-4 rounded-lg border bg-card hover:bg-accent transition-colors"
+            className="group flex items-start gap-4 p-4 rounded-lg border bg-card hover:bg-accent transition-colors"
           >
-            <h3 className="font-semibold text-lg">{cat.name} Wallpapers</h3>
-            <p className="text-sm text-muted-foreground mt-1">{cat.description}</p>
+            <CategoryGlyph slug={cat.slug} />
+            <div>
+              <h3 className="font-semibold text-lg">{cat.name} Wallpapers</h3>
+              <p className="text-sm text-muted-foreground mt-1">{cat.description}</p>
+            </div>
           </a>
         ))}
       </div>
