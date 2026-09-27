@@ -7,6 +7,7 @@ import { Smartphone } from "lucide-react"
 import { getImageUrl } from '@/lib/imagekit'
 import { getBlurDataURLClient } from '@/lib/blur-placeholder'
 import { imagekitLoader } from '@/lib/imagekit-loader'
+import { wallpaperPath } from '@/lib/wallpaper-url'
 
 
 interface Props {
@@ -73,7 +74,7 @@ export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false
           <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base line-clamp-2">
             {/* Real link keeps wallpaper pages crawlable; modal preview stays on card click */}
             <Link
-              href={`/wallpaper/${wallpaper.id}`}
+              href={wallpaperPath(wallpaper)}
               className="pointer-events-auto hover:underline"
               onClick={(e) => e.stopPropagation()}
             >

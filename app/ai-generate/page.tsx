@@ -100,8 +100,8 @@ export default function AIGeneratePage() {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to generate image")
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || errorData.error || "Failed to generate image")
       }
 
       const result = await response.json()

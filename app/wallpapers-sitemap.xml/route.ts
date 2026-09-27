@@ -1,4 +1,5 @@
 import { getAllWallpapers } from '@/lib/server/wallpapers'
+import { wallpaperPath } from '@/lib/wallpaper-url'
 
 const BASE_URL = 'https://www.wallpaperz.in'
 const IMAGEKIT_ENDPOINT = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
@@ -28,7 +29,7 @@ export async function GET() {
           : `${IMAGEKIT_ENDPOINT}${w.imageUrl}`
         const imageUrl = encodeURI(rawUrl)
         return `  <url>
-    <loc>${BASE_URL}/wallpaper/${w.id}</loc>
+    <loc>${BASE_URL}${wallpaperPath(w)}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <image:image>

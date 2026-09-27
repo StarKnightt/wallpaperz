@@ -8,6 +8,7 @@ import Pagination from "@/components/Pagination"
 import PaginationHead from "@/components/PaginationHead"
 import CategoryChips from "@/components/CategoryChips"
 import { Button } from "@/components/ui/button"
+import { wallpaperPath } from "@/lib/wallpaper-url"
 
 const BASE_URL = "https://www.wallpaperz.in"
 const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || "https://ik.imagekit.io/starknight"
@@ -37,7 +38,7 @@ export default function CategoryListing({ slug, slice, all }: Props) {
       "@type": "ImageObject",
       name: w.title,
       contentUrl: encodeURI(w.imageUrl.startsWith("http") ? w.imageUrl : `${IK}${w.imageUrl}`),
-      url: `${BASE_URL}/wallpaper/${w.id}`,
+      url: `${BASE_URL}${wallpaperPath(w)}`,
     })),
     provider: { "@type": "Organization", name: "Wallpaperz", url: BASE_URL },
   }

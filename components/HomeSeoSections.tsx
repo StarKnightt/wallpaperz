@@ -34,6 +34,18 @@ const categories = [
 ]
 
 // Server-rendered internal-linking block shared by / and /page/[n]
+const deviceLinks: [string, string, string?][] = [
+  ['/devices/iphone-18-pro-max', 'iPhone 18 Pro Max', '1320×2868'],
+  ['/devices/iphone-17', 'iPhone 17', '1206×2622'],
+  ['/devices/galaxy-s26-ultra', 'Galaxy S26 Ultra', '1440×3120'],
+  ['/devices/pixel-10-pro', 'Pixel 10 Pro', '1280×2856'],
+  ['/devices/ipad-pro-13', 'iPad Pro 13"', '2752×2064'],
+  ['/devices/macbook-air-13', 'MacBook Air', '2560×1664'],
+  ['/laptop-wallpapers', '4K laptop wallpapers'],
+  ['/devices/3840x2160', '4K desktop', '3840×2160'],
+  ['/devices', 'All devices →'],
+]
+
 export default function HomeSeoSections() {
   return (
     <section className="container mx-auto px-4 py-12 border-t">
@@ -67,6 +79,20 @@ export default function HomeSeoSections() {
               aria-hidden="true"
             />
             {color.name} Wallpapers
+          </a>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-6">Wallpapers Sized for Your Device</h2>
+      <div className="flex flex-wrap gap-3">
+        {deviceLinks.map(([href, label, size]) => (
+          <a
+            key={href}
+            href={href}
+            className="inline-flex items-baseline gap-2 rounded-full border bg-card px-4 py-2 text-sm hover:bg-accent transition-colors"
+          >
+            {label}
+            {size && <span className="text-xs text-muted-foreground tabular-nums">{size}</span>}
           </a>
         ))}
       </div>

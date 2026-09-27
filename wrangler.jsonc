@@ -57,6 +57,11 @@
       "binding": "NEXT_TAG_CACHE_D1",
       "database_name": "wallpaperz-tag-cache",
       "database_id": "69126f83-7ab4-4603-9798-631a1e60b8b7"
+    },
+    {
+      "binding": "RATE_LIMIT_DB",
+      "database_name": "wallpaperz-ratelimit",
+      "database_id": "56c6de8f-2a10-4735-ad72-398fee10f1f5"
     }
   ]
 }

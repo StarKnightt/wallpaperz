@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { getImageUrl, getOriginalDownloadUrl } from "@/lib/imagekit"
 import { toast } from "sonner"
 import { getBlurDataURLClient } from "@/lib/blur-placeholder"
+import { wallpaperPath } from "@/lib/wallpaper-url"
 
 interface WallpaperCardProps {
   wallpaper: Wallpaper
@@ -76,7 +77,7 @@ export default function WallpaperCard({ wallpaper, onPreview }: WallpaperCardPro
         }}
       />
 
-      <a href={`/wallpaper/${wallpaper.id}`} className="sr-only">{wallpaper.title}</a>
+      <a href={wallpaperPath(wallpaper)} className="sr-only">{wallpaper.title}</a>
       <div className="aspect-[16/10] relative overflow-hidden">
         <motion.div
           initial={{ scale: 1.2, opacity: 0 }}

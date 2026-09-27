@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import { getBlurDataURLClient } from "@/lib/blur-placeholder"
 import { imagekitLoader } from "@/lib/imagekit-loader"
 import { getOriginalDownloadUrl } from "@/lib/imagekit"
+import { wallpaperPath } from "@/lib/wallpaper-url"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Props {
@@ -43,7 +44,7 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
   }
 
   const handleShare = async () => {
-    const shareUrl = `${window.location.origin}/wallpaper/${wallpaper.id}`
+    const shareUrl = `${window.location.origin}${wallpaperPath(wallpaper)}`
     try {
       if (navigator.share) {
         await navigator.share({ title: wallpaper.title, url: shareUrl })

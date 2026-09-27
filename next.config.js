@@ -3,6 +3,56 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+// Keep in sync with slugify() in lib/wallpaper-url.ts. If they ever drift, the
+// page-level redirect in app/wallpaper/[id] still lands on the canonical URL.
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 70)
+    .replace(/-+$/g, '')
+}
+
+// Mirrors cleanFilename() in lib/categories.ts (casing is irrelevant once slugified)
+function cleanName(filename) {
+  const drop = new Set(['wallpaperz', 'wallpaper', 'wallpapers'])
+  return filename.replace(/\.[^/.]+$/, '').split(/[-_\s]+/).filter((t) => t && !drop.has(t.toLowerCase())).join(' ')
+}
+
+// Old /wallpaper/<id> URLs (Pinterest pins, existing index entries) 308 to
+// /wallpaper/<slug>-<id> at the routing layer. A redirect thrown inside the ISR
+// page gets cached by OpenNext as a 200 with a client-side redirect instead.
+async function legacyWallpaperRedirects() {
+  if (!process.env.IMAGEKIT_PRIVATE_KEY) return []
+  try {
+    const ImageKit = require('imagekit')
+    const ik = new ImageKit({
+      publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
+      privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+      urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT,
+    })
+    const files = await ik.listFiles({ limit: 1000 })
+    return files
+      .filter((f) => {
+        const parts = f.filePath.split('/')
+        return parts.length === 3 && parts[1] === 'wallpapers' && f.fileType === 'image'
+      })
+      .map((f) => {
+        const title = (f.customMetadata && f.customMetadata.title) || cleanName(f.name)
+        const slug = slugify(title)
+        return slug && { source: `/wallpaper/${f.fileId}`, destination: `/wallpaper/${slug}-${f.fileId}`, permanent: true }
+      })
+      .filter(Boolean)
+  } catch (err) {
+    console.warn('[next.config] legacy wallpaper redirects skipped:', err.message)
+    return []
+  }
+}
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -76,6 +126,7 @@ const nextConfig = {
       // page for Google) and 404'd for x.com, which refuses to be proxied.
       { source: '/github', destination: 'https://github.com/StarKnightt', permanent: false },
       { source: '/twitter', destination: 'https://x.com/Star_Knight12', permanent: false },
+      ...(await legacyWallpaperRedirects()),
     ]
   },
 }

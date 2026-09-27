@@ -5,14 +5,44 @@ import { postMetadata } from '@/lib/blog/registry'
 
 export const metadata: Metadata = postMetadata('best-wallpaper-size-for-iphone')
 
+const JUMP: [string, string][] = [
+  ['iphone-18-pro-max', '18 Pro Max'], ['iphone-17-pro-max', '17 Pro Max'], ['iphone-17', '17'],
+  ['iphone-air', 'Air'], ['iphone-16-pro-max', '16 Pro Max'], ['iphone-16', '16'], ['iphone-15', '15'],
+]
+
+const IPHONE_ROWS: { label: string; size: string; slug?: string }[] = [
+  { label: 'iPhone 18 Pro Max / 17 Pro Max / 16 Pro Max', size: '1320 x 2868', slug: 'iphone-18-pro-max' },
+  { label: 'iPhone 18 Pro / 17 Pro / 17 / 16 Pro', size: '1206 x 2622', slug: 'iphone-18-pro' },
+  { label: 'iPhone Air', size: '1260 x 2736', slug: 'iphone-air' },
+  { label: 'iPhone 16 Plus / 15 Plus / 15 Pro Max / 14 Pro Max', size: '1290 x 2796', slug: 'iphone-16-plus' },
+  { label: 'iPhone 16 / 15 / 15 Pro / 14 Pro', size: '1179 x 2556', slug: 'iphone-16' },
+  { label: 'iPhone 16e / 14 / 13 / 13 Pro / 12 / 12 Pro', size: '1170 x 2532', slug: 'iphone-16e' },
+  { label: 'iPhone 14 Plus / 13 Pro Max / 12 Pro Max', size: '1284 x 2778', slug: 'iphone-13-pro-max' },
+  { label: 'iPhone 13 mini / 12 mini', size: '1080 x 2340', slug: 'iphone-13-mini' },
+  { label: 'iPhone 11 Pro / XS / X', size: '1125 x 2436' },
+  { label: 'iPhone 11 / XR', size: '828 x 1792', slug: 'iphone-11' },
+  { label: 'iPhone SE (2020 / 2022)', size: '750 x 1334', slug: 'iphone-se' },
+]
+
 export default function Page() {
   return (
     <PostLayout slug="best-wallpaper-size-for-iphone">
       <p>
-        Short answer: download a portrait image that is <strong>at least as large as your iPhone&apos;s
-        native resolution</strong>, ideally bigger. A 4K portrait wallpaper (2160x3840) covers every
-        iPhone ever made with room to spare. If you want the exact numbers for your model, the full
-        table is below.
+        Short answer: the <strong>iPhone 18 Pro Max and 17 Pro Max use 1320 x 2868</strong>, the{' '}
+        <strong>iPhone 18 Pro, 17 Pro and 17 use 1206 x 2622</strong>, and the iPhone Air uses 1260 x 2736 -
+        all a tall 9:19.5 portrait shape. Use an image at least that large. Every model is in the table
+        below, and each one links to wallpapers already{' '}
+        <Link href="/devices">cropped to that exact size</Link>.
+      </p>
+      <p>
+        <strong>Jump to your iPhone:</strong>{' '}
+        {JUMP.map(([slug, name], i) => (
+          <span key={slug}>
+            {i > 0 && ' · '}
+            <Link href={`/devices/${slug}`}>{name}</Link>
+          </span>
+        ))}
+        {' · '}<Link href="/devices">all devices</Link>
       </p>
 
       <h2>Why your wallpaper looks zoomed in</h2>
@@ -36,23 +66,20 @@ export default function Page() {
           </tr>
         </thead>
         <tbody>
-          <tr><td>iPhone 16 Pro Max</td><td>1320 x 2868</td></tr>
-          <tr><td>iPhone 16 Pro</td><td>1206 x 2622</td></tr>
-          <tr><td>iPhone 16 Plus / 15 Plus / 15 Pro Max / 14 Pro Max</td><td>1290 x 2796</td></tr>
-          <tr><td>iPhone 16 / 15 / 15 Pro / 14 Pro</td><td>1179 x 2556</td></tr>
-          <tr><td>iPhone 14 / 13 / 13 Pro / 12 / 12 Pro</td><td>1170 x 2532</td></tr>
-          <tr><td>iPhone 14 Plus / 13 Pro Max / 12 Pro Max</td><td>1284 x 2778</td></tr>
-          <tr><td>iPhone 13 mini / 12 mini</td><td>1080 x 2340</td></tr>
-          <tr><td>iPhone 11 Pro / XS / X</td><td>1125 x 2436</td></tr>
-          <tr><td>iPhone 11 / XR</td><td>828 x 1792</td></tr>
-          <tr><td>iPhone SE (2020 / 2022)</td><td>750 x 1334</td></tr>
+          {IPHONE_ROWS.map((r) => (
+            <tr key={r.label}>
+              <td>{r.slug ? <Link href={`/devices/${r.slug}`}>{r.label}</Link> : r.label}</td>
+              <td>{r.size}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <p>
-        Newer models (the iPhone 17 family and beyond) stay in the same class - tall 9:19.5-ish panels
-        around 1300 x 2800. Any image at <strong>1440 x 3120 or larger</strong> covers the entire
-        current lineup, which is why our <Link href="/category/mobile">mobile wallpapers</Link> are
-        produced at 1440 x 2560 minimum and most at higher.
+        Notice how few distinct sizes there are: Apple reuses panels across generations, so an
+        iPhone 16 Pro Max wallpaper fits a 17 Pro Max and 18 Pro Max perfectly. Any image at{' '}
+        <strong>1440 x 3120 or larger</strong> covers the entire current lineup, and our{' '}
+        <Link href="/category/mobile">mobile wallpapers</Link> can be downloaded pre-cropped for each
+        model from its <Link href="/devices">device page</Link>.
       </p>
 
       <h2>How to set it without weird cropping</h2>

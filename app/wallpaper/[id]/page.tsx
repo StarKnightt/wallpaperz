@@ -1,9 +1,12 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { getAllWallpapers, getWallpaperById, getRelatedWallpapers, getHomePageNumberFor } from '@/lib/server/wallpapers'
 import { pageHref } from '@/lib/pagination'
 import { getResolutionName, formatFileSize } from '@/lib/blur-placeholder'
+import { idFromSegment, wallpaperPath, wallpaperSegment } from '@/lib/wallpaper-url'
+import { devicesForWallpaper, deviceDownloadUrl } from '@/lib/devices'
 import WallpaperPageClient from './WallpaperPageClient'
+import CreditSnippet from '@/components/CreditSnippet'
 
 // ISR with full build-time prerendering: every wallpaper page is generated at
 // build (one ImageKit list call, same as the sitemaps) so no visitor request
@@ -13,7 +16,7 @@ export const revalidate = 3600
 
 export async function generateStaticParams() {
   const wallpapers = await getAllWallpapers()
-  return wallpapers.map((w) => ({ id: w.id }))
+  return wallpapers.map((w) => ({ id: wallpaperSegment(w) }))
 }
 
 type Props = {
@@ -22,8 +25,9 @@ type Props = {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
-  const wallpaper = await getWallpaperById(params.id)
+  const wallpaper = await getWallpaperById(idFromSegment(params.id))
   if (!wallpaper) return { title: 'Wallpaper Not Found' }
+  const path = wallpaperPath(wallpaper)
 
   const resolution = wallpaper.width && wallpaper.height
     ? getResolutionName(wallpaper.width, wallpaper.height)
@@ -52,7 +56,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://www.wallpaperz.in/wallpaper/${params.id}`,
+      url: `https://www.wallpaperz.in${path}`,
       siteName: 'Wallpaperz',
       images: [{ url: imageUrl, width: wallpaper.width, height: wallpaper.height, alt: wallpaper.title }],
       type: 'article',
@@ -64,15 +68,20 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       images: [imageUrl],
     },
     alternates: {
-      canonical: `/wallpaper/${params.id}`,
+      canonical: path,
     },
   }
 }
 
 export default async function WallpaperPage(props: Props) {
   const params = await props.params;
-  const wallpaper = await getWallpaperById(params.id)
+  const wallpaper = await getWallpaperById(idFromSegment(params.id))
   if (!wallpaper) notFound()
+  // Legacy /wallpaper/<id> links (Pinterest pins, old index entries) and
+  // renamed titles all collapse onto one canonical URL.
+  if (decodeURIComponent(params.id) !== wallpaperSegment(wallpaper)) permanentRedirect(wallpaperPath(wallpaper))
+  const pageUrl = `https://www.wallpaperz.in${wallpaperPath(wallpaper)}`
+  const fitDevices = devicesForWallpaper(wallpaper)
 
   const related = await getRelatedWallpapers(wallpaper, 6)
   // Homepage list page this wallpaper appears on - links deep list pages from
@@ -98,7 +107,7 @@ export default async function WallpaperPage(props: Props) {
     encodingFormat: "image/jpeg",
     isAccessibleForFree: true,
     license: "https://www.wallpaperz.in/license",
-    acquireLicensePage: `https://www.wallpaperz.in/wallpaper/${wallpaper.id}`,
+    acquireLicensePage: pageUrl,
     creditText: "Wallpaperz",
     copyrightNotice: "Wallpaperz",
     creator: { "@type": "Organization", name: "Wallpaperz", url: "https://www.wallpaperz.in" },
@@ -110,7 +119,7 @@ export default async function WallpaperPage(props: Props) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://www.wallpaperz.in" },
       { "@type": "ListItem", position: 2, name: `${wallpaper.category} Wallpapers`, item: `https://www.wallpaperz.in/category/${wallpaper.category.toLowerCase()}` },
-      { "@type": "ListItem", position: 3, name: wallpaper.title, item: `https://www.wallpaperz.in/wallpaper/${wallpaper.id}` },
+      { "@type": "ListItem", position: 3, name: wallpaper.title, item: pageUrl },
     ],
   }
 
@@ -180,6 +189,37 @@ export default async function WallpaperPage(props: Props) {
                 )}
               </div>
             </div>
+
+            {fitDevices.length > 0 && (
+              <div className="border rounded-lg p-4 text-sm">
+                <h2 className="font-semibold text-base">Download for your device</h2>
+                <p className="mt-1 mb-3 text-muted-foreground">Cropped to your exact screen resolution, so it fills edge to edge.</p>
+                <ul className="divide-y">
+                  {fitDevices.map((d) => (
+                    <li key={d.slug} className="flex items-center justify-between gap-3 py-2">
+                      <a href={`/devices/${d.slug}`} className="min-w-0 hover:text-primary">
+                        <span className="block truncate font-medium">{d.name}</span>
+                        <span className="block text-xs text-muted-foreground tabular-nums">{d.width} × {d.height}</span>
+                      </a>
+                      <a
+                        href={deviceDownloadUrl(wallpaper, d)}
+                        rel="nofollow"
+                        className="shrink-0 rounded-full border px-3 py-1 text-xs font-medium hover:border-primary hover:text-primary"
+                        aria-label={`Download ${wallpaper.title} for ${d.name} at ${d.width} by ${d.height}`}
+                      >
+                        Download
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <a href="/devices" className="mt-3 inline-block text-xs font-medium text-primary hover:underline">
+                  All devices and sizes &rarr;
+                </a>
+              </div>
+            )}
+
+            <CreditSnippet title={wallpaper.title} pageUrl={pageUrl} imageUrl={imageUrl} />
+            
           </div>
         </div>
 
@@ -210,7 +250,7 @@ export default async function WallpaperPage(props: Props) {
                 const relUrl = `${relBase}?tr=w-480,q-70,f-auto`
                 const relPortrait = !!(w.width && w.height && w.height > w.width)
                 return (
-                  <a key={w.id} href={`/wallpaper/${w.id}`} className="group block rounded-lg overflow-hidden border">
+                  <a key={w.id} href={wallpaperPath(w)} className="group block rounded-lg overflow-hidden border">
                     <div className={`${relPortrait ? 'aspect-[9/14]' : 'aspect-[16/10]'} relative`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img

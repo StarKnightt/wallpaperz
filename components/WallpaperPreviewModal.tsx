@@ -8,6 +8,7 @@ import { Wallpaper } from "@/types/wallpaper"
 import { useState, useEffect } from "react"
 import { getImageUrl, getOriginalDownloadUrl } from '@/lib/imagekit'
 import { imagekitLoader } from '@/lib/imagekit-loader'
+import { wallpaperPath } from '@/lib/wallpaper-url'
 import { getBlurDataURLClient, getImageMetadata, ImageMetadata, getResolutionName } from '@/lib/blur-placeholder'
 
 interface WallpaperPreviewModalProps {
@@ -66,7 +67,7 @@ export default function WallpaperPreviewModal({
 
   const handleShare = async (platform: string) => {
     // Canonical page URL so shares get proper OG previews and link equity
-    const shareUrl = `${window.location.origin}/wallpaper/${wallpaper.id}`
+    const shareUrl = `${window.location.origin}${wallpaperPath(wallpaper)}`
     const text = `Check out this amazing wallpaper: ${wallpaper.title}`
     
     switch (platform) {
@@ -176,7 +177,7 @@ export default function WallpaperPreviewModal({
         <div className="p-4 space-y-4 shrink-0">
           <div>
             <h3 className="text-xl font-semibold mb-2">
-              <a href={`/wallpaper/${wallpaper.id}`} className="hover:underline" title={`Open ${wallpaper.title} page`}>
+              <a href={wallpaperPath(wallpaper)} className="hover:underline" title={`Open ${wallpaper.title} page`}>
                 {wallpaper.title}
               </a>
             </h3>

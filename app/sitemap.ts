@@ -9,6 +9,7 @@ import { BLOG_POSTS } from '@/lib/blog/registry'
 import { CATEGORY_SLUGS, wallpapersForCategory } from '@/lib/category-pages'
 import { pageHref, totalPagesFor } from '@/lib/pagination'
 import { Wallpaper } from '@/types/wallpaper'
+import { DEVICES } from '@/lib/devices'
 
 const categories = CATEGORY_SLUGS
 
@@ -75,6 +76,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
+  const devicePages: MetadataRoute.Sitemap = [
+    { url: `${baseUrl}/devices`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/laptop-wallpapers`, changeFrequency: 'daily', priority: 0.8 },
+    ...DEVICES.map((d) => ({
+      url: `${baseUrl}/devices/${d.slug}`,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
+  ]
+
   const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),
@@ -85,5 +96,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Wallpaper pages live in /wallpapers-sitemap.xml (route handler) because
   // Next's MetadataRoute.Sitemap cannot emit <image:image> entries, which
   // Google Images needs to index the actual wallpaper files.
-  return [...staticPages, ...paginatedPages, ...categoryPages, ...colorPages, ...blogPages]
+  return [...staticPages, ...paginatedPages, ...categoryPages, ...colorPages, ...devicePages, ...blogPages]
 }

@@ -69,6 +69,23 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+
+            <h3 className="font-medium mb-3 mt-6">By Device</h3>
+            <ul className="space-y-2 text-sm">
+              {[
+                ['/devices/iphone-17-pro-max', 'iPhone 17 Pro Max'],
+                ['/devices/galaxy-s26-ultra', 'Galaxy S26 Ultra'],
+                ['/laptop-wallpapers', 'Laptop wallpapers'],
+                ['/devices/3840x2160', '4K desktop'],
+                ['/devices', 'All devices'],
+              ].map(([href, label]) => (
+                <li key={href}>
+                  <Link href={href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Popular Colors */}

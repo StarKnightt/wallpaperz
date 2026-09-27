@@ -70,9 +70,9 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'best-wallpaper-size-for-iphone',
     title: 'Best Wallpaper Size for iPhone: Every Model Explained (2026)',
-    metaTitle: 'Best Wallpaper Size for iPhone - Every Model (2026)',
+    metaTitle: 'iPhone Wallpaper Size for Every Model: 18, 17, Air, 16 (2026)',
     description:
-      'Exact iPhone wallpaper resolutions for every model, why your wallpaper gets zoomed in, and how to size images so they stay sharp on the lock screen.',
+      'iPhone 18 Pro Max and 17 Pro Max: 1320x2868. iPhone 17 and 18 Pro: 1206x2622. Exact wallpaper resolution and aspect ratio for every iPhone, plus wallpapers pre-cropped to fit.',
     date: '2026-08-01',
     cluster: 'Device Guides',
     minutes: 6,

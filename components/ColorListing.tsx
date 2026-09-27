@@ -6,6 +6,7 @@ import { PageSlice, pageHref } from '@/lib/pagination'
 import WallpaperListingClient from '@/components/WallpaperListingClient'
 import Pagination from '@/components/Pagination'
 import PaginationHead from '@/components/PaginationHead'
+import { wallpaperPath } from '@/lib/wallpaper-url'
 
 const BASE_URL = 'https://www.wallpaperz.in'
 const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
@@ -34,7 +35,7 @@ export default function ColorListing({ color, slice, all }: Props) {
       "@type": "ImageObject",
       name: w.title,
       contentUrl: encodeURI(w.imageUrl.startsWith('http') ? w.imageUrl : `${IK}${w.imageUrl}`),
-      url: `${BASE_URL}/wallpaper/${w.id}`,
+      url: `${BASE_URL}${wallpaperPath(w)}`,
     })),
     provider: { "@type": "Organization", name: "Wallpaperz", url: BASE_URL },
   }
