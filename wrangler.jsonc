@@ -15,8 +15,11 @@
   // process.env). Used to disable the hard cache purge in /api/wallpapers/sync,
   // which is unaffordable on the free plan (10ms CPU): a purge forces foreground
   // SSR of every page and cascades into exceededCpu/1102 errors (verified twice).
+  // DODO_PAYMENTS_ENVIRONMENT picks the Dodo API host; the API key, webhook
+  // secret and product IDs are Worker secrets (see .env.example).
   "vars": {
-    "DEPLOY_TARGET": "cloudflare"
+    "DEPLOY_TARGET": "cloudflare",
+    "DODO_PAYMENTS_ENVIRONMENT": "live_mode"
   },
   "assets": {
     "directory": ".open-next/assets",

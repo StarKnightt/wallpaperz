@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Sparkles, Loader2, Download, AlertCircle, Share2, Wand2, Eye, X, ZoomIn, MonitorSmartphone } from "lucide-react"
 import NoiseField from "@/components/ai/NoiseField"
@@ -12,8 +12,13 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useAuth, SignInButton } from "@clerk/nextjs"
+import { useAuth, useUser, SignInButton } from "@clerk/nextjs"
 import { motion, AnimatePresence } from "framer-motion"
+import { toast } from "sonner"
+import UsageBar from "@/components/ai/UsageBar"
+import UpsellCard from "@/components/ai/UpsellCard"
+import { useEntitlements } from "@/lib/hooks/useEntitlements"
+import { FREE_PER_DAY, type LimitCode } from "@/lib/pricing"
 
 const GEN_STEPS = ["Reading your prompt", "Composing the scene", "Adding light and color", "Sharpening details", "Almost there"]
 
@@ -52,6 +57,32 @@ export default function AIGeneratePage() {
   const [error, setError] = useState<string | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [isMockupOpen, setIsMockupOpen] = useState(false)
+  const [limit, setLimit] = useState<{ code: Exclude<LimitCode, "PAID_GLOBAL_LIMIT">; message: string; resetTime: string | null } | null>(null)
+  const { user } = useUser()
+  const { entitlements, setEntitlements, refresh } = useEntitlements(!!isSignedIn)
+
+  // Back from Dodo checkout (?paid=1): the webhook may land a few seconds
+  // later, so poll until the purchase shows up.
+  const latest = useRef({ refresh, user })
+  useEffect(() => { latest.current = { refresh, user } }, [refresh, user])
+  const paidHandled = useRef(false)
+  useEffect(() => {
+    if (!isSignedIn || paidHandled.current || !new URLSearchParams(window.location.search).has("paid")) return
+    paidHandled.current = true
+    window.history.replaceState(null, "", window.location.pathname)
+    ;(async () => {
+      const before = await latest.current.refresh()
+      for (let i = 0; i < 8; i++) {
+        await new Promise((r) => setTimeout(r, 2500))
+        const now = await latest.current.refresh()
+        if (now && before && (now.credits > before.credits || now.plan !== before.plan)) break
+      }
+      toast.success("Payment received. Thanks for supporting Wallpaperz!")
+      setLimit(null)
+      // Picks up publicMetadata.plan so ads switch off for Pro.
+      await latest.current.user?.reload()
+    })()
+  }, [isSignedIn])
   
   const promptSuggestions = [
     "Massive aurora borealis over a snow-covered mountain range reflected in a still lake, photorealistic, 8K, cinematic lighting",
@@ -86,6 +117,7 @@ export default function AIGeneratePage() {
     try {
       setIsGenerating(true)
       setError(null)
+      setLimit(null)
 
       const response = await fetch("/api/ai-generate", {
         method: "POST",
@@ -101,10 +133,16 @@ export default function AIGeneratePage() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
+        if (errorData.entitlements) setEntitlements(errorData.entitlements)
+        if (response.status === 429 && errorData.code && errorData.code !== "PAID_GLOBAL_LIMIT") {
+          setLimit({ code: errorData.code, message: errorData.message, resetTime: errorData.resetTime ?? null })
+          return
+        }
         throw new Error(errorData.message || errorData.error || "Failed to generate image")
       }
 
       const result = await response.json()
+      if (result.entitlements) setEntitlements(result.entitlements)
       setGeneratedImage(result.image)
     } catch (err) {
       console.error("Generation failed:", err)
@@ -224,7 +262,10 @@ export default function AIGeneratePage() {
                 Sign in to start creating
               </Button>
             </SignInButton>
-            <p className="text-xs text-muted-foreground">Free &middot; 5 wallpapers an hour &middot; download in full quality</p>
+            <p className="text-xs text-muted-foreground">
+              Free &middot; {FREE_PER_DAY} wallpapers a day &middot; download in full quality &middot;{" "}
+              <Link href="/pricing" className="underline-offset-2 hover:underline">need more?</Link>
+            </p>
           </motion.div>
 
           <section className="mx-auto mt-20 max-w-5xl">
@@ -308,6 +349,9 @@ export default function AIGeneratePage() {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Transform your imagination into stunning wallpapers using AI
             </p>
+            <div className="mt-5">
+              <UsageBar entitlements={entitlements} />
+            </div>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -316,6 +360,10 @@ export default function AIGeneratePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
             >
+              {limit && (
+                <UpsellCard code={limit.code} message={limit.message} resetTime={limit.resetTime} onDismiss={() => setLimit(null)} />
+              )}
+
               {error && (
                 <Alert variant="destructive" className="mb-6">
                   <AlertCircle className="h-4 w-4" />

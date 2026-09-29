@@ -41,23 +41,22 @@ export async function POST(req: NextRequest) {
     }
 
     const rateLimit = await reserveGeneration(userId)
-    const limitHeaders = {
-      'X-RateLimit-Limit': String(AI_LIMITS.perUserPerHour),
-      'X-RateLimit-Remaining': String(rateLimit.remaining),
-      'X-RateLimit-Reset': String(rateLimit.resetTime),
-    }
     if (!rateLimit.allowed) {
-      const resetDate = new Date(rateLimit.resetTime)
       return NextResponse.json(
         {
-          error: "Rate limit exceeded. Please try again later.",
-          resetTime: resetDate.toISOString(),
-          message: rateLimit.reason === 'global'
-            ? "The generator is taking a breather after a busy day. Please try again later."
-            : `You've reached the maximum of ${AI_LIMITS.perUserPerHour} generations per hour. Resets at ${resetDate.toLocaleTimeString()}`,
+          error: "Rate limit exceeded",
+          code: rateLimit.code,
+          message: rateLimit.message,
+          resetTime: rateLimit.resetTime ? new Date(rateLimit.resetTime).toISOString() : null,
+          entitlements: rateLimit.entitlements,
         },
-        { status: 429, headers: limitHeaders }
+        { status: 429 }
       );
+    }
+    const limitHeaders = {
+      'X-RateLimit-Limit': String(AI_LIMITS.freePerDay),
+      'X-RateLimit-Remaining': String(rateLimit.entitlements.free.remaining),
+      'X-Generation-Source': rateLimit.source,
     }
 
     // 16:9 widescreen dimensions (SDXL supported pair)
@@ -131,6 +130,8 @@ export async function POST(req: NextRequest) {
         success: true,
         image: `data:image/png;base64,${generatedImage}`,
         seed: responseData.artifacts[0]?.seed,
+        source: rateLimit.source,
+        entitlements: rateLimit.entitlements,
       },
       { headers: limitHeaders }
     );
