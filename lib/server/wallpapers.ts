@@ -57,6 +57,14 @@ export async function getRelatedWallpapers(wallpaper: Wallpaper, limit = 6): Pro
     .slice(0, limit)
 }
 
+/** AI uploads carry the `ai-generated` tag and an "Original AI-generated ..." description. */
+export function isAiGenerated(wallpaper: Wallpaper): boolean {
+  return (
+    !!wallpaper.tags?.some((t) => t.toLowerCase() === 'ai-generated') ||
+    /\bOriginal AI-generated\b/i.test(wallpaper.description)
+  )
+}
+
 /** 1-based homepage list page that contains this wallpaper (for back-links). */
 export async function getHomePageNumberFor(id: string): Promise<number | null> {
   const all = await getAllWallpapers()

@@ -1,3 +1,4 @@
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getDb, type D1Like } from '@/lib/server/d1'
 import { addCreditsStmt, consumeCredit, getCredits, getSubscription, subscriptionGrantsPro, type SubscriptionRow } from '@/lib/server/entitlements'
 import { FREE_PER_DAY, PRO_PER_MONTH, type Entitlements, type LimitCode } from '@/lib/pricing'
@@ -14,6 +15,27 @@ export const AI_LIMITS = {
 const HOUR = 60 * 60 * 1000
 const DAY = 24 * HOUR
 const PRO_WINDOW = 30 * DAY
+/** Privacy policy: generation logs are kept 90 days. Longer than every window read above. */
+const LOG_RETENTION = 90 * DAY
+const RETENTION_SWEEP_RATE = 0.01
+
+// Opportunistic retention sweep (no cron on the free plan): an indexed delete on
+// ~1% of reservations, run after the response via waitUntil. Only touches
+// ai_generations; credits, subscriptions and payment records are untouched.
+async function maybePruneGenerationLogs(db: D1Like, now: number) {
+  if (Math.random() >= RETENTION_SWEEP_RATE) return
+  const sweep = db
+    .prepare('DELETE FROM ai_generations WHERE created_at < ?')
+    .bind(now - LOG_RETENTION)
+    .run()
+    .catch(() => {})
+  try {
+    const { ctx } = await getCloudflareContext({ async: true })
+    ctx.waitUntil(sweep)
+  } catch {
+    await sweep
+  }
+}
 
 export type GenerationSource = 'free' | 'pro' | 'credit'
 
@@ -108,6 +130,7 @@ export async function reserveGeneration(userId: string): Promise<LimitResult> {
     }
   }
 
+  await maybePruneGenerationLogs(db, now)
   const usage = await loadUsage(db, userId, now)
   const isPro = subscriptionGrantsPro(usage.sub, now)
   let freeGlobalHit = false

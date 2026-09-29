@@ -1,5 +1,6 @@
 import { clerkMiddleware } from "@clerk/nextjs/server"; 
 import { NextResponse, type NextRequest } from "next/server";
+import { COUNTRY_COOKIE } from "@/lib/consent";
 
 // Canonical host. The apex (wallpaperz.in) and plain http both served 200 after
 // the Cloudflare Workers move (Vercel used to 308 apex -> www), so Google saw
@@ -25,9 +26,21 @@ function canonicalRedirect(req: NextRequest) {
   return NextResponse.redirect(url, 301);
 }
 
+// Pages are prerendered, so the client can't see the visitor's country. Hand it
+// Cloudflare's cf-ipcountry via a cookie; DomainGatedScripts uses it to hold
+// Clarity until consent in CONSENT_REGIONS. Only set when missing or changed.
+function withCountryHint(req: NextRequest, res: NextResponse) {
+  const country = req.headers.get("cf-ipcountry")?.toUpperCase();
+  if (!country || !/^[A-Z0-9]{2}$/.test(country)) return res;
+  if (req.cookies.get(COUNTRY_COOKIE)?.value === country) return res;
+  res.cookies.set(COUNTRY_COOKIE, country, { path: "/", maxAge: 86400, sameSite: "lax", secure: true });
+  return res;
+}
+
 export default clerkMiddleware((auth, req) => {
   const redirect = canonicalRedirect(req);
   if (redirect) return redirect;
+  if (!req.nextUrl.pathname.startsWith("/api/")) return withCountryHint(req, NextResponse.next());
 
   const publicRoutes = [
     "/",

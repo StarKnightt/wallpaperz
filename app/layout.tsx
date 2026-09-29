@@ -13,6 +13,7 @@ import BottomNav from "@/components/BottomNav"
 import PwaRegister from "@/components/PwaRegister"
 import InstallPrompt from "@/components/InstallPrompt"
 import type { Metadata, Viewport } from "next"
+import { CONSENT_DEFAULTS_SCRIPT } from "@/lib/consent"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -160,6 +161,8 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
+          {/* Consent Mode v2 defaults: first in <head> so they precede every Google tag. */}
+          <script id="consent-defaults" dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS_SCRIPT }} />
           <link rel="preconnect" href="https://ik.imagekit.io" />
           <link rel="dns-prefetch" href="https://ik.imagekit.io" />
           <meta property="og:image" content="https://www.wallpaperz.in/theimage.png" />

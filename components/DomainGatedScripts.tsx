@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Script from "next/script"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import { useUser } from "@clerk/nextjs"
 import { isAdFreePlan } from "@/lib/pricing"
+import { CONSENT_REGIONS, COUNTRY_COOKIE } from "@/lib/consent"
 
 // Hostname allowlist: the repo is public and gets cloned/redeployed by others.
 // Gating ad/analytics scripts on our hostnames means a clone's deployment never
@@ -25,6 +25,10 @@ const ADSENSE_ID = process.env.NEXT_PUBLIC_ADSENSE_ID || "ca-pub-981296338390808
 // unless Clerk's session cookie says someone is signed in (could be Pro).
 const CLERK_WAIT_MS = 4000
 
+const CLARITY_ID = "q9tt7wi9dk"
+// Poll for Google's CMP every 500ms for up to 30s (AdSense itself may wait for Clerk).
+const TCF_WAIT_TRIES = 60
+
 function hasClerkSession() {
   const m = document.cookie.match(/(?:^|;\s*)__client_uat(?:_[^=]+)?=([^;]*)/)
   return !!m && m[1] !== "0" && m[1] !== ""
@@ -41,6 +45,59 @@ function addScript(attrs: Record<string, string>) {
   for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v)
   s.async = true
   document.head.appendChild(s)
+}
+
+type TcfData = { eventStatus?: string; gdprApplies?: boolean; purpose?: { consents?: Record<string, boolean> } }
+type TcfApi = (cmd: string, version: number, cb: (data: TcfData, success: boolean) => void) => void
+type ClarityFn = ((...args: unknown[]) => void) & { q?: unknown[] }
+
+function inConsentRegion() {
+  const m = document.cookie.match(new RegExp(`(?:^|;\\s*)${COUNTRY_COOKIE}=([A-Z0-9]{2})`))
+  if (m && m[1] !== "XX" && m[1] !== "T1") return CONSENT_REGIONS.includes(m[1])
+  // No usable edge hint (local dev, Tor, cookie blocked): guess from the time
+  // zone, erring towards asking for consent.
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""
+    return /^(Europe|Arctic)\//.test(tz) || /^Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe)$/.test(tz) || tz === "UTC" || tz.startsWith("Etc/")
+  } catch {
+    return true
+  }
+}
+
+function loadClarity() {
+  const w = window as unknown as { clarity?: ClarityFn }
+  if (!w.clarity) {
+    const fn: ClarityFn = (...args: unknown[]) => { (fn.q = fn.q || []).push(args) }
+    w.clarity = fn
+  }
+  addScript({ src: `https://www.clarity.ms/tag/${CLARITY_ID}` })
+  return w.clarity!
+}
+
+// Google's CMP exposes the TCF API once it loads (it's pulled in by the AdSense
+// script). Purpose 1 (store/access information on a device) gates Clarity.
+// No CMP within the wait (Pro member, blocker) means no Clarity.
+function onTcfAnalyticsConsent(onChange: (granted: boolean) => void) {
+  let tries = 0
+  let timer: ReturnType<typeof setTimeout>
+  let active = true
+  const attach = () => {
+    const tcf = (window as unknown as { __tcfapi?: TcfApi }).__tcfapi
+    if (!tcf) {
+      if (++tries < TCF_WAIT_TRIES) timer = setTimeout(attach, 500)
+      return
+    }
+    tcf("addEventListener", 2, (data, success) => {
+      if (!active || !success) return
+      if (data.eventStatus !== "tcloaded" && data.eventStatus !== "useractioncomplete") return
+      onChange(data.gdprApplies === false || !!data.purpose?.consents?.[1])
+    })
+  }
+  attach()
+  return () => {
+    active = false
+    clearTimeout(timer)
+  }
 }
 
 export default function DomainGatedScripts() {
@@ -63,8 +120,24 @@ export default function DomainGatedScripts() {
       defer: "",
     })
 
+    // Microsoft Clarity: straight away outside consent regions; inside them only
+    // after the CMP reports consent, and consent withdrawal is passed on.
+    let stopTcf = () => {}
+    if (!inConsentRegion()) {
+      loadClarity()
+    } else {
+      stopTcf = onTcfAnalyticsConsent((granted) => {
+        const w = window as unknown as { clarity?: ClarityFn }
+        if (granted) loadClarity()("consent")
+        else w.clarity?.("consent", false)
+      })
+    }
+
     const t = setTimeout(() => setClerkWaitOver(!hasClerkSession()), CLERK_WAIT_MS)
-    return () => clearTimeout(t)
+    return () => {
+      clearTimeout(t)
+      stopTcf()
+    }
   }, [])
 
   // AdSense Auto ads: loading this script is all that's needed (no manual units).
@@ -86,18 +159,6 @@ export default function DomainGatedScripts() {
 
   if (!allowed) return null
 
-  return (
-    <>
-      <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
-      <Script strategy="afterInteractive" id="microsoft-clarity">
-        {`
-          (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "q9tt7wi9dk");
-        `}
-      </Script>
-    </>
-  )
+  // GA4 honours the Consent Mode defaults set in the layout <head>.
+  return <GoogleAnalytics gaId="G-FY8FQN2G9Z" />
 }

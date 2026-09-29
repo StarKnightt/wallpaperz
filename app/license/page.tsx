@@ -1,144 +1,109 @@
-"use client"
-import { motion } from "framer-motion"
-import Image from "next/image"
+import type { Metadata } from "next"
 import Link from "next/link"
+import LegalPage, { LegalSection, Mail } from "@/components/legal/LegalPage"
+
+export const metadata: Metadata = {
+  title: "Wallpaper License",
+  description:
+    "What you can and cannot do with wallpapers downloaded from Wallpaperz: free personal use, attribution, redistribution, commercial use and premium packs explained.",
+  alternates: { canonical: "/license" },
+  openGraph: { url: "https://www.wallpaperz.in/license", title: "Wallpaper License | Wallpaperz" },
+}
+
+const sources = [
+  { name: "Pexels", url: "https://www.pexels.com/license/" },
+  { name: "Pixabay", url: "https://pixabay.com/service/license-summary/" },
+  { name: "Unsplash", url: "https://unsplash.com/license" },
+]
 
 export default function LicensePage() {
-  const platformLicenses = [
-    {
-      name: "Pexels",
-      url: "https://www.pexels.com/license/",
-      description: "Free to use, no attribution required"
-    },
-    {
-      name: "Pixabay",
-      url: "https://pixabay.com/service/license/",
-      description: "Free for commercial use, no attribution required"
-    },
-    {
-      name: "Unsplash",
-      url: "https://unsplash.com/license",
-      description: "Free to use, attribution appreciated"
-    }
-  ]
-
   return (
-    <div className="min-h-screen">
-      <div className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-background" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="container mx-auto px-4 relative z-10"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
-            License Information
-          </h1>
-          <div className="flex justify-center mb-8">
-            <Link 
-              href="https://creativecommons.org/licenses/by-sa/4.0/"
-              target="_blank"
-              rel="license noopener noreferrer"
-            >
-              <Image
-                src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
-                alt="Creative Commons License"
-                width={88}
-                height={31}
-                className="dark:brightness-200"
-                unoptimized
-              />
-            </Link>
-          </div>
-        </motion.div>
-      </div>
+    <LegalPage title="Wallpaper License" intro="Free for personal use. Here's exactly what that covers.">
+      <LegalSection id="allowed" title="You can">
+        <ul>
+          <li>Download any wallpaper for free, without an account.</li>
+          <li>Use it as a wallpaper, lock screen or background on your own phones, tablets, computers and TVs.</li>
+          <li>Crop, resize or edit it for your own personal use.</li>
+          <li>
+            Share links to wallpaper pages, or embed a wallpaper on your blog or social post using the credit snippet
+            on its page.
+          </li>
+        </ul>
+      </LegalSection>
 
-      <div className="container mx-auto px-4 py-16 max-w-4xl space-y-12">
-        {/* Platform Licenses */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-primary/5 rounded-2xl p-8"
-        >
-          <h2 className="text-2xl font-bold mb-6">Image Sources & Licenses</h2>
-          <div className="grid gap-6">
-            {platformLicenses.map((platform) => (
-              <div key={platform.name} className="p-4 bg-background/50 rounded-lg backdrop-blur-sm">
-                <h3 className="font-semibold text-lg mb-2">{platform.name}</h3>
-                <p className="text-muted-foreground mb-3">{platform.description}</p>
-                <Link 
-                  href={platform.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline inline-flex items-center"
-                >
-                  View License Terms
-                </Link>
-              </div>
-            ))}
-          </div>
-        </motion.section>
+      <LegalSection id="not-allowed" title="You can't">
+        <ul>
+          <li>Sell, license or give away the wallpapers, on their own or bundled into wallpaper packs.</li>
+          <li>Publish them in wallpaper apps, themes, websites or stock collections.</li>
+          <li>Use them on merchandise or in print-on-demand products, or turn them into NFTs.</li>
+          <li>Claim you created them, or remove credits or watermarks.</li>
+          <li>Bulk download or scrape the site, or use the wallpapers to train AI models.</li>
+          <li>Use them in ways that suggest a person or brand endorses you.</li>
+        </ul>
+        <p>
+          Want to use a wallpaper commercially (for example in an ad, product or video)? Email <Mail /> and tell us
+          which one and how. We&apos;ll let you know if that&apos;s possible.
+        </p>
+      </LegalSection>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-primary/5 rounded-2xl p-8"
-        >
-          <h2 className="text-2xl font-bold mb-6">License Terms</h2>
-          <div className="prose prose-lg dark:prose-invert">
-            <p>
-              This work is licensed under a{' '}
-              <Link 
-                href="https://creativecommons.org/licenses/by-sa/4.0/"
-                target="_blank"
-                rel="license noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Creative Commons Attribution-ShareAlike 4.0 International License
-              </Link>.
-            </p>
-            <p>Under this license, you are free to:</p>
-            <ul>
-              <li>Share — copy and redistribute the material in any medium or format</li>
-              <li>Adapt — remix, transform, and build upon the material for any purpose</li>
-            </ul>
-            <p>Under the following terms:</p>
-            <ul>
-              <li>
-                <strong>Attribution</strong> — You must give appropriate credit to Wallpaperz 
-                and original creators, provide a link to the license, and indicate if changes were made.
-              </li>
-              <li>
-                <strong>ShareAlike</strong> — If you remix, transform, or build upon the material, 
-                you must distribute your contributions under the same license as the original.
-              </li>
-            </ul>
-          </div>
-        </motion.section>
+      <LegalSection id="attribution" title="Attribution">
+        <p>
+          Credit isn&apos;t required for personal use, but it&apos;s always appreciated. When you post a wallpaper
+          online, use the snippet on its page or a line like: <em>Wallpaper from Wallpaperz (wallpaperz.in)</em>.
+        </p>
+      </LegalSection>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-primary/5 rounded-2xl p-8"
-        >
-          <h2 className="text-2xl font-bold mb-6">Image Sources</h2>
-          <div className="prose prose-lg dark:prose-invert">
-            <p>Our wallpapers are sourced from:</p>
-            <ul>
-              <li>Pexels (under the Pexels License)</li>
-              <li>Pixabay (under the Pixabay License)</li>
-              <li>Unsplash (under the Unsplash License)</li>
-            </ul>
-            <p>
-              Individual images may have specific attribution requirements. Please check the 
-              download information for each wallpaper for detailed licensing information.
-            </p>
-          </div>
-        </motion.section>
-      </div>
-    </div>
+      <LegalSection id="sources" title="AI-generated and third-party images">
+        <p>
+          Many wallpapers are AI-generated (see <Link href="/ai-transparency">AI Transparency</Link>). Some come from
+          free image platforms, shown as the &ldquo;Source&rdquo; on the wallpaper page. For those, the original
+          platform&apos;s license and the photographer&apos;s rights also apply, and we can&apos;t grant you more rights
+          than we have:
+        </p>
+        <ul>
+          {sources.map((s) => (
+            <li key={s.name}>
+              <a href={s.url} target="_blank" rel="noopener noreferrer">
+                {s.name} license
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p>
+          Logos, brands, characters and real people that may appear in images remain the property of their owners.
+          If you believe a wallpaper infringes your rights, see the{" "}
+          <Link href="/terms#copyright">copyright complaint process</Link>.
+        </p>
+      </LegalSection>
+
+      <LegalSection id="generated" title="Images you generate">
+        <p>
+          Images you create with the <Link href="/ai-generate">AI generator</Link> aren&apos;t covered by this license.
+          You may use them for personal and commercial purposes, as described in the{" "}
+          <Link href="/terms#ai-outputs">Terms of Service</Link>.
+        </p>
+      </LegalSection>
+
+      <LegalSection id="packs" title="Premium packs">
+        <p>
+          Premium wallpaper packs sold on our{" "}
+          <a href="https://prasenjitt.gumroad.com" target="_blank" rel="noopener noreferrer">
+            Gumroad store
+          </a>{" "}
+          come with a personal-use license: use them on your own devices, but don&apos;t share, resell or redistribute
+          the files.
+        </p>
+      </LegalSection>
+
+      <LegalSection id="code" title="Source code">
+        <p>
+          This license covers images. The website&apos;s source code is open source and published separately on{" "}
+          <a href="https://github.com/StarKnightt/wallpaperz" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>{" "}
+          under the license in that repository, which doesn&apos;t apply to the wallpapers.
+        </p>
+      </LegalSection>
+    </LegalPage>
   )
 }
