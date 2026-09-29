@@ -173,7 +173,10 @@ export default function RootLayout({
               The ad-serving script is injected client-side by DomainGatedScripts. */}
           <meta name="google-adsense-account" content={adsenseId} />
         </head>
-        <body className={inter.className}>
+        {/* The flex column lives on <body> (not a wrapper div) because AdSense Auto Ads
+            appends its placements as direct <body> children; Footer is order-last so those
+            render above it instead of leaving a blank block below the footer. */}
+        <body className={`${inter.className} min-h-screen flex flex-col relative pb-16 lg:pb-0`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -182,14 +185,12 @@ export default function RootLayout({
           >
             <SearchProvider>
               <ScrollProgress />
-              <div className="min-h-screen flex flex-col relative pb-16 lg:pb-0">
-                <Header />
-                <main className="flex-grow w-full max-w-[1920px] mx-auto">
-                  {children}
-                </main>
-                <Footer />
-                <BottomNav />
-              </div>
+              <Header />
+              <main className="flex-grow w-full max-w-[1920px] mx-auto">
+                {children}
+              </main>
+              <Footer />
+              <BottomNav />
               <InstallPrompt />
               <PwaRegister />
               <Toaster position="bottom-right" />
