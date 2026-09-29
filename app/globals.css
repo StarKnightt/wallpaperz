@@ -298,6 +298,16 @@ body {
   100% { filter: blur(0) saturate(1) contrast(1); transform: scale(1); opacity: 1; }
 }
 
+/* AI generator (components/ai/NoiseField.tsx) */
+@keyframes wz-drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(18%, 12%, 0) scale(1.15); }
+}
+@keyframes wz-drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to { transform: translate3d(-20%, -10%, 0) scale(0.95); }
+}
+
 @keyframes screen-reveal {
   from { clip-path: inset(100% 0 0 0); transform: scale(1.08); }
   to { clip-path: inset(0 0 0 0); transform: scale(1); }

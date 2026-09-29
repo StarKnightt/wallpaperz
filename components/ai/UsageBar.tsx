@@ -1,48 +1,33 @@
 "use client"
 
 import Link from "next/link"
-import { Coins, Crown, Infinity as InfinityIcon, Sparkles } from "lucide-react"
 import type { Entitlements } from "@/lib/pricing"
 
-function Pill({ children }: { children: React.ReactNode }) {
+function Stat({ value, label }: { value: React.ReactNode; label: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md sm:text-sm">
-      {children}
+    <span className="whitespace-nowrap">
+      <span className="font-medium tabular-nums text-foreground">{value}</span> {label}
     </span>
   )
 }
 
 export default function UsageBar({ entitlements }: { entitlements: Entitlements | null }) {
-  if (!entitlements) return <div className="h-7" aria-hidden />
+  if (!entitlements) {
+    return <div className="h-5 w-56 animate-pulse rounded bg-muted" aria-hidden />
+  }
   const { plan, free, pro, credits } = entitlements
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
       {plan !== "free" && (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-3 py-1 text-xs font-semibold text-white shadow-sm sm:text-sm">
-          {plan === "lifetime" ? <InfinityIcon className="h-3.5 w-3.5" /> : <Crown className="h-3.5 w-3.5" />}
-          {plan === "lifetime" ? "Lifetime" : "Pro"}
-        </span>
+        <span className="font-medium text-violet-600 dark:text-violet-400">{plan === "lifetime" ? "Lifetime" : "Pro"}</span>
       )}
-      <Pill>
-        <Sparkles className="h-3.5 w-3.5 text-fuchsia-500" />
-        <span className="tabular-nums">{free.remaining}</span> of {free.limit} free left today
-      </Pill>
-      {pro && (
-        <Pill>
-          <Crown className="h-3.5 w-3.5 text-violet-500" />
-          <span className="tabular-nums">{pro.remaining}</span> of {pro.limit} Pro left this month
-        </Pill>
-      )}
-      {(credits > 0 || plan === "free") && (
-        <Pill>
-          <Coins className="h-3.5 w-3.5 text-amber-500" />
-          <span className="tabular-nums">{credits}</span> {credits === 1 ? "credit" : "credits"}
-        </Pill>
-      )}
+      <Stat value={`${free.remaining}/${free.limit}`} label="free today" />
+      {pro && <Stat value={`${pro.remaining}/${pro.limit}`} label="Pro this month" />}
+      {(credits > 0 || plan === "free") && <Stat value={credits} label={credits === 1 ? "credit" : "credits"} />}
       {plan === "free" && (
-        <Link href="/pricing" className="text-xs font-medium text-fuchsia-500 hover:underline sm:text-sm">
-          Get more &rarr;
+        <Link href="/pricing" className="font-medium text-foreground underline-offset-4 hover:underline">
+          Get more
         </Link>
       )}
     </div>

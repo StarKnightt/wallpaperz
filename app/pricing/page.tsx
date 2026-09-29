@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Wand2 } from "lucide-react"
+import { Check, Minus } from "lucide-react"
 import PricingPlans from "@/components/pricing/PricingPlans"
+import { cn } from "@/lib/utils"
 import { FREE_PER_DAY, PLANS, PRO_PER_MONTH } from "@/lib/pricing"
 
 export const metadata: Metadata = {
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
   },
 }
 
-const FAQ = [
+const link = "font-medium text-violet-600 underline-offset-4 hover:underline dark:text-violet-400"
+
+const FAQ: { q: string; a: string; body?: React.ReactNode }[] = [
   {
     q: "What counts as a generation?",
     a: "Each wallpaper you generate uses one. If the AI fails to return an image, nothing is used: free generations and credits are refunded automatically.",
@@ -37,13 +40,41 @@ const FAQ = [
   },
   {
     q: "Can I get a refund?",
-    a: "Unused credit packs can be refunded within 7 days: just email contact@wallpaperz.in. Used credits aren't refundable. Pro can be cancelled anytime and stays active until the end of the period, with no partial-period refunds.",
+    a: "Unused credit packs can be refunded within 7 days of purchase. A first Pro or Lifetime purchase can be refunded within 7 days if you've made fewer than 20 AI generations with it. Used credits, renewals and partial periods aren't refundable. Cancelling Pro keeps it active until the period ends. Full details are in our Refund Policy and Terms.",
+    body: (
+      <>
+        Unused credit packs can be refunded within 7 days of purchase. A first Pro or Lifetime purchase can be
+        refunded within 7 days if you&apos;ve made fewer than 20 AI generations with it. Used credits, renewals and
+        partial periods aren&apos;t refundable. Cancelling Pro keeps it active until the period ends. Full details are
+        in our{" "}
+        <Link href="/refund-policy" className={link}>Refund Policy</Link> and{" "}
+        <Link href="/terms" className={link}>Terms</Link>.
+      </>
+    ),
   },
   {
     q: "Who processes payments?",
     a: "Payments are handled securely by Dodo Payments, our merchant of record. We never see or store your card details. For billing questions or refunds, contact us.",
   },
 ]
+
+type Cell = string | boolean
+const COMPARE: { label: string; cells: [Cell, Cell, Cell, Cell] }[] = [
+  { label: "AI wallpapers", cells: [`${FREE_PER_DAY} a day`, `${FREE_PER_DAY} a day + your pack`, `${FREE_PER_DAY} a day + ${PRO_PER_MONTH} a month`, `${FREE_PER_DAY} a day + ${PRO_PER_MONTH} a month`] },
+  { label: "Output", cells: ["1344 × 768 PNG", "1344 × 768 PNG", "1344 × 768 PNG", "1344 × 768 PNG"] },
+  { label: "Works when free generations pause", cells: [false, true, true, true] },
+  { label: "Ad-free site", cells: [false, false, true, true] },
+  { label: "Payment", cells: ["None", "One-time", "Monthly or yearly", "One-time"] },
+  { label: "Expires", cells: ["Resets daily", "Never", "When you cancel", "Never"] },
+]
+const COLUMNS = ["Free", "Credits", "Pro", "Lifetime"]
+const proCol = "bg-violet-500/[0.035] dark:bg-violet-400/[0.06]"
+
+function CompareCell({ value }: { value: Cell }) {
+  if (value === true) return <Check className="h-4 w-4 text-foreground" strokeWidth={2} aria-label="Included" />
+  if (value === false) return <Minus className="h-4 w-4 text-muted-foreground/50" aria-label="Not included" />
+  return <>{value}</>
+}
 
 export default function PricingPage() {
   const faqJsonLd = {
@@ -53,59 +84,89 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.22),transparent_70%)]" />
+    <div className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 sm:pt-16 lg:px-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      <div className="container mx-auto px-4 pb-20 pt-10 sm:pt-14">
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border bg-background/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md sm:text-sm">
-            <Wand2 className="h-3.5 w-3.5 shrink-0 text-fuchsia-500" />
-            Pricing
-          </span>
-          <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">
-            Make more wallpapers.
-            <span className="block bg-gradient-to-r from-violet-500 via-fuchsia-500 to-amber-400 bg-clip-text pb-1 text-transparent">
-              Pay only if you want to.
-            </span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground sm:text-lg">
-            {FREE_PER_DAY} free AI wallpapers every day. Top up with credits, or go Pro for {PRO_PER_MONTH} a month and an ad-free site.
+      <header className="max-w-2xl">
+        <p className="text-sm font-medium text-violet-600 dark:text-violet-400">Pricing</p>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.035em] text-foreground sm:text-5xl">
+          Free every day.
+          <span className="block text-balance text-muted-foreground">Pay when you want more.</span>
+        </h1>
+        <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
+          {FREE_PER_DAY} AI wallpapers a day cost nothing. Buy credits, go Pro, or pay once for Lifetime when you
+          want to make more.
+        </p>
+      </header>
+
+      <div className="mt-12">
+        <PricingPlans />
+      </div>
+
+      <section className="mt-24" aria-labelledby="compare">
+        <h2 id="compare" className="text-2xl font-semibold tracking-[-0.025em] text-foreground">Compare plans</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Every plan gets the same image quality. The difference is how many you can make.
+        </p>
+        <div className="-mx-4 mt-8 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+          <table className="w-full min-w-[600px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                <th scope="col" className="sticky left-0 z-10 w-[28%] min-w-[9rem] bg-background py-3 pr-4 font-normal text-muted-foreground">
+                  <span className="sr-only">Feature</span>
+                </th>
+                {COLUMNS.map((c) => (
+                  <th key={c} scope="col" className={cn("py-3 pl-3 pr-4 font-semibold text-foreground", c === "Pro" && proCol)}>{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border/60">
+              {COMPARE.map((row) => (
+                <tr key={row.label}>
+                  <th scope="row" className="sticky left-0 z-10 bg-background py-3.5 pr-4 font-normal text-muted-foreground">{row.label}</th>
+                  {row.cells.map((cell, i) => (
+                    <td key={i} className={cn("py-3.5 pl-3 pr-4 tabular-nums text-foreground", COLUMNS[i] === "Pro" && proCol)}>
+                      <CompareCell value={cell} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="mt-24 grid gap-10 lg:grid-cols-12" aria-labelledby="faq">
+        <div className="lg:col-span-4">
+          <h2 id="faq" className="text-2xl font-semibold tracking-[-0.025em] text-foreground">Questions</h2>
+          <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+            Something else?{" "}
+            <Link href="/contact" className={link}>Ask us</Link>, or{" "}
+            <Link href="/ai-generate" className={link}>try the generator free</Link>.
           </p>
         </div>
-
-        <div className="mx-auto mt-10 max-w-6xl">
-          <PricingPlans />
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            Prices in USD. Taxes may apply at checkout. The wallpaper library stays free for everyone.
-          </p>
+        <div className="divide-y divide-border/70 border-y border-border/70 lg:col-span-8">
+          {FAQ.map(({ q, a, body }) => (
+            <details key={q} className="group [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-4 text-[15px] font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60">
+                {q}
+                <span
+                  className="relative h-3 w-3 shrink-0 text-muted-foreground before:absolute before:inset-x-0 before:top-1/2 before:h-px before:-translate-y-1/2 before:bg-current after:absolute after:inset-y-0 after:left-1/2 after:w-px after:-translate-x-1/2 after:bg-current after:transition-transform after:duration-200 group-open:after:scale-y-0"
+                  aria-hidden
+                />
+              </summary>
+              <p className="max-w-2xl pb-5 text-sm leading-relaxed text-muted-foreground">{body ?? a}</p>
+            </details>
+          ))}
         </div>
+      </section>
 
-        <section className="mx-auto mt-20 max-w-3xl">
-          <h2 className="text-center text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">Questions</h2>
-          <div className="mt-6 divide-y rounded-2xl border bg-card/60 backdrop-blur-sm">
-            {FAQ.map(({ q, a }) => (
-              <details key={q} className="group px-5 py-4 [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
-                  {q}
-                  <span className="text-muted-foreground transition-transform group-open:rotate-45" aria-hidden>+</span>
-                </summary>
-                <p className="mt-2 text-sm text-muted-foreground">{a}</p>
-              </details>
-            ))}
-          </div>
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Still unsure?{" "}
-            <Link href="/ai-generate" className="font-medium text-fuchsia-500 hover:underline">
-              Try the generator free
-            </Link>{" "}
-            or{" "}
-            <Link href="/contact" className="font-medium text-fuchsia-500 hover:underline">
-              ask us anything
-            </Link>
-            .
-          </p>
-        </section>
+      <div className="mt-20 flex flex-col gap-2 border-t border-border/70 pt-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <p>
+          Want offline sets? Every device size in one download.{" "}
+          <Link href="/packs" className={link}>See Wallpaper Packs →</Link>
+        </p>
+        <p className="text-xs">Prices in USD. Taxes may apply at checkout. The library stays free for everyone.</p>
       </div>
     </div>
   )
