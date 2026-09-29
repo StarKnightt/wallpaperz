@@ -37,12 +37,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: baseUrl, changeFrequency: 'daily', priority: 1 },
     { url: `${baseUrl}/ai-generate`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/pricing`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/packs`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${baseUrl}/blog`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/about`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/contact`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/privacy`, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${baseUrl}/terms`, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${baseUrl}/license`, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${baseUrl}/cookies`, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${baseUrl}/refund-policy`, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${baseUrl}/ai-transparency`, changeFrequency: 'monthly', priority: 0.3 },
   ]
 
   const categoryPages: MetadataRoute.Sitemap = categories.map((slug) => ({

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ArrowUpRight } from "lucide-react"
 import { Wallpaper } from "@/types/wallpaper"
 import { PageSlice, pageHref } from "@/lib/pagination"
 import { categoryNameFromSlug, categoryNamesOf } from "@/lib/category-pages"
@@ -9,6 +9,7 @@ import PaginationHead from "@/components/PaginationHead"
 import CategoryChips from "@/components/CategoryChips"
 import { Button } from "@/components/ui/button"
 import { wallpaperPath } from "@/lib/wallpaper-url"
+import { formatUsd, packForCategory, packHref, packThumb } from "@/lib/packs"
 
 const BASE_URL = "https://www.wallpaperz.in"
 const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || "https://ik.imagekit.io/starknight"
@@ -28,6 +29,7 @@ export default function CategoryListing({ slug, slice, all }: Props) {
   const { items, page, totalPages, total } = slice
   // Redundant on /category/mobile, which is already an orientation pseudo-category
   const showDeviceFilter = slug.toLowerCase() !== "mobile"
+  const pack = packForCategory(slug)
 
   const collectionData = {
     "@context": "https://schema.org",
@@ -81,6 +83,25 @@ export default function CategoryListing({ slug, slice, all }: Props) {
       </div>
 
       <CategoryChips categories={categoryNamesOf(all)} activeSlug={slug.toLowerCase()} className="mb-6" />
+
+      {pack && total > 0 && (
+        <a
+          href={packHref(pack, "category-banner")}
+          target="_blank"
+          rel="noopener"
+          className="group mb-6 flex items-center gap-2.5 rounded-full border bg-card/60 py-1.5 pl-1.5 pr-4 text-sm transition-colors hover:border-foreground/30 sm:w-fit"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={packThumb(pack.covers[0], 96)} alt="" loading="lazy" className="h-7 w-7 shrink-0 rounded-full object-cover" />
+          <span className="min-w-0 flex-1 truncate">
+            <span className="font-medium">{pack.name} pack</span>
+            <span className="text-muted-foreground">
+              <span className="hidden sm:inline"> · {pack.count} wallpapers for phone, iPad &amp; desktop</span> · {formatUsd(pack.priceUsd)}
+            </span>
+          </span>
+          <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" aria-hidden />
+        </a>
+      )}
 
       {total === 0 ? (
         <div className="text-center py-16">

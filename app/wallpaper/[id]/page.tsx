@@ -1,12 +1,14 @@
 import { Metadata } from 'next'
 import { notFound, permanentRedirect } from 'next/navigation'
-import { getAllWallpapers, getWallpaperById, getRelatedWallpapers, getHomePageNumberFor } from '@/lib/server/wallpapers'
+import { getAllWallpapers, getWallpaperById, getRelatedWallpapers, getHomePageNumberFor, isAiGenerated } from '@/lib/server/wallpapers'
 import { pageHref } from '@/lib/pagination'
 import { getResolutionName, formatFileSize } from '@/lib/blur-placeholder'
 import { idFromSegment, wallpaperPath, wallpaperSegment } from '@/lib/wallpaper-url'
 import { devicesForWallpaper, deviceDownloadUrl } from '@/lib/devices'
 import WallpaperPageClient from './WallpaperPageClient'
 import CreditSnippet from '@/components/CreditSnippet'
+import { ArrowUpRight } from 'lucide-react'
+import { formatUsd, packForWallpaper, packHref, packThumb } from '@/lib/packs'
 
 // ISR with full build-time prerendering: every wallpaper page is generated at
 // build (one ImageKit list call, same as the sitemaps) so no visitor request
@@ -94,6 +96,8 @@ export default async function WallpaperPage(props: Props) {
   const imageUrl = wallpaper.imageUrl.startsWith('http')
     ? wallpaper.imageUrl
     : `${process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT}${wallpaper.imageUrl}`
+  const aiGenerated = isAiGenerated(wallpaper)
+  const pack = packForWallpaper(wallpaper.imageUrl, wallpaper.category)
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -108,7 +112,7 @@ export default async function WallpaperPage(props: Props) {
     isAccessibleForFree: true,
     license: "https://www.wallpaperz.in/license",
     acquireLicensePage: pageUrl,
-    creditText: "Wallpaperz",
+    creditText: aiGenerated ? "Wallpaperz (created with AI)" : "Wallpaperz",
     copyrightNotice: "Wallpaperz",
     creator: { "@type": "Organization", name: "Wallpaperz", url: "https://www.wallpaperz.in" },
   }
@@ -181,6 +185,14 @@ export default async function WallpaperPage(props: Props) {
                     <span className="font-medium">{formatFileSize(wallpaper.fileSize)}</span>
                   </>
                 )}
+                {aiGenerated && (
+                  <>
+                    <span className="text-muted-foreground">Origin</span>
+                    <a href="/ai-transparency" className="font-medium hover:text-primary">
+                      Created with AI
+                    </a>
+                  </>
+                )}
                 {wallpaper.source && wallpaper.source !== 'imagekit' && (
                   <>
                     <span className="text-muted-foreground">Source</span>
@@ -216,6 +228,33 @@ export default async function WallpaperPage(props: Props) {
                   All devices and sizes &rarr;
                 </a>
               </div>
+            )}
+
+            {pack && (
+              <a
+                href={packHref(pack, 'wallpaper-page')}
+                target="_blank"
+                rel="noopener"
+                className="group flex items-center gap-3 rounded-lg border p-3 text-sm transition-colors hover:border-foreground/30"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={packThumb(pack.covers[0], 160)}
+                  alt=""
+                  loading="lazy"
+                  className="h-11 w-11 shrink-0 rounded-md object-cover"
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block font-medium">Part of the {pack.name} pack</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {pack.count} wallpapers · phone, iPad &amp; desktop
+                  </span>
+                </span>
+                <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium tabular-nums text-muted-foreground transition-colors group-hover:text-foreground">
+                  {formatUsd(pack.priceUsd)}
+                  <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+                </span>
+              </a>
             )}
 
             <CreditSnippet title={wallpaper.title} pageUrl={pageUrl} imageUrl={imageUrl} />

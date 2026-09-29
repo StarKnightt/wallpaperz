@@ -5,6 +5,17 @@ import { Facebook, Twitter, Instagram, Github, Coffee, Globe, ExternalLink } fro
 import ComingSoonModal from "./ComingSoonModal"
 import { useState } from "react"
 
+type GoogleFc = { callbackQueue?: unknown[]; showRevocationMessage?: () => void }
+
+// Reopens Google's CMP consent message where it runs (EU/EEA/UK/CH); elsewhere
+// the link falls through to the cookie policy's "Managing cookies" section.
+function openPrivacySettings(e: React.MouseEvent<HTMLAnchorElement>) {
+  const w = window as unknown as { googlefc?: GoogleFc; __tcfapi?: unknown }
+  if (!w.__tcfapi || !w.googlefc?.callbackQueue) return
+  e.preventDefault()
+  w.googlefc.callbackQueue.push(() => w.googlefc?.showRevocationMessage?.())
+}
+
 export default function Footer() {
   const [showComingSoon, setShowComingSoon] = useState(false)
   const [comingSoonFeature, setComingSoonFeature] = useState("")
@@ -61,6 +72,11 @@ export default function Footer() {
               <li>
                 <Link href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
                   Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/packs" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Wallpaper Packs
                 </Link>
               </li>
               <li>
@@ -159,10 +175,28 @@ export default function Footer() {
                   Privacy Policy
                 </Link>
               </li>
+              {[
+                ['/cookies', 'Cookie Policy'],
+                ['/refund-policy', 'Refund Policy'],
+                ['/license', 'Wallpaper License'],
+                ['/ai-transparency', 'AI Transparency'],
+                ['/terms#copyright', 'Copyright / DMCA'],
+                ['/privacy#your-choices', 'Do Not Sell or Share My Personal Information'],
+              ].map(([href, label]) => (
+                <li key={href}>
+                  <Link href={href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {label}
+                  </Link>
+                </li>
+              ))}
               <li>
-                <Link href="/license" className="text-muted-foreground hover:text-foreground transition-colors">
-                  License
-                </Link>
+                <a
+                  href="/cookies#manage"
+                  onClick={openPrivacySettings}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Privacy &amp; cookie settings
+                </a>
               </li>
             </ul>
           </div>
