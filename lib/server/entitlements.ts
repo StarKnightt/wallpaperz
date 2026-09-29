@@ -61,11 +61,32 @@ export function addCreditsStmt(db: D1Like, userId: string, amount: number, now =
     .bind(userId, amount, now)
 }
 
-export async function removeCredits(db: D1Like, userId: string, amount: number, now = Date.now()) {
-  await db
+/** Takes back up to `amount` credits; never below zero (spent credits aren't clawed back). */
+export function removeCreditsStmt(db: D1Like, userId: string, amount: number, now = Date.now()) {
+  return db
     .prepare('UPDATE user_credits SET balance = MAX(balance - ?, 0), updated_at = ? WHERE user_id = ?')
     .bind(amount, now, userId)
-    .run()
+}
+
+// ---- Dodo customers --------------------------------------------------------
+
+export function upsertCustomerStmt(db: D1Like, userId: string, dodoCustomerId: string, now = Date.now()) {
+  return db
+    .prepare(
+      `INSERT INTO customers (user_id, dodo_customer_id, updated_at) VALUES (?, ?, ?)
+       ON CONFLICT(user_id) DO UPDATE SET dodo_customer_id = excluded.dodo_customer_id, updated_at = excluded.updated_at`
+    )
+    .bind(userId, dodoCustomerId, now)
+}
+
+/** Latest Dodo customer for the user (any purchase), falling back to the subscription row. */
+export async function getDodoCustomerId(db: D1Like, userId: string): Promise<string | null> {
+  const row = await db
+    .prepare('SELECT dodo_customer_id FROM customers WHERE user_id = ?')
+    .bind(userId)
+    .first<{ dodo_customer_id: string }>()
+  if (row?.dodo_customer_id) return row.dodo_customer_id
+  return (await getSubscription(db, userId))?.dodo_customer_id ?? null
 }
 
 /** Atomically spends one credit; false when the balance is empty. */
@@ -81,16 +102,23 @@ export async function consumeCredit(db: D1Like, userId: string, now = Date.now()
 
 /**
  * Grants or renews Pro. Never overwrites an active lifetime row with a
- * subscription; lifetime grants always win.
+ * subscription; lifetime grants always win. A `revoked` row (refund / lost
+ * dispute) is terminal for its Dodo subscription: later events for that same
+ * subscription can't bring it back.
  */
-export async function activatePlan(
+export function activatePlanStmt(
   db: D1Like,
   row: Omit<SubscriptionRow, 'updated_at' | 'status'> & { status?: SubStatus },
   now = Date.now()
 ) {
   const status = row.status ?? 'active'
-  const guard = row.plan === 'lifetime' ? '' : `WHERE NOT (subscriptions.plan = 'lifetime' AND subscriptions.status = 'active')`
-  await db
+  const guard =
+    row.plan === 'lifetime'
+      ? ''
+      : `WHERE NOT (subscriptions.plan = 'lifetime' AND subscriptions.status = 'active')
+           AND NOT (subscriptions.status = 'revoked' AND excluded.dodo_subscription_id IS NOT NULL
+                    AND subscriptions.dodo_subscription_id = excluded.dodo_subscription_id)`
+  return db
     .prepare(
       `INSERT INTO subscriptions (user_id, plan, status, current_period_end, dodo_subscription_id, dodo_customer_id, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -112,13 +140,16 @@ export async function activatePlan(
       row.dodo_customer_id,
       now
     )
-    .run()
+}
+
+export async function activatePlan(db: D1Like, row: Parameters<typeof activatePlanStmt>[1], now = Date.now()) {
+  await activatePlanStmt(db, row, now).run()
 }
 
 /**
  * Moves a subscription to a non-active status. Only touches the row when it
  * still belongs to that Dodo subscription, so events for an old subscription
- * can't revoke a newer one (or a lifetime grant).
+ * can't revoke a newer one (or a lifetime grant). A revoked row stays revoked.
  */
 export async function setSubscriptionStatus(
   db: D1Like,
@@ -131,7 +162,7 @@ export async function setSubscriptionStatus(
   await db
     .prepare(
       `UPDATE subscriptions SET status = ?, current_period_end = COALESCE(?, current_period_end), updated_at = ?
-       WHERE user_id = ? AND dodo_subscription_id = ? AND plan != 'lifetime'`
+       WHERE user_id = ? AND dodo_subscription_id = ? AND plan != 'lifetime' AND status != 'revoked'`
     )
     .bind(status, periodEnd, now, userId, dodoSubscriptionId)
     .run()

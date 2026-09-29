@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { Check, Coins, Crown, Infinity as InfinityIcon, Loader2, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useCheckout } from "@/lib/hooks/useCheckout"
+import { useEntitlements } from "@/lib/hooks/useEntitlements"
 import { FREE_PER_DAY, PLANS, PRO_PER_MONTH, isAdFreePlan, isPlanKey, type PlanKey } from "@/lib/pricing"
 
 type Billing = "monthly" | "yearly"
@@ -35,7 +36,7 @@ function Segmented<T extends string>({ value, onChange, options, label }: {
   label: string
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-full border bg-muted/50 p-1 text-sm">
+    <div role="radiogroup" aria-label={label} className="inline-flex rounded-full border bg-muted dark:bg-muted/50 p-1 text-sm">
       {options.map((o) => (
         <button
           key={o.value}
@@ -58,26 +59,41 @@ function Segmented<T extends string>({ value, onChange, options, label }: {
 export default function PricingPlans() {
   const { isSignedIn, isLoaded } = useAuth()
   const { user } = useUser()
-  const { checkout, pending } = useCheckout()
+  const { checkout, pending, failed } = useCheckout()
   const [billing, setBilling] = useState<Billing>("yearly")
   const [pack, setPack] = useState<Pack>("credits_150")
+  const [discountCode, setDiscountCode] = useState<string | undefined>()
   const resumed = useRef(false)
+  const { entitlements } = useEntitlements(!!isSignedIn)
 
   const currentPlan = user?.publicMetadata?.plan
   const hasPro = isAdFreePlan(currentPlan)
   const hasLifetime = currentPlan === "lifetime"
 
-  // Resume a checkout started before sign-in (/pricing?plan=...), and surface return states.
+  // The entitlements call repairs a stale publicMetadata.plan server-side; reload to pick it up.
+  const planReloaded = useRef(false)
+  useEffect(() => {
+    if (!entitlements || !user || planReloaded.current) return
+    const actual = entitlements.plan === "free" ? "" : entitlements.plan
+    if (actual !== (typeof currentPlan === "string" ? currentPlan : "")) {
+      planReloaded.current = true
+      user.reload().catch(() => {})
+    }
+  }, [entitlements, user, currentPlan])
+
+  // Resume a checkout started before sign-in (/pricing?plan=...), pick up ?code=, and surface return states.
   useEffect(() => {
     if (!isLoaded || resumed.current) return
     resumed.current = true
     const params = new URLSearchParams(window.location.search)
     const plan = params.get("plan")
+    const code = params.get("code")?.trim() || undefined
+    if (code) setDiscountCode(code)
     if (params.get("cancelled")) toast("Checkout cancelled. No charge was made.")
-    if (params.get("billing") === "none") toast("No active subscription found for this account.")
+    if (params.get("billing") === "none") toast("No purchases found for this account yet.")
     if (params.get("billing") === "error") toast.error("Couldn't open billing right now. Please try again.")
     if (params.toString()) window.history.replaceState(null, "", window.location.pathname)
-    if (isSignedIn && isPlanKey(plan)) checkout(plan)
+    if (isSignedIn && isPlanKey(plan)) checkout(plan, code)
   }, [isLoaded, isSignedIn, checkout])
 
   const proPlan: PlanKey = billing === "yearly" ? "pro_yearly" : "pro_monthly"
@@ -88,14 +104,14 @@ export default function PricingPlans() {
     <button
       type="button"
       disabled={disabled || pending !== null}
-      onClick={() => checkout(plan)}
+      onClick={() => checkout(plan, discountCode)}
       className={cn(
         "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-60",
         className
       )}
     >
       {pending === plan && <Loader2 className="h-4 w-4 animate-spin" />}
-      {label}
+      {failed === plan && pending === null ? "Try again" : label}
     </button>
   )
 
@@ -122,6 +138,11 @@ export default function PricingPlans() {
           ]}
         />
       </div>
+      {discountCode && (
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          Code <span className="font-mono font-medium text-foreground">{discountCode}</span> will be applied at checkout.
+        </p>
+      )}
 
       <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         {/* Free */}
@@ -261,6 +282,14 @@ export default function PricingPlans() {
           </div>
         </div>
       </div>
+      {isSignedIn && !hasPro && (
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          Bought credits before?{" "}
+          <a href="/api/billing/portal" className="underline underline-offset-2 hover:text-foreground">
+            Receipts and billing
+          </a>
+        </p>
+      )}
     </div>
   )
 }

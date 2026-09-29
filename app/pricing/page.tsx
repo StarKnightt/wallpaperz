@@ -36,6 +36,10 @@ const FAQ = [
     a: `Lifetime includes the same ${PRO_PER_MONTH} generations a month as Pro, forever, so the generator stays fast and affordable for everyone.`,
   },
   {
+    q: "Can I get a refund?",
+    a: "Unused credit packs can be refunded within 7 days: just email contact@wallpaperz.in. Used credits aren't refundable. Pro can be cancelled anytime and stays active until the end of the period, with no partial-period refunds.",
+  },
+  {
     q: "Who processes payments?",
     a: "Payments are handled securely by Dodo Payments, our merchant of record. We never see or store your card details. For billing questions or refunds, contact us.",
   },

@@ -31,16 +31,24 @@ export function creditsForPlan(plan: PlanKey): number {
   return PLANS[plan].credits ?? 0
 }
 
-async function dodoFetch(method: string, path: string, body?: unknown): Promise<Response> {
+const DODO_TIMEOUT_MS = 10_000
+
+/** Throws on network failure or after DODO_TIMEOUT_MS (TimeoutError). */
+export async function dodoFetch(method: string, path: string, body?: unknown): Promise<Response> {
   return fetch(`${apiBase()}${path}`, {
     method,
     headers: {
       Authorization: `Bearer ${process.env.DODO_PAYMENTS_API_KEY}`,
-      'Content-Type': 'application/json',
+      ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
+    signal: AbortSignal.timeout(DODO_TIMEOUT_MS),
   })
 }
+
+export const DISCOUNT_CODE_RE = /^[A-Za-z0-9_-]{3,40}$/
+
+export type CheckoutError = 'timeout' | 'invalid_discount' | 'checkout_failed'
 
 export async function createCheckoutSession(opts: {
   productId: string
@@ -50,24 +58,41 @@ export async function createCheckoutSession(opts: {
   name?: string
   returnUrl: string
   cancelUrl: string
-}): Promise<{ url: string } | { error: string; status: number }> {
-  const res = await dodoFetch('POST', '/checkouts', {
-    product_cart: [{ product_id: opts.productId, quantity: 1 }],
-    ...(opts.email ? { customer: { email: opts.email, ...(opts.name ? { name: opts.name } : {}) } } : {}),
-    return_url: opts.returnUrl,
-    cancel_url: opts.cancelUrl,
-    // Webhooks map the payment back to the Clerk user through this.
-    metadata: { clerk_user_id: opts.userId, plan: opts.plan, app: 'wallpaperz' },
-  })
+  discountCode?: string
+}): Promise<{ url: string } | { error: CheckoutError; status: number }> {
+  let res: Response
+  try {
+    res = await dodoFetch('POST', '/checkouts', {
+      product_cart: [{ product_id: opts.productId, quantity: 1 }],
+      ...(opts.email ? { customer: { email: opts.email, ...(opts.name ? { name: opts.name } : {}) } } : {}),
+      return_url: opts.returnUrl,
+      cancel_url: opts.cancelUrl,
+      // The Dodo account is shared with other apps, so codes can only come from our own server.
+      feature_flags: { allow_discount_code: false },
+      ...(opts.discountCode ? { discount_codes: [opts.discountCode] } : {}),
+      // Webhooks map the payment back to the Clerk user through this.
+      metadata: { clerk_user_id: opts.userId, plan: opts.plan, app: 'wallpaperz' },
+    })
+  } catch (err) {
+    console.error('[dodo] checkout request failed', (err as Error)?.name)
+    return { error: 'timeout', status: 504 }
+  }
   const data = (await res.json().catch(() => ({}))) as { checkout_url?: string; message?: string }
   if (res.ok && data.checkout_url) return { url: data.checkout_url }
   console.error('[dodo] checkout failed', res.status, data?.message)
+  // With a code attached, a 4xx is almost always the code (unknown, used up, or not valid for this product).
+  if (opts.discountCode && res.status >= 400 && res.status < 500) return { error: 'invalid_discount', status: res.status }
   return { error: 'checkout_failed', status: res.status }
 }
 
-/** Immediate cancel; a refund alone would leave the subscription renewing. */
+/**
+ * Immediate cancel; a refund alone would leave the subscription renewing.
+ * Throws on network errors and 5xx so the webhook is retried; 4xx (already
+ * cancelled, unknown) is only logged.
+ */
 export async function cancelSubscription(subscriptionId: string): Promise<void> {
   const res = await dodoFetch('PATCH', `/subscriptions/${encodeURIComponent(subscriptionId)}`, { status: 'cancelled' })
+  if (res.status >= 500) throw new Error(`Dodo cancel subscription failed: ${res.status}`)
   if (!res.ok) console.error('[dodo] cancel subscription failed', subscriptionId, res.status)
 }
 

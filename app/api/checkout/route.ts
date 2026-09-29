@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { isPlanKey } from '@/lib/pricing'
-import { createCheckoutSession, productForPlan } from '@/lib/server/dodo'
+import { DISCOUNT_CODE_RE, createCheckoutSession, productForPlan } from '@/lib/server/dodo'
 import { getDb } from '@/lib/server/d1'
 import { getSubscription, subscriptionGrantsPro } from '@/lib/server/entitlements'
 
@@ -13,6 +13,12 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}))
   const plan = body?.plan
   if (!isPlanKey(plan)) return NextResponse.json({ error: 'Unknown plan' }, { status: 400 })
+
+  const rawCode = typeof body?.discountCode === 'string' ? body.discountCode.trim() : ''
+  if (rawCode && !DISCOUNT_CODE_RE.test(rawCode)) {
+    return NextResponse.json({ error: "That discount code doesn't look right.", code: 'INVALID_DISCOUNT' }, { status: 400 })
+  }
+  const discountCode = rawCode || undefined
 
   const productId = productForPlan(plan)
   if (!productId || !process.env.DODO_PAYMENTS_API_KEY) {
@@ -48,8 +54,18 @@ export async function POST(req: NextRequest) {
     name,
     returnUrl: `${origin}/ai-generate?paid=1`,
     cancelUrl: `${origin}/pricing?cancelled=1`,
+    discountCode,
   })
   if ('error' in result) {
+    if (result.error === 'invalid_discount') {
+      return NextResponse.json(
+        { error: "That discount code isn't valid for this purchase, or it has already been used.", code: 'INVALID_DISCOUNT' },
+        { status: 400 }
+      )
+    }
+    if (result.error === 'timeout') {
+      return NextResponse.json({ error: 'Checkout is taking too long to respond. Please try again.' }, { status: 504 })
+    }
     return NextResponse.json({ error: 'Could not start checkout. Please try again.' }, { status: 502 })
   }
   return NextResponse.json({ url: result.url })
