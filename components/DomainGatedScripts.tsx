@@ -21,8 +21,16 @@ const ALLOWED_HOSTNAMES = [
 // against clones is the hostname gate above, not secrecy of the ID.
 const ADSENSE_ID = process.env.NEXT_PUBLIC_ADSENSE_ID || "ca-pub-9812963383908086"
 
-// If Clerk hasn't loaded by then (blocked, slow network), serve ads anyway.
+// If Clerk hasn't loaded by then (blocked, slow network), serve ads anyway,
+// unless Clerk's session cookie says someone is signed in (could be Pro).
 const CLERK_WAIT_MS = 4000
+
+function hasClerkSession() {
+  const m = document.cookie.match(/(?:^|;\s*)__client_uat(?:_[^=]+)?=([^;]*)/)
+  return !!m && m[1] !== "0" && m[1] !== ""
+}
+
+type AdsQueue = unknown[] & { pauseAdRequests?: number }
 
 // Injected by hand rather than via next/script: AdSense warns about the
 // data-nscript attribute next/script adds, and the module beacon's
@@ -55,14 +63,21 @@ export default function DomainGatedScripts() {
       defer: "",
     })
 
-    const t = setTimeout(() => setClerkWaitOver(true), CLERK_WAIT_MS)
+    const t = setTimeout(() => setClerkWaitOver(!hasClerkSession()), CLERK_WAIT_MS)
     return () => clearTimeout(t)
   }, [])
 
   // AdSense Auto ads: loading this script is all that's needed (no manual units).
   // Waits for Clerk so Pro members never load it.
   useEffect(() => {
-    if (!allowed || adFree || (!isLoaded && !clerkWaitOver)) return
+    const w = window as unknown as { adsbygoogle?: AdsQueue }
+    if (adFree) {
+      // Upgraded mid-session after the script already loaded: stop further ad requests.
+      if (w.adsbygoogle) w.adsbygoogle.pauseAdRequests = 1
+      return
+    }
+    if (!allowed || (!isLoaded && !clerkWaitOver)) return
+    if (w.adsbygoogle?.pauseAdRequests) w.adsbygoogle.pauseAdRequests = 0
     addScript({
       src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`,
       crossorigin: "anonymous",

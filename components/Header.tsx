@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, Moon, Sun, Menu, X, Github, Star } from "lucide-react"
 import { useSearch } from "@/context/SearchContext"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { FormEvent } from "react"
 import debounce from 'lodash/debounce' 
 import { UserButton, SignInButton } from "@clerk/nextjs"
@@ -31,6 +31,37 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
   const [starCount, setStarCount] = useState<number | null>(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  // The Sheet lives in the root layout and survives client navigations, so
+  // close it whenever the route changes.
+  useEffect(() => {
+    setIsMenuOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    const close = () => setIsMenuOpen(false)
+    window.addEventListener("hashchange", close)
+    return () => window.removeEventListener("hashchange", close)
+  }, [])
+
+  // Radix modals set body pointer-events:none while open; if one unmounts
+  // mid-open the style can stick and the whole page stops taking clicks.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const anyModalOpen = document.querySelector('[role="dialog"][data-state="open"], [role="alertdialog"][data-state="open"]')
+      if (!anyModalOpen && document.body.style.pointerEvents === "none") {
+        document.body.style.pointerEvents = ""
+      }
+    }, 400)
+    return () => clearTimeout(t)
+  }, [pathname, isMenuOpen])
+
+  // Any link tap inside the menu closes it, including same-page and hash links.
+  const handleMenuClick = useCallback((e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("a[href]")) setIsMenuOpen(false)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -188,14 +219,14 @@ export default function Header() {
 
         <div className="lg:hidden flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sheet>
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="mr-2">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[80%] sm:w-[350px]">
+              <SheetContent side="left" className="w-[80%] sm:w-[350px]" onClickCapture={handleMenuClick}>
                 <SheetHeader className="sr-only">
                   <SheetTitle>Navigation Menu</SheetTitle>
                   <SheetDescription>Access site navigation, GitHub link, and account settings</SheetDescription>
@@ -234,7 +265,7 @@ export default function Header() {
                           <UserButton afterSignOutUrl="/" />
                         ) : (
                           <SignInButton mode="modal" fallbackRedirectUrl="/">
-                            <Button variant="default" size="sm">
+                            <Button variant="default" size="sm" onClick={() => setIsMenuOpen(false)}>
                               Sign in
                             </Button>
                           </SignInButton>
