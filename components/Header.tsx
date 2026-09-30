@@ -164,10 +164,11 @@ export default function Header() {
               href="https://github.com/StarKnightt/wallpaperz"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Wallpaperz on GitHub"
               className="flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-sm bg-muted/50 hover:bg-muted rounded-full transition-colors"
             >
               <Github className="h-4 w-4" />
-              <span>{starCount !== null ? starCount : '...'}</span>
+              {starCount !== null && <span>{starCount}</span>}
             </Link>
           </div>
 
@@ -214,7 +215,7 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="mr-2">
+                <Button variant="ghost" size="icon" className="min-[360px]:mr-2">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>
@@ -237,7 +238,7 @@ export default function Header() {
                       href="https://github.com/StarKnightt/wallpaperz"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted rounded-md transition-colors"
+                      className="-mx-3 flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted rounded-md transition-colors"
                     >
                       <Github className="h-4 w-4" />
                       <span>GitHub</span>
@@ -290,7 +291,8 @@ export default function Header() {
               href="https://github.com/StarKnightt/wallpaperz"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-8 h-8 bg-muted/50 hover:bg-muted rounded-full transition-colors"
+              aria-label="Wallpaperz on GitHub"
+              className="hidden min-[360px]:flex items-center justify-center w-8 h-8 bg-muted/50 hover:bg-muted rounded-full transition-colors"
             >
               <Github className="h-4 w-4" />
             </Link>
@@ -312,6 +314,7 @@ export default function Header() {
                   variant="ghost" 
                   size="icon"
                   onClick={() => setIsMobileSearchOpen(false)}
+                  aria-label="Close search"
                 >
                   <X className="h-5 w-5" />
                 </Button>
@@ -321,6 +324,7 @@ export default function Header() {
                 variant="ghost" 
                 size="icon"
                 onClick={() => setIsMobileSearchOpen(true)}
+                aria-label="Search wallpapers"
               >
                 <Search className="h-5 w-5" />
               </Button>
