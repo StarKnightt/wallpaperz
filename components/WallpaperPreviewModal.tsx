@@ -31,6 +31,7 @@ export default function WallpaperPreviewModal({
   const [isLoading, setIsLoading] = useState(true)
   const [metadata, setMetadata] = useState<ImageMetadata>({})
   const [showMetadata, setShowMetadata] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   useEffect(() => {
     if (isOpen && wallpaper) {
@@ -224,9 +225,12 @@ export default function WallpaperPreviewModal({
             <Button 
               size="sm"
               className="w-full sm:w-auto"
+              disabled={isDownloading}
               onClick={async () => {
+                if (isDownloading) return
+                setIsDownloading(true)
+                const toastId = toast.loading('Preparing download...')
                 try {
-                  toast.info('Preparing download...')
                   const response = await fetch(getOriginalDownloadUrl(wallpaper.imageUrl));
                   
                   if (!response.ok) {
@@ -243,15 +247,17 @@ export default function WallpaperPreviewModal({
                   document.body.removeChild(link);
                   window.URL.revokeObjectURL(url);
                   
-                  toast.success('Wallpaper downloaded successfully!')
+                  toast.success('Wallpaper downloaded successfully!', { id: toastId })
                 } catch (error) {
                   console.error('Download failed:', error);
-                  toast.error('Failed to download wallpaper. Please try again.')
+                  toast.error('Failed to download wallpaper. Please try again.', { id: toastId })
+                } finally {
+                  setIsDownloading(false)
                 }
               }}
             >
-              <Download className="h-4 w-4 mr-2" />
-              Download
+              {isDownloading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+              {isDownloading ? 'Downloading...' : 'Download'}
             </Button>
           </div>
         </div>

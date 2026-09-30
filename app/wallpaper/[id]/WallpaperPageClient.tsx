@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Wallpaper } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
-import { Download, MonitorSmartphone, Share2, X, ZoomIn } from "lucide-react"
+import { Download, Loader2, MonitorSmartphone, Share2, X, ZoomIn } from "lucide-react"
 import ScreenPreview from "@/components/ScreenPreview"
 import Image from "next/image"
 import { toast } from "sonner"
@@ -21,11 +21,14 @@ interface Props {
 export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [isMockupOpen, setIsMockupOpen] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
   const isPortrait = !!(wallpaper.width && wallpaper.height && wallpaper.height > wallpaper.width)
 
   const handleDownload = async () => {
+    if (isDownloading) return
+    setIsDownloading(true)
+    const toastId = toast.loading("Preparing download...")
     try {
-      toast.info("Preparing download...")
       const response = await fetch(getOriginalDownloadUrl(imageUrl))
       if (!response.ok) throw new Error("Failed to fetch image")
       const blob = await response.blob()
@@ -37,9 +40,11 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
-      toast.success("Downloaded!")
+      toast.success("Downloaded!", { id: toastId })
     } catch {
-      toast.error("Download failed. Please try again.")
+      toast.error("Download failed. Please try again.", { id: toastId })
+    } finally {
+      setIsDownloading(false)
     }
   }
 
@@ -83,9 +88,9 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
       </div>
 
       <div className="flex gap-3 mt-4">
-        <Button onClick={handleDownload} className="flex-1">
-          <Download className="h-4 w-4 mr-2" />
-          Download
+        <Button onClick={handleDownload} disabled={isDownloading} className="flex-1">
+          {isDownloading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+          {isDownloading ? "Downloading..." : "Download"}
         </Button>
         <Button variant="outline" onClick={() => setIsMockupOpen(true)}>
           <MonitorSmartphone className="h-4 w-4 sm:mr-2" />
@@ -134,6 +139,8 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
                   variant="secondary"
                   className="h-9 w-9 rounded-full bg-black/50 hover:bg-black/70 text-white border-0"
                   onClick={handleDownload}
+                  disabled={isDownloading}
+                  aria-label="Download wallpaper"
                 >
                   <Download className="h-4 w-4" />
                 </Button>
@@ -142,6 +149,7 @@ export default function WallpaperPageClient({ wallpaper, imageUrl }: Props) {
                   variant="secondary"
                   className="h-9 w-9 rounded-full bg-black/50 hover:bg-black/70 text-white border-0"
                   onClick={() => setIsPreviewOpen(false)}
+                  aria-label="Close preview"
                 >
                   <X className="h-4 w-4" />
                 </Button>

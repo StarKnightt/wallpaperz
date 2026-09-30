@@ -169,7 +169,9 @@ export default function Studio() {
     }
   }
 
-  const promptField = register("prompt", { required: "Describe the wallpaper you want first." })
+  const promptField = register("prompt", {
+    validate: (v) => v.trim().length > 0 || "Describe the wallpaper you want first.",
+  })
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 pb-20 pt-6 sm:px-6 sm:pt-8 lg:px-8">
