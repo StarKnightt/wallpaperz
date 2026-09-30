@@ -10,6 +10,7 @@ import DomainGatedScripts from "@/components/DomainGatedScripts"
 import { ClerkProvider } from '@clerk/nextjs'
 import { ScrollProgress } from "@/components/ScrollProgress"
 import BottomNav from "@/components/BottomNav"
+import BackToTop from "@/components/BackToTop"
 import PwaRegister from "@/components/PwaRegister"
 import InstallPrompt from "@/components/InstallPrompt"
 import type { Metadata, Viewport } from "next"
@@ -186,11 +187,12 @@ export default function RootLayout({
             <SearchProvider>
               <ScrollProgress />
               <Header />
-              <main className="flex-grow w-full max-w-[1920px] mx-auto">
+              <main id="main-content" tabIndex={-1} className="flex-grow w-full max-w-[1920px] mx-auto focus:outline-none">
                 {children}
               </main>
               <Footer />
               <BottomNav />
+              <BackToTop />
               <InstallPrompt />
               <PwaRegister />
               <Toaster position="bottom-right" />

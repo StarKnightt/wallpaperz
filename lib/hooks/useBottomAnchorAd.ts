@@ -9,24 +9,29 @@ import { useEffect, useState } from "react"
 // themselves for as long as that anchor is displayed. Top anchors and
 // dismissed/collapsed anchors are ignored.
 export function useBottomAnchorAd(): boolean {
-  const [covered, setCovered] = useState(false)
+  return useBottomAnchorAdHeight() > 0
+}
+
+// Height in px of the displayed bottom anchor ad, 0 when there is none.
+export function useBottomAnchorAdHeight(): number {
+  const [height, setHeight] = useState(0)
 
   useEffect(() => {
     const isAnchor = (node: Node): node is HTMLElement =>
       node instanceof HTMLElement && node.tagName === "INS" && node.classList.contains("adsbygoogle")
 
     const check = () => {
-      let found = false
+      let found = 0
       for (const el of document.body.querySelectorAll<HTMLElement>(":scope > ins.adsbygoogle")) {
         if (el.dataset.anchorStatus !== "displayed") continue
         const r = el.getBoundingClientRect()
         // Anchored to the bottom edge (top anchors start at y=0 and are ignored)
         if (r.height > 0 && r.top > 0 && r.bottom >= window.innerHeight - 1) {
-          found = true
+          found = Math.ceil(r.height)
           break
         }
       }
-      setCovered(found)
+      setHeight(found)
     }
 
     // Google flips data-anchor-status / inline style on the ins itself
@@ -55,5 +60,5 @@ export function useBottomAnchorAd(): boolean {
     }
   }, [])
 
-  return covered
+  return height
 }
