@@ -255,7 +255,8 @@ export default function Footer() {
             </Link>
           </div>
           
-          <div className="flex items-center gap-4">
+          {/* md:pr-16 keeps this clear of the fixed BackToTop button at the page bottom */}
+          <div className="flex items-center gap-4 md:pr-16">
             <Link 
               href="https://github.com/StarKnightt/wallpaperz" 
               target="_blank"
