@@ -4,7 +4,7 @@ import { useTheme } from "next-themes"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Moon, Sun, Menu, X, Github, Star } from "lucide-react"
+import { Search, Moon, Sun, Menu, X, Github } from "lucide-react"
 import { useSearch } from "@/context/SearchContext"
 import { usePathname, useRouter } from "next/navigation"
 import { FormEvent } from "react"
@@ -14,13 +14,6 @@ import { useAuth } from "@clerk/nextjs"
 import { cn } from "@/lib/utils"
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import Navigation from "@/components/Navigation"
-
-const navigationItems = [
-  { name: 'Home', href: '/' },
-  { name: 'AI Generate', href: '/ai-generate' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
-];
 
 export default function Header() {
   const { isSignedIn, isLoaded } = useAuth()
@@ -171,7 +164,7 @@ export default function Header() {
               href="https://github.com/StarKnightt/wallpaperz"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-muted/50 hover:bg-muted rounded-full transition-colors"
+              className="flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-sm bg-muted/50 hover:bg-muted rounded-full transition-colors"
             >
               <Github className="h-4 w-4" />
               <span>{starCount !== null ? starCount : '...'}</span>
@@ -186,7 +179,7 @@ export default function Header() {
                 placeholder={isSearching ? "Searching..." : "Search wallpapers..."}
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="pl-10 w-[300px]"
+                className="pl-10 w-[220px] xl:w-[300px]"
                 autoComplete="off"
                 spellCheck="false"
               />

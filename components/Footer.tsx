@@ -1,9 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Facebook, Twitter, Instagram, Github, Coffee, Globe, ExternalLink } from "lucide-react"
-import ComingSoonModal from "./ComingSoonModal"
-import { useState } from "react"
+import { Github, Sparkles, Globe, ExternalLink } from "lucide-react"
 
 type GoogleFc = { callbackQueue?: unknown[]; showRevocationMessage?: () => void }
 
@@ -17,17 +15,7 @@ function openPrivacySettings(e: React.MouseEvent<HTMLAnchorElement>) {
 }
 
 export default function Footer() {
-  const [showComingSoon, setShowComingSoon] = useState(false)
-  const [comingSoonFeature, setComingSoonFeature] = useState("")
   const currentYear = new Date().getFullYear()
-
-  const handleComingSoonClick = (e: React.MouseEvent<HTMLAnchorElement>, feature: string) => {
-    if (feature !== "About Us" && feature !== "Privacy Policy") {
-      e.preventDefault()
-      setComingSoonFeature(feature)
-      setShowComingSoon(true)
-    }
-  }
 
   return (
     <footer className="order-last border-t bg-background/50 backdrop-blur-sm">
@@ -181,7 +169,7 @@ export default function Footer() {
                 ['/license', 'Wallpaper License'],
                 ['/ai-transparency', 'AI Transparency'],
                 ['/terms#copyright', 'Copyright / DMCA'],
-                ['/privacy#your-choices', 'Do Not Sell or Share My Personal Information'],
+                ['/privacy#your-choices', 'Do Not Sell or Share'],
               ].map(([href, label]) => (
                 <li key={href}>
                   <Link href={href} className="text-muted-foreground hover:text-foreground transition-colors">
@@ -240,13 +228,11 @@ export default function Footer() {
               </li>
               <li>
                 <Link 
-                  href="https://buymeacoffee.com/prasen" 
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/pricing" 
                   className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <Coffee className="h-4 w-4" />
-                  Buy Me a Coffee
+                  <Sparkles className="h-4 w-4" />
+                  Go Pro
                 </Link>
               </li>
             </ul>
@@ -279,23 +265,9 @@ export default function Footer() {
               <Github className="h-4 w-4" />
               Open Source Project
             </Link>
-            <Link 
-              href="https://buymeacoffee.com/prasen" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
-            >
-              <Coffee className="h-4 w-4" />
-              Support
-            </Link>
           </div>
         </div>
       </div>
-      <ComingSoonModal
-        isOpen={showComingSoon}
-        onClose={() => setShowComingSoon(false)}
-        feature={comingSoonFeature}
-      />
     </footer>
   )
 }

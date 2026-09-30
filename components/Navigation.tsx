@@ -1,13 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 export default function Navigation() {
   const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navItems = [
     {
@@ -35,13 +33,13 @@ export default function Navigation() {
   return (
     <nav className="flex flex-col">
       {/* Desktop Navigation */}
-      <div className="hidden md:flex md:gap-x-6">
+      <div className="hidden lg:flex lg:gap-x-4 xl:gap-x-6">
         {navItems.map((item) => (
           <Link
             key={item.name}
             href={item.href}
             className={cn(
-              'text-sm font-semibold leading-6 transition-colors',
+              'whitespace-nowrap text-sm font-semibold leading-6 transition-colors',
               pathname === item.href
                 ? 'text-primary'
                 : 'text-muted-foreground hover:text-primary'
@@ -53,7 +51,7 @@ export default function Navigation() {
       </div>
 
       {/* Mobile Navigation */}
-      <div className="space-y-2 py-6 md:hidden">
+      <div className="space-y-2 py-6 lg:hidden">
         {navItems.map((item) => (
           <Link
             key={item.name}
@@ -64,7 +62,6 @@ export default function Navigation() {
                 ? 'text-primary'
                 : 'text-muted-foreground hover:text-primary'
             )}
-            onClick={() => setMobileMenuOpen(false)}
           >
             {item.name}
           </Link>
