@@ -40,7 +40,7 @@ export default function Page() {
 
       <h2>Option 2: Lively Wallpaper (free, open source)</h2>
       <p>
-        <a href="https://www.rocksdanister.com/lively/" target="_blank" rel="noopener noreferrer">Lively Wallpaper</a>{' '}
+        <a href="https://github.com/lively-community/lively" target="_blank" rel="noopener noreferrer">Lively Wallpaper</a>{' '}
         is the tool most people should use. It is free, open source, and available straight from the
         Microsoft Store, which means no sketchy installers.
       </p>
