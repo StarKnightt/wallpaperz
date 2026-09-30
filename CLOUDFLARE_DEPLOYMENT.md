@@ -45,9 +45,13 @@ Notes:
 
 - On Vercel the old flow is unchanged: `POST /api/wallpapers/sync` purges the
   data cache and ISR pages.
-- Without a redeploy, Workers pages still refresh in the background via ISR
-  (`revalidate = 3600`), so content self-heals within ~1–2 hours anyway; the
-  redeploy is just the fast, guaranteed path.
+- Without a redeploy, Workers pages still refresh in the background via ISR:
+  list pages hourly (`revalidate = 3600`), wallpaper and device pages daily
+  (`revalidate = 86400`, fed by `getAllWallpapersDaily`) because their hourly
+  stale-hit re-renders kept hitting `exceededCpu`. A new wallpaper's own page
+  still resolves right away (`getWallpaperById` falls back to the hourly list);
+  it just takes up to a day to show up on device pages and in "related". The
+  redeploy is the fast, guaranteed path.
 - A wallpaper uploaded but not yet redeployed renders on demand on first visit
   (~100–500ms CPU). Isolated on-demand renders complete fine; only
   mass-concurrent renders are dangerous, which is exactly what the disabled
