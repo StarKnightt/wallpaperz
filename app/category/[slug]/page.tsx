@@ -7,6 +7,8 @@ import CategoryListing from '@/components/CategoryListing'
 // Prerendered at build (one ImageKit list call shared via unstable_cache) and
 // refreshed hourly; pages 2..N live at /category/[slug]/page/[n].
 export const revalidate = 3600
+// Fixed slug set: unknown slugs get the static 404 rather than an empty 200 page.
+export const dynamicParams = false
 
 export function generateStaticParams() {
   return CATEGORY_SLUGS.map((slug) => ({ slug }))

@@ -13,6 +13,8 @@ import ColorListing from '@/components/ColorListing'
 const BASE_URL = 'https://www.wallpaperz.in'
 
 export const revalidate = 3600
+// Fixed slug set: unknown slugs get the static 404 instead of an SSR attempt.
+export const dynamicParams = false
 
 export function generateStaticParams() {
   return COLOR_DEFS.map((c) => ({ slug: c.slug }))

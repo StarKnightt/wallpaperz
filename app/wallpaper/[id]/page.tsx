@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound, permanentRedirect } from 'next/navigation'
-import { getAllWallpapers, getWallpaperById, getRelatedWallpapers, getHomePageNumberFor, isAiGenerated } from '@/lib/server/wallpapers'
+import { getAllWallpapersDaily, getWallpaperById, getRelatedWallpapers, getHomePageNumberFor, isAiGenerated } from '@/lib/server/wallpapers'
 import { pageHref } from '@/lib/pagination'
 import { getResolutionName, formatFileSize } from '@/lib/blur-placeholder'
 import { idFromSegment, wallpaperPath, wallpaperSegment } from '@/lib/wallpaper-url'
@@ -14,10 +14,13 @@ import { formatUsd, packForWallpaper, packHref, packThumb } from '@/lib/packs'
 // build (one ImageKit list call, same as the sitemaps) so no visitor request
 // ever pays a fresh SSR render — critical on the Workers free plan (10ms CPU).
 // New IDs uploaded after a build still render on demand (dynamicParams default).
-export const revalidate = 3600
+// Daily, not hourly: every stale hit triggers a background re-render that runs
+// past the 10ms CPU cap (exceededCpu) and can 503 the visitor's request, and
+// these long-tail pages are almost always stale when visited.
+export const revalidate = 86400
 
 export async function generateStaticParams() {
-  const wallpapers = await getAllWallpapers()
+  const wallpapers = await getAllWallpapersDaily()
   return wallpapers.map((w) => ({ id: wallpaperSegment(w) }))
 }
 

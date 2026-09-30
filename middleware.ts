@@ -37,9 +37,19 @@ function withCountryHint(req: NextRequest, res: NextResponse) {
   return res;
 }
 
+// Every wallpaper URL ends in a 24-hex ImageKit fileId. Anything else can never
+// resolve, and letting /wallpaper/[id] SSR its notFound() blows the 10ms CPU cap
+// (503). Rewriting to a path with no route serves the prebuilt static 404.
+const WALLPAPER_SEGMENT = /^\/wallpaper\/([^/]+)\/?$/;
+const WALLPAPER_ID = /[0-9a-f]{24}$/i;
+
 export default clerkMiddleware((auth, req) => {
   const redirect = canonicalRedirect(req);
   if (redirect) return redirect;
+  const segment = req.nextUrl.pathname.match(WALLPAPER_SEGMENT)?.[1];
+  if (segment && !WALLPAPER_ID.test(segment)) {
+    return NextResponse.rewrite(new URL("/_not-found-wallpaper", req.url));
+  }
   if (!req.nextUrl.pathname.startsWith("/api/")) return withCountryHint(req, NextResponse.next());
 
   const publicRoutes = [

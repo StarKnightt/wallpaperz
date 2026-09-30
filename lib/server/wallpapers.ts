@@ -45,13 +45,23 @@ export const getAllWallpapers = unstable_cache(fetchAllWallpapers, ['all-wallpap
   tags: ['wallpapers'],
 })
 
+// A route's ISR window is capped by the shortest unstable_cache it reads, so the
+// long-tail /wallpaper/[id] and /devices/[slug] pages read this daily copy.
+// Their hourly stale-hit re-renders ran past the Workers 10ms CPU cap.
+export const getAllWallpapersDaily = unstable_cache(fetchAllWallpapers, ['all-wallpapers-daily'], {
+  revalidate: 86400,
+  tags: ['wallpapers'],
+})
+
 export async function getWallpaperById(id: string): Promise<Wallpaper | null> {
-  const all = await getAllWallpapers()
-  return all.find((w) => w.id === id) ?? null
+  const found = (await getAllWallpapersDaily()).find((w) => w.id === id)
+  if (found) return found
+  // Uploaded after the daily copy was cached.
+  return (await getAllWallpapers()).find((w) => w.id === id) ?? null
 }
 
 export async function getRelatedWallpapers(wallpaper: Wallpaper, limit = 6): Promise<Wallpaper[]> {
-  const all = await getAllWallpapers()
+  const all = await getAllWallpapersDaily()
   return all
     .filter((w) => w.id !== wallpaper.id && w.category === wallpaper.category)
     .slice(0, limit)
@@ -67,7 +77,7 @@ export function isAiGenerated(wallpaper: Wallpaper): boolean {
 
 /** 1-based homepage list page that contains this wallpaper (for back-links). */
 export async function getHomePageNumberFor(id: string): Promise<number | null> {
-  const all = await getAllWallpapers()
+  const all = await getAllWallpapersDaily()
   const index = all.findIndex((w) => w.id === id)
   return index === -1 ? null : Math.floor(index / PAGE_SIZE) + 1
 }

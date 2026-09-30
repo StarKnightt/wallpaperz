@@ -2,14 +2,17 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Download } from 'lucide-react'
-import { getAllWallpapers } from '@/lib/server/wallpapers'
+import { getAllWallpapersDaily } from '@/lib/server/wallpapers'
 import { wallpaperPath } from '@/lib/wallpaper-url'
 import {
   DEVICES, KIND_LABEL, Device, getDevice, sameSizeDevices, aspectLabel,
   wallpapersForDevice, deviceDownloadUrl, deviceThumbUrl,
 } from '@/lib/devices'
 
-export const revalidate = 3600
+// Daily, like /wallpaper/[id]: stale-hit re-renders of these large pages exceed
+// the 10ms CPU cap. Unknown slugs get the static 404 instead of an SSR attempt.
+export const revalidate = 86400
+export const dynamicParams = false
 
 export function generateStaticParams() {
   return DEVICES.map((d) => ({ slug: d.slug }))
@@ -27,7 +30,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { slug } = await props.params
   const d = getDevice(slug)
   if (!d) return { title: 'Device not found' }
-  const all = await getAllWallpapers()
+  const all = await getAllWallpapersDaily()
   const count = wallpapersForDevice(all, d).length
   const size = `${d.width}×${d.height}`
   const title = d.brand === 'Monitor'
@@ -92,7 +95,7 @@ export default async function DevicePage(props: Props) {
   const d = getDevice(slug)
   if (!d) notFound()
 
-  const all = await getAllWallpapers()
+  const all = await getAllWallpapersDaily()
   const wallpapers = wallpapersForDevice(all, d)
   const twins = sameSizeDevices(d)
   const siblings = DEVICES.filter((x) => x.kind === d.kind && x.slug !== d.slug)
