@@ -45,14 +45,14 @@ export default function Pagination({ currentPage, totalPages, basePath, classNam
           rel={prev ? "prev" : undefined}
           aria-disabled={!prev}
           tabIndex={prev ? undefined : -1}
-          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12 flex-1 px-4 sm:flex-none", !prev && disabled)}
+          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12 flex-1 px-3 min-[360px]:px-4 sm:flex-none", !prev && disabled)}
         >
           <ChevronLeft className="h-5 w-5" />
           Previous
         </Link>
 
         <span className="shrink-0 text-sm text-muted-foreground tabular-nums sm:hidden" aria-live="polite">
-          Page {currentPage} of {totalPages}
+          <span className="max-[359px]:hidden">Page </span>{currentPage} of {totalPages}
         </span>
 
         <ol className="hidden items-center gap-1 sm:flex">
@@ -84,7 +84,7 @@ export default function Pagination({ currentPage, totalPages, basePath, classNam
           rel={next ? "next" : undefined}
           aria-disabled={!next}
           tabIndex={next ? undefined : -1}
-          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12 flex-1 px-4 sm:flex-none", !next && disabled)}
+          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12 flex-1 px-3 min-[360px]:px-4 sm:flex-none", !next && disabled)}
         >
           Next
           <ChevronRight className="h-5 w-5" />

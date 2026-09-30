@@ -29,7 +29,7 @@ interface DeviceFilterProps {
 
 export default function DeviceFilter({ value, onChange, counts }: DeviceFilterProps) {
   return (
-    <div className="flex items-center gap-2" role="group" aria-label="Filter wallpapers by device">
+    <div className="flex flex-wrap items-center gap-1.5 min-[360px]:gap-2" role="group" aria-label="Filter wallpapers by device">
       {OPTIONS.map((option) => (
         <button
           key={option.value}
@@ -37,7 +37,7 @@ export default function DeviceFilter({ value, onChange, counts }: DeviceFilterPr
           onClick={() => onChange(option.value)}
           aria-pressed={value === option.value}
           className={cn(
-            "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
+            "inline-flex items-center gap-1 min-[360px]:gap-1.5 px-2 min-[360px]:px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
             value === option.value
               ? "bg-primary text-primary-foreground"
               : "bg-muted hover:bg-muted/80 text-muted-foreground"
