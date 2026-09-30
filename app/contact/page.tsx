@@ -3,13 +3,14 @@ import Link from "next/link"
 import { Mail, Clock, CreditCard, ShieldAlert, Lock } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import LegalPage, { CONTACT_EMAIL } from "@/components/legal/LegalPage"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
     "Questions, billing and refunds, wallpaper takedowns, privacy requests or partnership ideas: email Wallpaperz at contact@wallpaperz.in.",
   alternates: { canonical: "/contact" },
-  openGraph: { url: "https://www.wallpaperz.in/contact", title: "Contact Wallpaperz" },
+  openGraph: { url: "https://www.wallpaperz.in/contact", title: "Contact Wallpaperz", images: [DEFAULT_OG_IMAGE] },
 }
 
 const topics = [

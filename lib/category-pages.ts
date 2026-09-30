@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Wallpaper } from '@/types/wallpaper'
 import { pageHref } from '@/lib/pagination'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 const BASE_URL = 'https://www.wallpaperz.in'
 
@@ -64,6 +65,7 @@ export function categoryMetadata(slug: string, page = 1): Metadata {
       url: `${BASE_URL}${pageHref(basePath, page)}`,
       siteName: 'Wallpaperz',
       type: 'website',
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',

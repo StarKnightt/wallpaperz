@@ -4,6 +4,7 @@ import { Check, Minus } from "lucide-react"
 import PricingPlans from "@/components/pricing/PricingPlans"
 import { cn } from "@/lib/utils"
 import { FREE_PER_DAY, PLANS, PRO_PER_MONTH } from "@/lib/pricing"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Pricing - AI Wallpaper Generator Plans",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     url: "https://www.wallpaperz.in/pricing",
     title: "Pricing | Wallpaperz",
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

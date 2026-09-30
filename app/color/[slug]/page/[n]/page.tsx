@@ -9,6 +9,7 @@ import {
 } from '@/lib/colors'
 import { extraPageParams, pageHref, paginate, parsePageParam } from '@/lib/pagination'
 import ColorListing from '@/components/ColorListing'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 const BASE_URL = 'https://www.wallpaperz.in'
 
@@ -41,6 +42,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       title,
       description: color.seoDescription,
       url: `${BASE_URL}${pageHref(basePath, page)}`,
+      images: [DEFAULT_OG_IMAGE],
     },
   }
 }

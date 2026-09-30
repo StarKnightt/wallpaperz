@@ -9,6 +9,7 @@ import {
 } from '@/lib/colors'
 import { paginate } from '@/lib/pagination'
 import ColorListing from '@/components/ColorListing'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 const BASE_URL = 'https://www.wallpaperz.in'
 
@@ -33,6 +34,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
       title: color.seoTitle,
       description: color.seoDescription,
       url: `${BASE_URL}/color/${color.slug}`,
+      images: [DEFAULT_OG_IMAGE],
     },
   }
 }

@@ -19,6 +19,12 @@ import { formatUsd, packForWallpaper, packHref, packThumb } from '@/lib/packs'
 // these long-tail pages are almost always stale when visited.
 export const revalidate = 86400
 
+function clampDescription(text: string, max = 160): string {
+  if (text.length <= max) return text
+  const cut = text.slice(0, max - 1)
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[\s,.;:-]+$/, '')}…`
+}
+
 export async function generateStaticParams() {
   const wallpapers = await getAllWallpapersDaily()
   return wallpapers.map((w) => ({ id: wallpaperSegment(w) }))
@@ -42,10 +48,14 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     : ''
 
   const title = `${wallpaper.title} - Free ${resolution} ${wallpaper.category} Wallpaper`
-  const description = `Download ${wallpaper.title} in ${resolution}${dims ? ` (${dims})` : ''} for free. ${wallpaper.description}`
-  const imageUrl = wallpaper.imageUrl.startsWith('http')
+  const description = clampDescription(`Download ${wallpaper.title} in ${resolution}${dims ? ` (${dims})` : ''} for free. ${wallpaper.description}`)
+  const originalUrl = wallpaper.imageUrl.startsWith('http')
     ? wallpaper.imageUrl
     : `${process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT}${wallpaper.imageUrl}`
+  // ImageKit ignores ?tr= when the URL already carries a query (e.g. ?updatedAt=).
+  const imageUrl = `${originalUrl.split('?')[0]}?tr=w-1200,q-80`
+  const ogWidth = Math.min(1200, wallpaper.width || 1200)
+  const ogHeight = wallpaper.width && wallpaper.height ? Math.round((ogWidth * wallpaper.height) / wallpaper.width) : undefined
 
   return {
     title,
@@ -63,7 +73,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       description,
       url: `https://www.wallpaperz.in${path}`,
       siteName: 'Wallpaperz',
-      images: [{ url: imageUrl, width: wallpaper.width, height: wallpaper.height, alt: wallpaper.title }],
+      images: [{ url: imageUrl, width: ogWidth, height: ogHeight, alt: wallpaper.title }],
       type: 'article',
     },
     twitter: {

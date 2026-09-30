@@ -8,6 +8,7 @@ import {
   DEVICES, KIND_LABEL, Device, getDevice, sameSizeDevices, aspectLabel,
   wallpapersForDevice, deviceDownloadUrl, deviceThumbUrl,
 } from '@/lib/devices'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 // Daily, like /wallpaper/[id]: stale-hit re-renders of these large pages exceed
 // the 10ms CPU cap. Unknown slugs get the static 404 instead of an SSR attempt.
@@ -43,7 +44,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: `/devices/${d.slug}` },
-    openGraph: { title, description, url: `${BASE_URL}/devices/${d.slug}`, siteName: 'Wallpaperz', type: 'website' },
+    openGraph: { title, description, url: `${BASE_URL}/devices/${d.slug}`, siteName: 'Wallpaperz', type: 'website', images: [DEFAULT_OG_IMAGE] },
   }
 }
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 // page.tsx is a client component and cannot export metadata. The tool's
 // headings, prompt suggestions and demo gallery are still server-rendered, so
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     url: 'https://www.wallpaperz.in/ai-generate',
     title: 'AI Wallpaper Generator | Wallpaperz',
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

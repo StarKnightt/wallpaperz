@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import LegalPage, { LegalSection, Mail } from "@/components/legal/LegalPage"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Refund Policy",
   description:
     "When Wallpaperz credit packs, Pro subscriptions and Lifetime plans can be refunded, how to cancel, and your EU/UK right of withdrawal.",
   alternates: { canonical: "/refund-policy" },
-  openGraph: { url: "https://www.wallpaperz.in/refund-policy", title: "Refund Policy | Wallpaperz" },
+  openGraph: { url: "https://www.wallpaperz.in/refund-policy", title: "Refund Policy | Wallpaperz", images: [DEFAULT_OG_IMAGE] },
 }
 
 const toc = [

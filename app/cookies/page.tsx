@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import LegalPage, { LegalSection, LegalTable, Mail } from "@/components/legal/LegalPage"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
   description:
     "The cookies and browser storage Wallpaperz uses for sign-in, preferences, analytics and Google AdSense ads, and how to manage your consent.",
   alternates: { canonical: "/cookies" },
-  openGraph: { url: "https://www.wallpaperz.in/cookies", title: "Cookie Policy | Wallpaperz" },
+  openGraph: { url: "https://www.wallpaperz.in/cookies", title: "Cookie Policy | Wallpaperz", images: [DEFAULT_OG_IMAGE] },
 }
 
 const toc = [

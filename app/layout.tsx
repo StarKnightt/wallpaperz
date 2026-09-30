@@ -166,10 +166,6 @@ export default function RootLayout({
           <script id="consent-defaults" dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS_SCRIPT }} />
           <link rel="preconnect" href="https://ik.imagekit.io" />
           <link rel="dns-prefetch" href="https://ik.imagekit.io" />
-          <meta property="og:image" content="https://www.wallpaperz.in/theimage.png" />
-          <meta property="og:image:width" content="1200" />
-          <meta property="og:image:height" content="630" />
-          <meta property="twitter:image" content="https://www.wallpaperz.in/theimage.png" />
           {/* Server-rendered so AdSense verification crawls see it; serves no ads by itself.
               The ad-serving script is injected client-side by DomainGatedScripts. */}
           <meta name="google-adsense-account" content={adsenseId} />

@@ -5,6 +5,7 @@ import { wallpaperPath } from '@/lib/wallpaper-url'
 import { getResolutionName } from '@/lib/blur-placeholder'
 import { DEVICES } from '@/lib/devices'
 import { Wallpaper } from '@/types/wallpaper'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -21,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: '/laptop-wallpapers' },
-    openGraph: { title, description, url: `${BASE_URL}/laptop-wallpapers`, siteName: 'Wallpaperz', type: 'website' },
+    openGraph: { title, description, url: `${BASE_URL}/laptop-wallpapers`, siteName: 'Wallpaperz', type: 'website', images: [DEFAULT_OG_IMAGE] },
   }
 }
 

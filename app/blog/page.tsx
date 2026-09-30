@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { Clock } from 'lucide-react'
 import { BLOG_POSTS, coverUrl, BlogCluster } from '@/lib/blog/registry'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 const BASE_URL = 'https://www.wallpaperz.in'
 
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     description:
       'Practical guides on wallpapers: resolutions, live wallpapers, dual monitor setups, AI generation and more.',
     url: `${BASE_URL}/blog`,
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

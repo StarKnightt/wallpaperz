@@ -6,6 +6,7 @@ import PaginationHead from "@/components/PaginationHead"
 import { getAllWallpapers } from "@/lib/server/wallpapers"
 import { extraPageParams, pageHref, paginate, parsePageParam } from "@/lib/pagination"
 import { categoryNamesOf } from "@/lib/category-pages"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 const BASE_URL = "https://www.wallpaperz.in"
 
@@ -38,6 +39,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       url: `${BASE_URL}${pageHref("/", page)}`,
       siteName: "Wallpaperz",
       type: "website",
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: { card: "summary_large_image", title: `${title} | Wallpaperz`, description },
   }
