@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import LegalPage, { LegalSection, LegalTable, Mail } from "@/components/legal/LegalPage"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "What personal data Wallpaperz collects, why, who processes it, how long it's kept, and how to use your privacy rights under GDPR, UK GDPR, CCPA/CPRA and India's DPDP Act.",
   alternates: { canonical: "/privacy" },
-  openGraph: { url: "https://www.wallpaperz.in/privacy", title: "Privacy Policy | Wallpaperz" },
+  openGraph: { url: "https://www.wallpaperz.in/privacy", title: "Privacy Policy | Wallpaperz", images: [DEFAULT_OG_IMAGE] },
 }
 
 const toc = [

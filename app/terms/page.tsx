@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import LegalPage, { LegalSection, Mail } from "@/components/legal/LegalPage"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "The rules for using Wallpaperz: eligibility, accounts, the wallpaper license, the AI generator and its content policy, payments, refunds, and copyright complaints.",
   alternates: { canonical: "/terms" },
-  openGraph: { url: "https://www.wallpaperz.in/terms", title: "Terms of Service | Wallpaperz" },
+  openGraph: { url: "https://www.wallpaperz.in/terms", title: "Terms of Service | Wallpaperz", images: [DEFAULT_OG_IMAGE] },
 }
 
 const toc = [

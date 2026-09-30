@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import LegalPage, { LegalSection, Mail } from "@/components/legal/LegalPage"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Wallpaper License",
   description:
     "What you can and cannot do with wallpapers downloaded from Wallpaperz: free personal use, attribution, redistribution, commercial use and premium packs explained.",
   alternates: { canonical: "/license" },
-  openGraph: { url: "https://www.wallpaperz.in/license", title: "Wallpaper License | Wallpaperz" },
+  openGraph: { url: "https://www.wallpaperz.in/license", title: "Wallpaper License | Wallpaperz", images: [DEFAULT_OG_IMAGE] },
 }
 
 const sources = [

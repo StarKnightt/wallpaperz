@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import LegalPage, { LegalSection, Mail } from "@/components/legal/LegalPage"
+import { DEFAULT_OG_IMAGE } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "AI Transparency",
   description:
     "How Wallpaperz uses AI: which wallpapers are AI-generated, how the AI wallpaper generator works, its limitations, and how to report a problem.",
   alternates: { canonical: "/ai-transparency" },
-  openGraph: { url: "https://www.wallpaperz.in/ai-transparency", title: "AI Transparency | Wallpaperz" },
+  openGraph: { url: "https://www.wallpaperz.in/ai-transparency", title: "AI Transparency | Wallpaperz", images: [DEFAULT_OG_IMAGE] },
 }
 
 export default function AiTransparencyPage() {
