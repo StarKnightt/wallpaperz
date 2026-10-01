@@ -212,7 +212,7 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Credit balances and plan status:</strong> while your account exists, or until you ask us to erase
-            them.
+            them. Deleting your account erases them automatically.
           </li>
           <li>
             <strong>Payment and invoice records:</strong> as long as tax and accounting laws require (typically up to 8
@@ -338,9 +338,9 @@ export default function PrivacyPage() {
         </p>
         <p>
           Deleting your account removes your Clerk profile (email, name and sign-in data) and ends any remaining
-          credits or plan access. Cancel an active subscription first so you aren&apos;t charged again. Records in our
-          database are keyed to your user ID rather than your email: generation logs are deleted after 90 days, and
-          we&apos;ll erase your credit and plan records on request. We keep payment records only as long as tax law
+          credits or plan access. Records in our database are keyed to your user ID rather than your email; when the
+          account is deleted we automatically erase your generation logs, credit balance and plan records and cancel
+          any active subscription. We keep payment records, with your user ID removed, only as long as tax law
           requires.
         </p>
       </LegalSection>
