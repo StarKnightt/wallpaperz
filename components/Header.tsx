@@ -200,9 +200,9 @@ export default function Header() {
             {!isLoaded ? (
               <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
             ) : isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             ) : (
-              <SignInButton mode="modal" fallbackRedirectUrl="/">
+              <SignInButton mode="modal" fallbackRedirectUrl={pathname} signUpFallbackRedirectUrl={pathname}>
                 <Button variant="default" size="sm">
                   Sign in
                 </Button>
@@ -256,9 +256,9 @@ export default function Header() {
                         {!isLoaded ? (
                           <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
                         ) : isSignedIn ? (
-                          <UserButton afterSignOutUrl="/" />
+                          <UserButton />
                         ) : (
-                          <SignInButton mode="modal" fallbackRedirectUrl="/">
+                          <SignInButton mode="modal" fallbackRedirectUrl={pathname} signUpFallbackRedirectUrl={pathname}>
                             <Button variant="default" size="sm" onClick={() => setIsMenuOpen(false)}>
                               Sign in
                             </Button>
@@ -333,9 +333,9 @@ export default function Header() {
             {!isLoaded ? (
               <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
             ) : isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             ) : (
-              <SignInButton mode="modal" fallbackRedirectUrl="/">
+              <SignInButton mode="modal" fallbackRedirectUrl={pathname} signUpFallbackRedirectUrl={pathname}>
                 <Button variant="default" size="sm" className="px-3">
                   Sign in
                 </Button>

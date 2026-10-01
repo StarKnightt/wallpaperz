@@ -8,6 +8,7 @@ import type React from "react"
 import { SearchProvider } from "@/context/SearchContext"
 import DomainGatedScripts from "@/components/DomainGatedScripts"
 import { ClerkProvider } from '@clerk/nextjs'
+import { clerkAppearance } from "@/lib/clerk-appearance"
 import { ScrollProgress } from "@/components/ScrollProgress"
 import BottomNav from "@/components/BottomNav"
 import BackToTop from "@/components/BackToTop"
@@ -159,21 +160,21 @@ export default function RootLayout({
   const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID || 'ca-pub-9812963383908086'
 
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          {/* Consent Mode v2 defaults: first in <head> so they precede every Google tag. */}
-          <script id="consent-defaults" dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS_SCRIPT }} />
-          <link rel="preconnect" href="https://ik.imagekit.io" />
-          <link rel="dns-prefetch" href="https://ik.imagekit.io" />
-          {/* Server-rendered so AdSense verification crawls see it; serves no ads by itself.
-              The ad-serving script is injected client-side by DomainGatedScripts. */}
-          <meta name="google-adsense-account" content={adsenseId} />
-        </head>
-        {/* The flex column lives on <body> (not a wrapper div) because AdSense Auto Ads
-            appends its placements as direct <body> children; Footer is order-last so those
-            render above it instead of leaving a blank block below the footer. */}
-        <body className={`${inter.className} min-h-screen flex flex-col relative pb-16 lg:pb-0`}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Consent Mode v2 defaults: first in <head> so they precede every Google tag. */}
+        <script id="consent-defaults" dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS_SCRIPT }} />
+        <link rel="preconnect" href="https://ik.imagekit.io" />
+        <link rel="dns-prefetch" href="https://ik.imagekit.io" />
+        {/* Server-rendered so AdSense verification crawls see it; serves no ads by itself.
+            The ad-serving script is injected client-side by DomainGatedScripts. */}
+        <meta name="google-adsense-account" content={adsenseId} />
+      </head>
+      {/* The flex column lives on <body> (not a wrapper div) because AdSense Auto Ads
+          appends its placements as direct <body> children; Footer is order-last so those
+          render above it instead of leaving a blank block below the footer. */}
+      <body className={`${inter.className} min-h-screen flex flex-col relative pb-16 lg:pb-0`}>
+        <ClerkProvider appearance={clerkAppearance} afterSignOutUrl="/">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -196,9 +197,9 @@ export default function RootLayout({
               <DomainGatedScripts />
             </SearchProvider>
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   )
 }
 

@@ -35,7 +35,7 @@ export default function AiLanding() {
             Describe any scene and get an original 16:9 wallpaper in about 15 seconds. Nobody else will have it.
           </motion.p>
           <motion.div {...enter(0.15)} className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate">
+            <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate" signUpFallbackRedirectUrl="/ai-generate">
               <button
                 type="button"
                 className="group inline-flex h-11 items-center gap-2 rounded-lg bg-foreground px-5 text-sm font-medium text-background transition-[transform,opacity] duration-150 ease-out hover:opacity-90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
@@ -77,7 +77,7 @@ export default function AiLanding() {
         <ul className="mt-10 grid grid-cols-2 gap-x-3 gap-y-7 sm:gap-x-5 sm:gap-y-8 lg:grid-cols-4">
           {gallery.map((ex, n) => (
             <li key={ex.file} className={n === 0 ? "col-span-2 lg:row-span-2 lg:flex" : ""}>
-              <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate">
+              <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate" signUpFallbackRedirectUrl="/ai-generate">
                 <button type="button" className="group flex w-full flex-col text-left focus-visible:outline-none">
                   <div
                     className={`relative overflow-hidden rounded-xl bg-muted ring-1 ring-black/5 transition-shadow duration-200 group-focus-visible:ring-2 group-focus-visible:ring-violet-500 dark:ring-white/10 ${

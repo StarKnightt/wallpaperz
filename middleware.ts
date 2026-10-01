@@ -43,7 +43,12 @@ function withCountryHint(req: NextRequest, res: NextResponse) {
 const WALLPAPER_SEGMENT = /^\/wallpaper\/([^/]+)\/?$/;
 const WALLPAPER_ID = /[0-9a-f]{24}$/i;
 
-export default clerkMiddleware((auth, req) => {
+// Nothing is protected here on purpose: every page is public (signed-out
+// /ai-generate renders its landing view) and each authenticated API route
+// checks `await auth()` itself so it can answer 401 JSON instead of a
+// redirect. Webhooks authenticate by signature. clerkMiddleware only has to
+// run so auth() works in those handlers.
+export default clerkMiddleware((_auth, req) => {
   const redirect = canonicalRedirect(req);
   if (redirect) return redirect;
   const segment = req.nextUrl.pathname.match(WALLPAPER_SEGMENT)?.[1];
@@ -51,33 +56,6 @@ export default clerkMiddleware((auth, req) => {
     return NextResponse.rewrite(new URL("/_not-found-wallpaper", req.url));
   }
   if (!req.nextUrl.pathname.startsWith("/api/")) return withCountryHint(req, NextResponse.next());
-
-  const publicRoutes = [
-    "/",
-    "/category/(.*)",
-    "/about",
-    "/privacy",
-    "/api/wallpapers(.*)",
-    "/api/healthcheck",
-    // Add more public routes as needed
-  ];
-  
-  const ignoredRoutes = [
-    "/api/webhook",
-    // Add more ignored routes as needed
-  ];
-
-  // Check if the route is in the ignored list
-  if (ignoredRoutes.some(route => new RegExp(`^${route}$`).test(req.nextUrl.pathname))) {
-    return NextResponse.next();
-  }
-
-  // Allow public routes without authentication
-  if (publicRoutes.some(route => new RegExp(`^${route}$`).test(req.nextUrl.pathname))) {
-    return NextResponse.next();
-  }
-  
-  // For protected routes, auth information is already available in the request
   return NextResponse.next();
 });
  
