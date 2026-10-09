@@ -11,6 +11,7 @@ import CategoryChips from "@/components/CategoryChips"
 import { Wallpaper } from "@/types/wallpaper"
 import { Button } from "@/components/ui/button"
 import Hero from "@/components/Hero"
+import ExactFitPreview from "@/components/ExactFitPreview"
 import { useSearch, DEFAULT_CATEGORY } from "@/context/SearchContext"
 import { Loader2, X } from "lucide-react"
 import { toast } from "sonner"
@@ -202,7 +203,10 @@ export default function HomeClient({ wallpapers, page, totalPages, total, catego
       />
       <div className="space-y-8 pb-16">
         {showHero ? (
-          <Hero wallpaperCount={total} />
+          <>
+            <Hero wallpaperCount={total} />
+            <ExactFitPreview />
+          </>
         ) : (
           <section className="container mx-auto px-4 pt-8">
             <h1 className="text-3xl md:text-4xl font-bold">

@@ -125,8 +125,10 @@ export function devicesForWallpaper(w: Wallpaper): Device[] {
 
 const IK = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight'
 
-function base(w: Wallpaper) {
-  return w.imageUrl.startsWith('http') ? w.imageUrl : `${IK}${w.imageUrl}`
+// ImageKit ignores ?tr= when the URL already carries a query (e.g. ?updatedAt=)
+function base(w: Pick<Wallpaper, 'imageUrl'>) {
+  const path = w.imageUrl.split('?')[0]
+  return path.startsWith('http') ? path : `${IK}${path}`
 }
 
 /** Exact-resolution crop with smart focus, served as a file download. */
@@ -135,7 +137,7 @@ export function deviceDownloadUrl(w: Wallpaper, d: Device): string {
 }
 
 /** Thumbnail cropped to the device's shape. */
-export function deviceThumbUrl(w: Wallpaper, d: Device, width = 360): string {
+export function deviceThumbUrl(w: Pick<Wallpaper, 'imageUrl'>, d: Pick<Device, 'width' | 'height'>, width = 360): string {
   const h = Math.round((width * d.height) / d.width)
   return `${base(w)}?tr=w-${width},h-${h},fo-auto,q-70,f-auto`
 }
