@@ -256,7 +256,7 @@ export default function Footer() {
           </div>
           
           {/* md:pr-16 keeps this clear of the fixed BackToTop button at the page bottom */}
-          <div className="flex items-center gap-4 md:pr-16">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 md:pr-16">
             <Link 
               href="https://github.com/StarKnightt/wallpaperz" 
               target="_blank"
@@ -266,6 +266,33 @@ export default function Footer() {
               <Github className="h-4 w-4" />
               Open Source Project
             </Link>
+            <a
+              href="https://peerlist.io/prasen/project/wallpaperz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 rounded-md opacity-90 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- external Peerlist badge, not worth a remotePatterns entry */}
+              <img
+                src="https://peerlist.io/api/v1/projects/embed/PRJH8OEQGN9RJNNGJH77PNDJQLM6QK?showUpvote=false&theme=light"
+                alt="Wallpaperz on Peerlist Launchpad"
+                width={245}
+                height={72}
+                loading="lazy"
+                decoding="async"
+                className="h-9 w-auto dark:hidden"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element -- external Peerlist badge, not worth a remotePatterns entry */}
+              <img
+                src="https://peerlist.io/api/v1/projects/embed/PRJH8OEQGN9RJNNGJH77PNDJQLM6QK?showUpvote=false&theme=dark"
+                alt="Wallpaperz on Peerlist Launchpad"
+                width={245}
+                height={72}
+                loading="lazy"
+                decoding="async"
+                className="hidden h-9 w-auto dark:block"
+              />
+            </a>
           </div>
         </div>
       </div>
