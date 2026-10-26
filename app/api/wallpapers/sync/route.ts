@@ -130,7 +130,7 @@ export async function POST() {
 
   // Purge the shared data cache and every ISR page that renders wallpaper data,
   // so new uploads show up immediately instead of waiting out the 1h revalidate.
-  revalidateTag('wallpapers')
+  revalidateTag('wallpapers', { expire: 0 })
   revalidatePath('/')
   revalidatePath('/api/wallpapers')
   revalidatePath('/category/[slug]', 'page')

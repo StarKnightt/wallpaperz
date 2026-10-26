@@ -165,6 +165,10 @@ export default function RootLayout({
       <head>
         {/* Consent Mode v2 defaults: first in <head> so they precede every Google tag. */}
         <script id="consent-defaults" dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS_SCRIPT }} />
+        {/* The site ships its own dark theme. Without this, the Dark Reader extension
+            rewrites stroke/fill on every SVG icon before React hydrates, which React
+            reports as a hydration mismatch (header/footer icon links). */}
+        <meta name="darkreader-lock" />
         <link rel="preconnect" href="https://ik.imagekit.io" />
         <link rel="dns-prefetch" href="https://ik.imagekit.io" />
         {/* Server-rendered so AdSense verification crawls see it; serves no ads by itself.
