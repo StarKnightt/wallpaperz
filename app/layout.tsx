@@ -7,6 +7,7 @@ import { Toaster } from "sonner"
 import type React from "react"
 import { SearchProvider } from "@/context/SearchContext"
 import DomainGatedScripts from "@/components/DomainGatedScripts"
+import SponsorSlot from "@/components/SponsorSlot"
 import { ClerkProvider } from '@clerk/nextjs'
 import { clerkAppearance } from "@/lib/clerk-appearance"
 import { ScrollProgress } from "@/components/ScrollProgress"
@@ -185,6 +186,7 @@ export default function RootLayout({
               <ScrollProgress />
               <Header />
               <main id="main-content" tabIndex={-1} className="flex-grow w-full max-w-[1920px] mx-auto focus:outline-none">
+                <SponsorSlot />
                 {children}
               </main>
               <Footer />

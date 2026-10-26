@@ -117,6 +117,10 @@ export default function PrivacyPage() {
           visits to this and other sites. See the <Link href="/cookies">Cookie Policy</Link>. Pro and Lifetime members
           don&apos;t load the ad script.
         </p>
+        <p>
+          Free visitors may also see a sponsor slot provided by SponsorAnySite, which loads a small script from
+          sponsoranysite.com. It sets no cookies, and Pro and Lifetime members don&apos;t load it.
+        </p>
         <h3>Things stored in your browser</h3>
         <p>
           Your light/dark theme choice, whether you dismissed the &ldquo;install app&rdquo; prompt, and a small cache
@@ -180,6 +184,7 @@ export default function PrivacyPage() {
               ext("https://policies.google.com/technologies/partner-sites", "policies.google.com"),
             ],
             ["Microsoft Clarity", "Analytics, heatmaps and session replay", ext("https://privacy.microsoft.com/privacystatement", "privacy.microsoft.com")],
+            ["SponsorAnySite", "Sponsor slot shown to free visitors", ext("https://sponsoranysite.com", "sponsoranysite.com")],
             ["Gumroad", "Sells our separate premium wallpaper packs", ext("https://gumroad.com/privacy", "gumroad.com")],
           ]}
         />

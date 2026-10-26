@@ -1,38 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { GoogleAnalytics } from "@next/third-parties/google"
-import { useUser } from "@clerk/nextjs"
-import { isAdFreePlan } from "@/lib/pricing"
+import { useAdGate } from "@/lib/hooks/useAdGate"
 import { CONSENT_REGIONS, COUNTRY_COOKIE } from "@/lib/consent"
 
-// Hostname allowlist: the repo is public and gets cloned/redeployed by others.
-// Gating ad/analytics scripts on our hostnames means a clone's deployment never
-// fires ad requests or analytics hits attributed to our AdSense/GA/Clarity IDs.
-// localhost is included so local dev behaves like production.
-const ALLOWED_HOSTNAMES = [
-  "wallpaperz.in",
-  "www.wallpaperz.in",
-  "localhost",
-  "127.0.0.1",
-]
-
 // Publisher ID is public by nature (it's served in /ads.txt); the protection
-// against clones is the hostname gate above, not secrecy of the ID.
+// against clones is the hostname gate in useAdGate, not secrecy of the ID.
 const ADSENSE_ID = process.env.NEXT_PUBLIC_ADSENSE_ID || "ca-pub-9812963383908086"
-
-// If Clerk hasn't loaded by then (blocked, slow network), serve ads anyway,
-// unless Clerk's session cookie says someone is signed in (could be Pro).
-const CLERK_WAIT_MS = 4000
 
 const CLARITY_ID = "q9tt7wi9dk"
 // Poll for Google's CMP every 500ms for up to 30s (AdSense itself may wait for Clerk).
 const TCF_WAIT_TRIES = 60
-
-function hasClerkSession() {
-  const m = document.cookie.match(/(?:^|;\s*)__client_uat(?:_[^=]+)?=([^;]*)/)
-  return !!m && m[1] !== "0" && m[1] !== ""
-}
 
 type AdsQueue = unknown[] & { pauseAdRequests?: number }
 
@@ -101,15 +80,10 @@ function onTcfAnalyticsConsent(onChange: (granted: boolean) => void) {
 }
 
 export default function DomainGatedScripts() {
-  const [allowed, setAllowed] = useState(false)
-  const [clerkWaitOver, setClerkWaitOver] = useState(false)
-  const { isLoaded, user } = useUser()
-  // Set by the Dodo webhook for Pro/Lifetime members.
-  const adFree = isAdFreePlan(user?.publicMetadata?.plan)
+  const { allowed, adFree, showAds } = useAdGate()
 
   useEffect(() => {
-    if (!ALLOWED_HOSTNAMES.includes(window.location.hostname)) return
-    setAllowed(true)
+    if (!allowed) return
 
     // Cloudflare Web Analytics (RUM) beacon, manual setup: reports to
     // cloudflareinsights.com. Automatic edge injection is turned off for this
@@ -133,12 +107,8 @@ export default function DomainGatedScripts() {
       })
     }
 
-    const t = setTimeout(() => setClerkWaitOver(!hasClerkSession()), CLERK_WAIT_MS)
-    return () => {
-      clearTimeout(t)
-      stopTcf()
-    }
-  }, [])
+    return stopTcf
+  }, [allowed])
 
   // AdSense Auto ads: loading this script is all that's needed (no manual units).
   // Waits for Clerk so Pro members never load it.
@@ -149,13 +119,13 @@ export default function DomainGatedScripts() {
       if (w.adsbygoogle) w.adsbygoogle.pauseAdRequests = 1
       return
     }
-    if (!allowed || (!isLoaded && !clerkWaitOver)) return
+    if (!showAds) return
     if (w.adsbygoogle?.pauseAdRequests) w.adsbygoogle.pauseAdRequests = 0
     addScript({
       src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`,
       crossorigin: "anonymous",
     })
-  }, [allowed, adFree, isLoaded, clerkWaitOver])
+  }, [adFree, showAds])
 
   if (!allowed) return null
 
