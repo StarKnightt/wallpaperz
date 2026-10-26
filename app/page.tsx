@@ -4,6 +4,7 @@ import PaginationHead from "@/components/PaginationHead"
 import { getAllWallpapers } from "@/lib/server/wallpapers"
 import { paginate } from "@/lib/pagination"
 import { categoryNamesOf } from "@/lib/category-pages"
+import { SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo"
 import type { Metadata } from "next"
 
 export const revalidate = 3600
@@ -23,6 +24,15 @@ const structuredData = {
     target: "https://www.wallpaperz.in/?search={search_term_string}",
     "query-input": "required name=search_term_string",
   },
+}
+
+const organizationData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/web-app-manifest-512x512.png`,
+  sameAs: SOCIAL_PROFILES,
 }
 
 const collectionData = {
@@ -50,6 +60,10 @@ export default async function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
       />
       <script
         type="application/ld+json"
