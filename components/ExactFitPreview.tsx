@@ -10,7 +10,7 @@ import { detectScreen, type ScreenResult } from "@/lib/screen"
 type Choice = DeviceKind | "yours"
 
 const FEATURED = {
-  imageUrl: "/wallpapers/angel-warrior-anime-girl-sword-4k-wallpaperz.jpg",
+  imageUrl: "https://ik.imagekit.io/starknight/wallpapers/angel-warrior-anime-girl-sword-4k-wallpaperz.jpg",
   title: "Angel Warrior",
 }
 

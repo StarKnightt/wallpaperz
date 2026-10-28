@@ -4,12 +4,17 @@ import { Wallpaper, WallpaperCategory } from '@/types/wallpaper'
 import { resolveCategory, cleanFilename } from '@/lib/categories'
 import { PAGE_SIZE } from '@/lib/pagination'
 
-function toWallpaper(file: any): Wallpaper {
+const IMAGEKIT_ENDPOINT = (process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/starknight').replace(/\/+$/, '')
+
+// imageUrl ships to the client in the RSC payload. A bare filePath there
+// ("/wallpapers/x.jpg") gets picked up by Googlebot-Image and requested on our
+// own domain, so it is always the absolute ImageKit URL.
+export function toWallpaper(file: any): Wallpaper {
   const category = resolveCategory(file.customMetadata?.category, file.tags) as WallpaperCategory
   return {
     id: file.fileId,
     title: file.customMetadata?.title || cleanFilename(file.name),
-    imageUrl: file.filePath,
+    imageUrl: `${IMAGEKIT_ENDPOINT}${file.filePath}`,
     category,
     description: file.customMetadata?.description || `A beautiful ${category.toLowerCase()} wallpaper`,
     source: file.customMetadata?.source || file.tags?.find((t: string) => ['pexels', 'unsplash', 'pixabay'].includes(t.toLowerCase())) || 'imagekit',

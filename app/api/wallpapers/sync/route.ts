@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { imagekitServer } from '@/lib/server/imagekit'
 import { Wallpaper } from '@/types/wallpaper'
-import { resolveCategory, cleanFilename } from '@/lib/categories'
+import { toWallpaper } from '@/lib/server/wallpapers'
 
 let cache: {
   data: Wallpaper[] | null
@@ -14,24 +14,6 @@ let cache: {
 
 const CACHE_DURATION = 60 * 60 * 1000
 const WALLPAPERS_FOLDER = '/wallpapers'
-
-function transformToWallpaper(file: any): Wallpaper {
-  const category = resolveCategory(file.customMetadata?.category, file.tags)
-  
-  return {
-    id: file.fileId,
-    title: file.customMetadata?.title || cleanFilename(file.name),
-    imageUrl: file.filePath,
-    category: category as any,
-    description: file.customMetadata?.description || `A beautiful ${category.toLowerCase()} wallpaper`,
-    source: file.customMetadata?.source || file.tags?.find((t: string) => ['pexels', 'unsplash', 'pixabay'].includes(t.toLowerCase())) || 'imagekit',
-    sourceUrl: file.customMetadata?.sourceUrl || undefined,
-    width: file.width,
-    height: file.height,
-    fileSize: file.size,
-    tags: file.tags || []
-  }
-}
 
 export async function GET() {
   try {
@@ -69,7 +51,7 @@ export async function GET() {
         
         return isDirectlyInWallpapers && isImageFile
       })
-      .map(transformToWallpaper)
+      .map(toWallpaper)
       .sort((a, b) => a.title.localeCompare(b.title))
     
     if (wallpapers.length === 0) {

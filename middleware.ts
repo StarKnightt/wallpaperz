@@ -1,5 +1,5 @@
 import { clerkMiddleware } from "@clerk/nextjs/server"; 
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
 import { COUNTRY_COOKIE } from "@/lib/consent";
 
 // Canonical host. The apex (wallpaperz.in) and plain http both served 200 after
@@ -43,12 +43,18 @@ function withCountryHint(req: NextRequest, res: NextResponse) {
 const WALLPAPER_SEGMENT = /^\/wallpaper\/([^/]+)\/?$/;
 const WALLPAPER_ID = /[0-9a-f]{24}$/i;
 
+// Bare ImageKit file paths requested on our own domain (Googlebot-Image used to
+// lift them out of the RSC payload). They map 1:1 to the ImageKit folder, and
+// without this each one SSR'd the full Next 404 page (~100-200ms CPU).
+const IMAGEKIT_FILE = /^\/wallpapers\/[^/]+\.(?:jpe?g|png|webp|avif|gif)$/i;
+const IK_WALLPAPERS = "https://ik.imagekit.io/starknight/wallpapers";
+
 // Nothing is protected here on purpose: every page is public (signed-out
 // /ai-generate renders its landing view) and each authenticated API route
 // checks `await auth()` itself so it can answer 401 JSON instead of a
 // redirect. Webhooks authenticate by signature. clerkMiddleware only has to
 // run so auth() works in those handlers.
-export default clerkMiddleware((_auth, req) => {
+const clerk = clerkMiddleware((_auth, req) => {
   const redirect = canonicalRedirect(req);
   if (redirect) return redirect;
   const segment = req.nextUrl.pathname.match(WALLPAPER_SEGMENT)?.[1];
@@ -58,7 +64,17 @@ export default clerkMiddleware((_auth, req) => {
   if (!req.nextUrl.pathname.startsWith("/api/")) return withCountryHint(req, NextResponse.next());
   return NextResponse.next();
 });
- 
+
+export default function middleware(req: NextRequest, event: NextFetchEvent) {
+  const { pathname } = req.nextUrl;
+  if (IMAGEKIT_FILE.test(pathname)) {
+    const res = NextResponse.redirect(`${IK_WALLPAPERS}${pathname.slice("/wallpapers".length)}`, 308);
+    res.headers.set("Cache-Control", "public, max-age=86400");
+    return res;
+  }
+  return clerk(req, event);
+}
+
 export const config = {
   // Skip middleware for static files and favicon. The crawler-facing XML/TXT
   // files are matched explicitly so the apex->www redirect covers them too.
@@ -67,5 +83,6 @@ export const config = {
     "/",
     "/(api|trpc)(.*)",
     "/(sitemap.xml|wallpapers-sitemap.xml|robots.txt)",
+    "/wallpapers/:file*",
   ],
 };
