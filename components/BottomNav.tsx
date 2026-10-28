@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Sparkles, Info } from "lucide-react"
+import { Home, Sparkles, Package, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useBottomAnchorAd } from "@/lib/hooks/useBottomAnchorAd"
 
@@ -20,6 +20,11 @@ export default function BottomNav() {
       name: 'AI Generate',
       href: '/ai-generate',
       icon: Sparkles
+    },
+    {
+      name: 'Packs',
+      href: '/packs',
+      icon: Package
     },
     {
       name: 'About',

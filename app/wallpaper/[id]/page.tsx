@@ -9,8 +9,7 @@ import WallpaperPageClient from './WallpaperPageClient'
 import CreditSnippet from '@/components/CreditSnippet'
 import AdUnit from '@/components/AdUnit'
 import { AD_SLOTS } from '@/lib/ads'
-import { ArrowUpRight } from 'lucide-react'
-import { formatUsd, packForWallpaper, packHref, packThumb } from '@/lib/packs'
+import WallpaperPackCard from '@/components/packs/WallpaperPackCard'
 
 // ISR with full build-time prerendering: every wallpaper page is generated at
 // build (one ImageKit list call, same as the sitemaps) so no visitor request
@@ -112,7 +111,6 @@ export default async function WallpaperPage(props: Props) {
     ? wallpaper.imageUrl
     : `${process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT}${wallpaper.imageUrl}`
   const aiGenerated = isAiGenerated(wallpaper)
-  const pack = packForWallpaper(wallpaper.imageUrl, wallpaper.category)
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -245,33 +243,6 @@ export default async function WallpaperPage(props: Props) {
               </div>
             )}
 
-            {pack && (
-              <a
-                href={packHref(pack, 'wallpaper-page')}
-                target="_blank"
-                rel="noopener"
-                className="group flex items-center gap-3 rounded-lg border p-3 text-sm transition-colors hover:border-foreground/30"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={packThumb(pack.covers[0], 160)}
-                  alt=""
-                  loading="lazy"
-                  className="h-11 w-11 shrink-0 rounded-md object-cover"
-                />
-                <span className="min-w-0 flex-1">
-                  <span className="block font-medium">Part of the {pack.name} pack</span>
-                  <span className="block text-xs text-muted-foreground">
-                    {pack.count} wallpapers · phone, iPad &amp; desktop
-                  </span>
-                </span>
-                <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium tabular-nums text-muted-foreground transition-colors group-hover:text-foreground">
-                  {formatUsd(pack.priceUsd)}
-                  <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-                </span>
-              </a>
-            )}
-
             <CreditSnippet title={wallpaper.title} pageUrl={pageUrl} imageUrl={imageUrl} />
             
           </div>
@@ -328,7 +299,9 @@ export default async function WallpaperPage(props: Props) {
           </section>
         )}
 
-        <AdUnit slot={AD_SLOTS.bottom} className="mt-12" />
+        <WallpaperPackCard imageUrl={wallpaper.imageUrl} category={wallpaper.category} />
+
+        <AdUnit slot={AD_SLOTS.bottom} className="mt-16" />
       </div>
     </>
   )

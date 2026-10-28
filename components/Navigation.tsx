@@ -17,6 +17,10 @@ export default function Navigation() {
       href: '/ai-generate',
     },
     {
+      name: 'Packs',
+      href: '/packs',
+    },
+    {
       name: 'Pricing',
       href: '/pricing',
     },
