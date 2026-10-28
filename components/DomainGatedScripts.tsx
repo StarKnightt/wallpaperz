@@ -4,10 +4,7 @@ import { useEffect } from "react"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import { useAdGate } from "@/lib/hooks/useAdGate"
 import { CONSENT_REGIONS, COUNTRY_COOKIE } from "@/lib/consent"
-
-// Publisher ID is public by nature (it's served in /ads.txt); the protection
-// against clones is the hostname gate in useAdGate, not secrecy of the ID.
-const ADSENSE_ID = process.env.NEXT_PUBLIC_ADSENSE_ID || "ca-pub-9812963383908086"
+import { ADSENSE_ID } from "@/lib/ads"
 
 const CLARITY_ID = "q9tt7wi9dk"
 // Poll for Google's CMP every 500ms for up to 30s (AdSense itself may wait for Clerk).
@@ -110,7 +107,7 @@ export default function DomainGatedScripts() {
     return stopTcf
   }, [allowed])
 
-  // AdSense Auto ads: loading this script is all that's needed (no manual units).
+  // AdSense: Auto ads (in-page only) plus the manual units in components/AdUnit.
   // Waits for Clerk so Pro members never load it.
   useEffect(() => {
     const w = window as unknown as { adsbygoogle?: AdsQueue }

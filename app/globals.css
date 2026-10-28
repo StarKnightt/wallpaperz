@@ -550,3 +550,8 @@ body {
 .blog-prose img {
   border-radius: 0.75rem;
 }
+
+/* Manual ad units (components/AdUnit.tsx): collapse, label included, when AdSense has no ad to show */
+.ad-unit:has(ins[data-ad-status="unfilled"]) {
+  display: none;
+}

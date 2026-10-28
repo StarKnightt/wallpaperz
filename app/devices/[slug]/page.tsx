@@ -9,6 +9,8 @@ import {
   wallpapersForDevice, deviceDownloadUrl, deviceThumbUrl,
 } from '@/lib/devices'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo'
+import AdUnit from '@/components/AdUnit'
+import { AD_SLOTS } from '@/lib/ads'
 
 // Daily, like /wallpaper/[id]: stale-hit re-renders of these large pages exceed
 // the 10ms CPU cap. Unknown slugs get the static 404 instead of an SSR attempt.
@@ -210,6 +212,10 @@ export default async function DevicePage(props: Props) {
           </p>
         </div>
       </section>
+
+      {/* Every card in the grid above has a Download button, so the only unit
+          sits below the text section, not inside or right after the grid. */}
+      <AdUnit slot={AD_SLOTS.inContent} className="mt-14" />
 
       <section className="mt-14">
         <h2 className="text-xl font-bold">Other {KIND_LABEL[d.kind].toLowerCase()}</h2>

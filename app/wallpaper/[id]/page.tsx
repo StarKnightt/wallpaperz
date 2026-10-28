@@ -7,6 +7,8 @@ import { idFromSegment, wallpaperPath, wallpaperSegment } from '@/lib/wallpaper-
 import { devicesForWallpaper, deviceDownloadUrl } from '@/lib/devices'
 import WallpaperPageClient from './WallpaperPageClient'
 import CreditSnippet from '@/components/CreditSnippet'
+import AdUnit from '@/components/AdUnit'
+import { AD_SLOTS } from '@/lib/ads'
 import { ArrowUpRight } from 'lucide-react'
 import { formatUsd, packForWallpaper, packHref, packThumb } from '@/lib/packs'
 
@@ -275,6 +277,10 @@ export default async function WallpaperPage(props: Props) {
           </div>
         </div>
 
+        {/* On lg the image column can end right at the Download button, so the
+            top margin keeps this unit well clear of it. */}
+        <AdUnit slot={AD_SLOTS.inContent} className="mt-16 lg:mt-36" />
+
         {related.length > 0 && (
           <section className="mt-12">
             <div className="flex flex-wrap items-baseline justify-between gap-2 mb-6">
@@ -321,6 +327,8 @@ export default async function WallpaperPage(props: Props) {
             </div>
           </section>
         )}
+
+        <AdUnit slot={AD_SLOTS.bottom} className="mt-12" />
       </div>
     </>
   )

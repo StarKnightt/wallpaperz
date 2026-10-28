@@ -13,7 +13,7 @@
     "analyze": "cross-env ANALYZE=true next build",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:deploy": "opennextjs-cloudflare build && node scripts/check-clerk-keys.mjs && opennextjs-cloudflare deploy",
     "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "wallpapers:list": "node scripts/list-imagekit.mjs",
     "wallpapers:upload": "node scripts/upload-wallpapers.mjs",

@@ -14,14 +14,17 @@ interface Props {
   wallpapers: Wallpaper[]
   onPreview: (wallpaper: Wallpaper) => void
   isLoading?: boolean
+  /** Position of the first card in the full list when a list is split across grids */
+  indexOffset?: number
 }
 
-export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false }: Props) {
+export default function WallpaperGrid({ wallpapers, onPreview, isLoading = false, indexOffset = 0 }: Props) {
   if (isLoading) {
     return <LoadingSkeleton />
   }
 
-  const wallpaperCards = wallpapers.map((wallpaper, index) => {
+  const wallpaperCards = wallpapers.map((wallpaper, i) => {
+    const index = i + indexOffset
     // Portrait (phone) wallpapers get a tall 1x2 cell so they aren't cropped
     // into wide cells; landscape keeps the mixed bento pattern.
     const isPortrait = !!(wallpaper.width && wallpaper.height && wallpaper.height > wallpaper.width)

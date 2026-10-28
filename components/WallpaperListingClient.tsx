@@ -3,6 +3,8 @@
 import { ReactNode, useMemo, useState } from "react"
 import WallpaperGrid from "@/components/WallpaperGrid"
 import WallpaperPreviewModal from "@/components/WallpaperPreviewModal"
+import AdUnit from "@/components/AdUnit"
+import { AD_SLOTS } from "@/lib/ads"
 import DeviceFilter, { DeviceFilterValue, isPortraitWallpaper, matchesDeviceFilter } from "@/components/DeviceFilter"
 import { Wallpaper } from "@/types/wallpaper"
 
@@ -16,6 +18,9 @@ interface Props {
   device?: DeviceFilterValue
   onDeviceChange?: (value: DeviceFilterValue) => void
 }
+
+// Cards before the in-feed ad: two to three rows at every breakpoint.
+const IN_FEED_AFTER = 8
 
 // Client shell around the grid for paginated list pages. The wallpaper slice
 // comes from the server component; the Desktop/Mobile toggle filters WITHIN
@@ -71,8 +76,22 @@ export default function WallpaperListingClient({
         </div>
       )}
 
-      {visible.length > 0 ? (
-        <WallpaperGrid wallpapers={visible} onPreview={handlePreview} />
+      {visible.length > IN_FEED_AFTER ? (
+        <>
+          <WallpaperGrid wallpapers={visible.slice(0, IN_FEED_AFTER)} onPreview={handlePreview} />
+          <AdUnit slot={AD_SLOTS.inContent} className="my-8" />
+          <WallpaperGrid
+            wallpapers={visible.slice(IN_FEED_AFTER)}
+            onPreview={handlePreview}
+            indexOffset={IN_FEED_AFTER}
+          />
+          <AdUnit slot={AD_SLOTS.bottom} className="mt-10" />
+        </>
+      ) : visible.length > 0 ? (
+        <>
+          <WallpaperGrid wallpapers={visible} onPreview={handlePreview} />
+          <AdUnit slot={AD_SLOTS.bottom} className="mt-10" />
+        </>
       ) : (
         <div className="text-center py-16">
           <p className="text-lg text-muted-foreground">
