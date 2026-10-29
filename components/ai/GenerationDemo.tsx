@@ -64,7 +64,7 @@ export default function GenerationDemo() {
 
   return (
     <div ref={rootRef} className="relative w-full" aria-hidden="true">
-      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#0d0b14] shadow-[0_30px_60px_-30px_rgba(40,20,80,0.45)] ring-1 ring-black/5 dark:ring-white/10 sm:aspect-[16/9]">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#0e0f11] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)] ring-1 ring-black/5 dark:ring-white/10 sm:aspect-[16/9]">
         {/* eslint-disable-next-line @next/next/no-img-element -- previous result stays as a dim backdrop while the next prompt types */}
         <img
           src={prev.src}
@@ -83,7 +83,7 @@ export default function GenerationDemo() {
         )}
       </div>
 
-      <div className="relative mx-3 -mt-10 flex items-center gap-3 rounded-xl border border-black/[0.06] bg-white/95 px-4 py-3 shadow-[0_8px_24px_-12px_rgba(40,20,80,0.25)] backdrop-blur-md dark:border-white/10 dark:bg-zinc-900/90 sm:mx-6 sm:-mt-12 sm:px-5 sm:py-3.5">
+      <div className="relative mx-3 -mt-10 flex items-center gap-3 rounded-xl border border-black/[0.06] bg-white/95 px-4 py-3 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25)] backdrop-blur-md dark:border-white/10 dark:bg-zinc-900/90 sm:mx-6 sm:-mt-12 sm:px-5 sm:py-3.5">
         <p className="min-h-[1.25rem] min-w-0 flex-1 truncate text-sm text-foreground">
           {ex.prompt.slice(0, typed)}
           <span className={`ml-px inline-block h-4 w-px translate-y-[3px] bg-foreground ${phase === "typing" ? "motion-safe:animate-pulse" : "opacity-0"}`} />

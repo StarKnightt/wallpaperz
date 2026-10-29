@@ -26,7 +26,7 @@ interface FormValues {
 }
 
 const ghostBtn =
-  "inline-flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-border bg-background px-2 text-[13px] font-medium sm:gap-2 sm:px-3.5 sm:text-sm text-foreground transition-[transform,background-color] duration-150 ease-out hover:bg-muted active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
+  "inline-flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-border bg-background px-2 text-[13px] font-medium sm:gap-2 sm:px-3.5 sm:text-sm text-foreground transition-[transform,background-color] duration-150 ease-out hover:bg-muted active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
 
 /** Signed-in generator: prompt composer, canvas, and result actions. */
 export default function Studio() {
@@ -200,7 +200,7 @@ export default function Studio() {
               </label>
               <div
                 className={cn(
-                  "mt-2 rounded-xl border bg-card shadow-[0_1px_2px_rgba(30,20,60,0.04)] transition-[border-color,box-shadow] duration-150 focus-within:border-violet-500/60 focus-within:ring-4 focus-within:ring-violet-500/10",
+                  "mt-2 rounded-xl border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow] duration-150 focus-within:border-brand/60 focus-within:ring-4 focus-within:ring-brand/15",
                   errors.prompt ? "border-destructive/60" : "border-border"
                 )}
               >
@@ -232,7 +232,7 @@ export default function Studio() {
                     <button
                       type="submit"
                       disabled={isGenerating}
-                      className="group inline-flex h-9 items-center gap-2 rounded-lg bg-foreground pl-3.5 pr-3 text-sm font-medium text-background transition-[transform,opacity] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+                      className="group inline-flex h-9 items-center gap-2 rounded-lg bg-brand pl-3.5 pr-3 text-sm font-medium text-brand-foreground transition-[transform,background-color] duration-150 ease-out hover:bg-brand/90 active:scale-[0.97] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
                     >
                       {isGenerating ? "Generating" : "Generate"}
                       {!isGenerating && <ArrowRight className="h-4 w-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5" strokeWidth={1.75} />}
@@ -267,7 +267,7 @@ export default function Studio() {
                       aria-pressed={active}
                       onClick={() => setStyle(active ? null : s.id)}
                       className={cn(
-                        "h-8 rounded-lg border px-3 text-[13px] transition-[transform,background-color,border-color,color] duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60",
+                        "h-8 rounded-lg border px-3 text-[13px] transition-[transform,background-color,border-color,color] duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         active
                           ? "border-foreground bg-foreground text-background"
                           : "border-border bg-background text-muted-foreground hover:border-foreground/30 hover:text-foreground"
@@ -293,7 +293,7 @@ export default function Studio() {
                   rows={2}
                   maxLength={MAX_PROMPT}
                   placeholder="Low quality, blurry, distorted"
-                  className="block w-full resize-none rounded-lg border border-border bg-card px-3 py-2 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/80 focus:border-violet-500/60 focus:outline-none focus:ring-4 focus:ring-violet-500/10"
+                  className="block w-full resize-none rounded-lg border border-border bg-card px-3 py-2 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/80 focus:border-brand/60 focus:outline-none focus:ring-4 focus:ring-brand/15"
                   {...register("negativePrompt")}
                 />
                 <div className="mt-2 flex items-center justify-between gap-3">
@@ -323,7 +323,7 @@ export default function Studio() {
                     title={ex.prompt}
                     className="group block w-full text-left transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-50 focus-visible:outline-none"
                   >
-                    <span className="block aspect-[16/10] overflow-hidden rounded-lg bg-muted ring-1 ring-black/5 group-focus-visible:ring-2 group-focus-visible:ring-violet-500 dark:ring-white/10">
+                    <span className="block aspect-[16/10] overflow-hidden rounded-lg bg-muted ring-1 ring-black/5 group-focus-visible:ring-2 group-focus-visible:ring-ring dark:ring-white/10">
                       {/* eslint-disable-next-line @next/next/no-img-element -- ImageKit-sized */}
                       <img
                         src={libraryImage(ex.file, 400)}
@@ -356,7 +356,7 @@ export default function Studio() {
               </div>
             )}
 
-            <div className="relative aspect-video overflow-hidden rounded-xl bg-[#f4f3f8] ring-1 ring-black/[0.06] dark:bg-white/[0.03] dark:ring-white/10">
+            <div className="relative aspect-video overflow-hidden rounded-xl bg-muted/60 ring-1 ring-black/[0.06] dark:bg-white/[0.03] dark:ring-white/10">
               <AnimatePresence mode="wait" initial={false}>
                 {isGenerating ? (
                   <motion.div key="gen" className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
@@ -408,7 +408,7 @@ export default function Studio() {
                   <button
                     type="button"
                     onClick={handleDownload}
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-foreground px-4 text-sm font-medium text-background transition-[transform,opacity] duration-150 ease-out hover:opacity-90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-foreground px-4 text-sm font-medium text-background transition-[transform,opacity] duration-150 ease-out hover:opacity-90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     <Download className="h-4 w-4" strokeWidth={1.75} />
                     Download
@@ -470,7 +470,7 @@ export default function Studio() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0b0a10]/95 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0e0f11]/95 p-4 backdrop-blur-sm"
             onClick={() => setIsPreviewOpen(false)}
           >
             <motion.div

@@ -55,34 +55,6 @@ export default function NotFoundView() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div 
-          className="absolute top-1/3 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ 
-            duration: 8, 
-            repeat: Infinity,
-            repeatType: "reverse" 
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ 
-            duration: 8, 
-            repeat: Infinity,
-            repeatType: "reverse" 
-          }}
-        />
-      </div>
-      
       {/* 404 Content */}
       <motion.div 
         className="relative z-10 max-w-2xl mx-auto text-center"
@@ -102,11 +74,11 @@ export default function NotFoundView() {
         </motion.div>
         
         <motion.h1
-          className="text-3xl md:text-5xl font-bold mb-4"
+          className="text-3xl md:text-5xl font-semibold tracking-tight mb-4"
           variants={itemVariants}
         >
           <span className="glitch-text" data-text="404">404</span>
-          <span className="block mt-2 text-2xl md:text-3xl">No wallpaper on this screen</span>
+          <span className="block mt-2 text-2xl md:text-3xl tracking-[-0.02em]">No wallpaper on this screen</span>
         </motion.h1>
 
         <motion.p

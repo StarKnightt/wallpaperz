@@ -32,11 +32,11 @@ export default function WallpaperPackCard({ imageUrl, category }: Props) {
         href={packHref(pack, "wallpaper-page")}
         target="_blank"
         rel="noopener"
-        className="group grid gap-4 rounded-2xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 sm:grid-cols-[minmax(0,16rem)_1fr] sm:items-center sm:gap-6"
+        className="group grid gap-4 rounded-2xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:grid-cols-[minmax(0,16rem)_1fr] sm:items-center sm:gap-6"
       >
         <PackMosaic covers={covers} name={pack.name} />
         <div className="flex flex-col px-1.5 pb-1.5 sm:py-2 sm:pr-4">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-violet-600 dark:text-violet-400">
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Wallpaper pack
           </p>
           <h2 className="mt-2 text-lg font-semibold tracking-tight sm:text-xl">{heading}</h2>
@@ -45,7 +45,7 @@ export default function WallpaperPackCard({ imageUrl, category }: Props) {
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3">
             <span className="text-2xl font-semibold tabular-nums">{formatUsd(pack.priceUsd)}</span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-5 py-2 text-sm font-medium text-background transition-opacity group-hover:opacity-90">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand px-5 py-2 text-sm font-medium text-brand-foreground transition-colors group-hover:bg-brand/90">
               Get the pack
               <ArrowUpRight className="h-4 w-4" aria-hidden />
             </span>

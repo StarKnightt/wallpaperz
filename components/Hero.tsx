@@ -183,10 +183,8 @@ export default function Hero({ wallpaperCount }: HeroProps) {
                 <span className="hidden sm:inline"> you won&apos;t find elsewhere</span>
               </span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-primary bg-[length:200%_auto] motion-safe:animate-text-shimmer">
-                Wallpapers Worth Staring At
-              </span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.035em] text-foreground">
+              Wallpapers Worth Staring At
             </h1>
           </motion.div>
 
@@ -207,14 +205,13 @@ export default function Hero({ wallpaperCount }: HeroProps) {
             onSubmit={handleSearch}
             className="relative max-w-2xl mx-auto"
           >
-            <div className="relative flex items-center group">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-xl transition-all group-hover:blur-2xl" />
+            <div className="relative flex items-center">
               <Search className="absolute left-4 w-5 h-5 text-muted-foreground z-10" />
               <Input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-12 pr-28 h-14 text-base md:text-lg rounded-full border-2 bg-background/80 backdrop-blur-md transition-all focus:bg-background/95 focus:ring-2 focus:ring-primary/20"
+                className="w-full pl-12 pr-28 h-14 text-base md:text-lg rounded-full border bg-background/80 backdrop-blur-md transition-colors focus:bg-background/95 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
                 placeholder="Try &quot;space&quot;, &quot;anime&quot; or &quot;minimal&quot;..."
                 autoComplete="off"
                 spellCheck="false"
@@ -222,7 +219,7 @@ export default function Hero({ wallpaperCount }: HeroProps) {
               <Button 
                 type="submit"
                 size="lg"
-                className="absolute right-2 rounded-full px-6 bg-gradient-to-r from-primary to-purple-500 hover:opacity-90 transition-opacity"
+                className="absolute right-2 rounded-full px-6"
               >
                 Search
               </Button>

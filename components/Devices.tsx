@@ -64,7 +64,7 @@ export function LockScreenChrome({ size = 16 }: { size?: number }) {
 
 /** macOS-style desktop chrome: menu bar and dock. */
 export function DesktopChrome({ size = 12 }: { size?: number }) {
-  const dock = ["#3b82f6", "#f97316", "#22c55e", "#a855f7", "#ec4899", "#eab308"]
+  const dock = ["#5c7187", "#9a7a62", "#6f8569", "#77707f", "#8f7479", "#a39466"]
   return (
     <div className="pointer-events-none absolute inset-0 flex flex-col" style={{ fontSize: size }}>
       <div className="flex h-[1.7em] items-center gap-[1.2em] bg-black/25 px-[0.9em] text-[0.75em] font-medium text-white backdrop-blur-md">
@@ -78,7 +78,7 @@ export function DesktopChrome({ size = 12 }: { size?: number }) {
       </div>
       <div className="mx-auto mb-[0.6em] mt-auto flex gap-[0.45em] rounded-[1em] border border-white/20 bg-white/15 p-[0.4em] backdrop-blur-xl">
         {dock.map((c) => (
-          <span key={c} className="h-[2.2em] w-[2.2em] rounded-[0.6em] shadow-inner" style={{ background: `linear-gradient(145deg, ${c}, ${c}99)` }} />
+          <span key={c} className="h-[2.2em] w-[2.2em] rounded-[0.6em]" style={{ backgroundColor: c }} />
         ))}
       </div>
     </div>

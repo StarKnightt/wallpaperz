@@ -26,7 +26,10 @@ body {
     --destructive-foreground: 210 40% 98%;
     --border: 216 20% 86%;
     --input: 216 18% 81%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 213 32% 38%;
+    /* The one accent: primary CTAs and small active/focus states only. */
+    --brand: 213 32% 38%;
+    --brand-foreground: 0 0% 100%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -35,25 +38,27 @@ body {
     --radius: 0.5rem;
   }
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --background: 220 8% 6%;
+    --foreground: 220 10% 95%;
+    --card: 220 8% 7.5%;
+    --card-foreground: 220 10% 95%;
+    --popover: 220 8% 8%;
+    --popover-foreground: 220 10% 95%;
+    --primary: 220 10% 95%;
+    --primary-foreground: 220 8% 8%;
+    --secondary: 220 6% 14%;
+    --secondary-foreground: 220 10% 95%;
+    --muted: 220 6% 14%;
+    --muted-foreground: 220 6% 64%;
+    --accent: 220 6% 14%;
+    --accent-foreground: 220 10% 95%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --destructive-foreground: 220 10% 95%;
+    --border: 220 6% 16%;
+    --input: 220 6% 20%;
+    --ring: 212 38% 72%;
+    --brand: 212 38% 72%;
+    --brand-foreground: 220 10% 7%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -117,167 +122,6 @@ body {
     0% { transform: translateY(-50%); }
     100% { transform: translateY(0); }
   }
-
-  .animate-gradient-x {
-    background-size: 200% 200%;
-    animation: gradient-x 20s ease infinite; /* Slower animation */
-  }
-  
-  .animate-text-shimmer {
-    background-size: 200% auto;
-    animation: text-shimmer 3s linear infinite;
-  }
-  
-  @keyframes gradient-x {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
-  @keyframes text-shimmer {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0) translateX(0);
-    }
-    25% {
-      transform: translateY(-10px) translateX(5px);
-    }
-    50% {
-      transform: translateY(0) translateX(10px);
-    }
-    75% {
-      transform: translateY(10px) translateX(5px);
-    }
-  }
-
-  @keyframes glow {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: -1000px 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
-  }
-
-  .animate-shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite;
-  }
-
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
-  }
-
-  .animate-shine {
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    background-size: 200% 100%;
-    animation: shine 8s linear infinite;
-  }
-
-  @keyframes shine {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-
-  /* Enhanced pulse animation */
-  .animate-pulse-glow {
-    animation: pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% {
-      opacity: 1;
-      filter: brightness(1) blur(0px);
-    }
-    50% {
-      opacity: 0.5;
-      filter: brightness(1.2) blur(4px);
-    }
-  }
-
-  /* Floating particles background */
-  .particle {
-    position: absolute;
-    opacity: 0.5;
-    animation: particle-float 8s infinite linear;
-    will-change: transform; /* Optimize transform animations */
-  }
-
-  @keyframes particle-float {
-    0% {
-      transform: translateY(0);
-      opacity: 0.2;
-    }
-    100% {
-      transform: translateY(-100px);
-      opacity: 0;
-    }
-  }
-
-  @keyframes shine {
-    from {
-      transform: translateX(-100%) skew(-45deg);
-    }
-    to {
-      transform: translateX(400%) skew(-45deg);
-    }
-  }
-}
-
-.text-gradient {
-  background: linear-gradient(to right, #4F46E5, #9333EA);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.hover-card-gradient:hover {
-  background: linear-gradient(45deg, 
-    rgba(79, 70, 229, 0.1) 0%,
-    rgba(147, 51, 234, 0.1) 100%
-  );
-}
-
-.grid-background {
-  background-image: 
-    linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
 }
 
 /* ---------- Device mockups (components/Devices.tsx) ---------- */
@@ -420,11 +264,10 @@ body {
   content: attr(data-text);
   position: absolute;
   inset: 0;
-  mix-blend-mode: screen;
   pointer-events: none;
 }
-.glitch-text::before { color: #ff2d55; animation: glitch-a 2.8s infinite steps(1); }
-.glitch-text::after { color: #00e0ff; animation: glitch-b 2.8s infinite steps(1); }
+.glitch-text::before { color: hsl(var(--muted-foreground)); animation: glitch-a 2.8s infinite steps(1); }
+.glitch-text::after { color: hsl(var(--foreground) / 0.5); animation: glitch-b 2.8s infinite steps(1); }
 .glitch-bars { animation: glitch-jitter 3s infinite steps(1); }
 .glitch-slice { opacity: 0; animation: glitch-slice 3s infinite steps(1); }
 .glitch-slice-b { animation-delay: -1.3s; }

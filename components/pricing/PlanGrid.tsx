@@ -43,9 +43,9 @@ function Segmented<T extends string>({ value, onChange, options, label }: {
             aria-checked={active}
             onClick={() => onChange(o.value)}
             className={cn(
-              "h-8 rounded-md px-3 font-medium transition-[background-color,color,box-shadow] duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60",
+              "h-8 rounded-md px-3 font-medium transition-[background-color,color,box-shadow] duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               active
-                ? "bg-background text-foreground shadow-[0_1px_2px_rgba(20,10,40,0.08)] ring-1 ring-border dark:bg-white/10 dark:ring-white/10"
+                ? "bg-background text-foreground shadow-sm ring-1 ring-border dark:bg-white/10 dark:ring-white/10"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -60,15 +60,15 @@ function Segmented<T extends string>({ value, onChange, options, label }: {
 function Feature({ children, accent }: { children: React.ReactNode; accent?: boolean }) {
   return (
     <li className="flex gap-2.5 text-sm leading-snug text-foreground/90">
-      <Check className={cn("mt-0.5 h-4 w-4 shrink-0", accent ? "text-violet-600 dark:text-violet-400" : "text-muted-foreground")} strokeWidth={2} />
+      <Check className={cn("mt-0.5 h-4 w-4 shrink-0", accent ? "text-foreground" : "text-muted-foreground")} strokeWidth={2} />
       <span>{children}</span>
     </li>
   )
 }
 
 const btnBase =
-  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-[transform,opacity,background-color] duration-150 ease-out active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-const btnPrimary = `${btnBase} bg-foreground text-background hover:opacity-90`
+  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-[transform,opacity,background-color] duration-150 ease-out active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+const btnPrimary = `${btnBase} bg-brand text-brand-foreground hover:bg-brand/90`
 const btnSecondary = `${btnBase} border border-border bg-background text-foreground hover:bg-muted`
 
 function Card({ highlight, children }: { highlight?: boolean; children: React.ReactNode }) {
@@ -77,7 +77,7 @@ function Card({ highlight, children }: { highlight?: boolean; children: React.Re
       className={cn(
         "flex flex-col rounded-xl border p-6",
         highlight
-          ? "border-violet-500/30 bg-violet-500/[0.035] dark:border-violet-400/30 dark:bg-violet-400/[0.06]"
+          ? "border-brand/60 bg-card"
           : "border-border bg-card"
       )}
     >
@@ -92,7 +92,7 @@ function Header({ name, note, noteAccent, description }: { name: string; note?: 
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-base font-semibold text-foreground">{name}</h2>
         {note && (
-          <span className={cn("text-xs font-medium", noteAccent ? "text-violet-600 dark:text-violet-400" : "text-muted-foreground")}>{note}</span>
+          <span className={cn("text-xs font-medium", noteAccent ? "rounded-full border border-border px-2 py-0.5 text-foreground" : "text-muted-foreground")}>{note}</span>
         )}
       </div>
       <p className="mt-1.5 text-sm md:min-h-[2.5rem] leading-snug text-muted-foreground">{description}</p>
@@ -200,7 +200,7 @@ export default function PlanGrid({
                   value: "yearly",
                   label: (
                     <span>
-                      Yearly <span className="text-violet-600 dark:text-violet-400">−{YEARLY_SAVING}%</span>
+                      Yearly <span className="text-muted-foreground">−{YEARLY_SAVING}%</span>
                     </span>
                   ),
                 },
@@ -216,7 +216,7 @@ export default function PlanGrid({
               buy(proPlan, `Go Pro ${billing === "yearly" ? "yearly" : "monthly"}`, btnPrimary)
             )}
           </div>
-          <ul className="mt-6 space-y-3 border-t border-violet-500/15 pt-6">
+          <ul className="mt-6 space-y-3 border-t border-border/70 pt-6">
             <Feature accent>{PRO_PER_MONTH} AI wallpapers a month, on top of the free {FREE_PER_DAY} a day</Feature>
             <Feature accent>No ads anywhere on Wallpaperz</Feature>
             <Feature accent>Keeps working when free generations pause on busy days</Feature>

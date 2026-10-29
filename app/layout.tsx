@@ -22,7 +22,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 // Matches manifest.json theme_color/background_color (dark theme --background).
 export const viewport: Viewport = {
-  themeColor: '#020817',
+  themeColor: '#0e0f11',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',

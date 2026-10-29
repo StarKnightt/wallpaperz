@@ -82,9 +82,8 @@ export default function LegalPage({ title, intro, toc, showLastUpdated = true, c
   return (
     <div className="min-h-screen">
       <div className="relative overflow-hidden py-16 md:py-24">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-background" />
         <div className="container relative z-10 mx-auto px-4">
-          <h1 className="mb-4 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-center text-4xl font-bold text-transparent md:text-6xl">
+          <h1 className="mb-4 text-center text-4xl font-semibold tracking-[-0.035em] text-foreground md:text-6xl">
             {title}
           </h1>
           {showLastUpdated && (

@@ -23,7 +23,7 @@ export default function GeneratingSteps() {
       </div>
       <div className="h-[2px] overflow-hidden bg-white/15">
         <div
-          className="h-full origin-left bg-gradient-to-r from-violet-400 via-pink-400 to-amber-300 transition-transform duration-200 ease-linear"
+          className="h-full origin-left bg-brand transition-transform duration-200 ease-linear"
           style={{ transform: `scaleX(${pct / 100})` }}
         />
       </div>

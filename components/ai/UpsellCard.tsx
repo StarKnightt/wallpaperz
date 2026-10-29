@@ -18,7 +18,7 @@ export default function UpsellCard({ code, message, resetTime, onDismiss }: {
     : null
 
   return (
-    <div role="alert" className="relative rounded-xl border border-violet-500/25 bg-violet-500/[0.04] p-5 dark:bg-violet-400/[0.06]">
+    <div role="alert" className="relative rounded-xl border border-border bg-card p-5">
       <button
         type="button"
         onClick={onDismiss}
@@ -41,7 +41,7 @@ export default function UpsellCard({ code, message, resetTime, onDismiss }: {
             type="button"
             disabled={pending !== null}
             onClick={() => checkout("pro_monthly")}
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-foreground px-4 text-sm font-medium text-background transition-[transform,opacity] duration-150 ease-out hover:opacity-90 active:scale-[0.97] disabled:opacity-60"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand px-4 text-sm font-medium text-brand-foreground transition-[transform,background-color] duration-150 ease-out hover:bg-brand/90 active:scale-[0.97] disabled:opacity-60"
           >
             {pending === "pro_monthly" && <Loader2 className="h-4 w-4 animate-spin" />}
             Go Pro: {PRO_PER_MONTH}/mo for ${PLANS.pro_monthly.priceUsd}

@@ -9,13 +9,12 @@ export default function AboutPage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <div className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-background" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="container mx-auto px-4 relative z-10"
         >
-          <h1 className="text-5xl md:text-7xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
+          <h1 className="text-5xl md:text-7xl font-semibold tracking-[-0.035em] text-center mb-6 text-foreground">
             About Wallpaperz
           </h1>
           <p className="text-xl text-center text-muted-foreground max-w-2xl mx-auto">
@@ -32,7 +31,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-primary/5 rounded-2xl p-8"
+            className="rounded-2xl border bg-card p-8"
           >
             <div className="flex items-center gap-4 mb-6">
               <ImageIcon className="w-8 h-8 text-primary" />
@@ -51,7 +50,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-primary/5 rounded-2xl p-8"
+            className="rounded-2xl border bg-card p-8"
           >
             <h2 className="text-3xl font-bold mb-6">What We Offer</h2>
             <div className="grid md:grid-cols-2 gap-6">
@@ -82,7 +81,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-primary/5 rounded-2xl p-8"
+            className="rounded-2xl border bg-card p-8"
           >
             <h2 className="text-3xl font-bold mb-6">Let's Build Together</h2>
             <div className="flex flex-col md:flex-row gap-8 items-center">
@@ -116,7 +115,7 @@ export default function AboutPage() {
                     }
                   ].map((item, i) => (
                     <div key={i} className="bg-background/50 backdrop-blur-sm rounded-lg p-4 text-center">
-                      <div className="bg-primary/10 p-2 rounded-full w-10 h-10 flex items-center justify-center mx-auto mb-3">
+                      <div className="bg-muted p-2 rounded-full w-10 h-10 flex items-center justify-center mx-auto mb-3">
                         <item.icon className="w-5 h-5 text-primary" />
                       </div>
                       <h3 className="font-semibold mb-1">{item.title}</h3>

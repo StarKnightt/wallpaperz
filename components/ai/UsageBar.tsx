@@ -20,7 +20,7 @@ export default function UsageBar({ entitlements }: { entitlements: Entitlements 
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
       {plan !== "free" && (
-        <span className="font-medium text-violet-600 dark:text-violet-400">{plan === "lifetime" ? "Lifetime" : "Pro"}</span>
+        <span className="font-medium text-foreground">{plan === "lifetime" ? "Lifetime" : "Pro"}</span>
       )}
       <Stat value={`${free.remaining}/${free.limit}`} label="free today" />
       {pro && <Stat value={`${pro.remaining}/${pro.limit}`} label="Pro this month" />}

@@ -72,7 +72,7 @@ export default function PacksPage() {
 
       <div className="container mx-auto max-w-6xl px-4 pb-20 pt-10 sm:pt-14">
         <header className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-medium text-violet-600 dark:text-violet-400">Wallpaper Packs</p>
+          <p className="text-sm font-medium text-muted-foreground">Wallpaper Packs</p>
           <h1 className="mt-4 text-[2.25rem] font-semibold leading-[1.06] tracking-[-0.035em] text-foreground sm:text-5xl">
             Curated sets, every size
             <span className="block text-muted-foreground">in one download.</span>
@@ -97,11 +97,11 @@ export default function PacksPage() {
                 href={packHref(MEGA_PACK, "packs-page")}
                 target="_blank"
                 rel="noopener"
-                className="group grid h-full gap-5 rounded-2xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 md:grid-cols-2 md:gap-6"
+                className="group grid h-full gap-5 rounded-2xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:grid-cols-2 md:gap-6"
               >
                 <PackMosaic covers={MEGA_PACK.covers} name={MEGA_PACK.name} variant="strip" />
                 <div className="flex flex-col px-1.5 pb-1.5 md:py-3 md:pr-4">
-                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-violet-600 dark:text-violet-400">
+                  <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
                     Best value · all 7 packs
                   </p>
                   <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{MEGA_PACK.name}</h2>
@@ -116,7 +116,7 @@ export default function PacksPage() {
                         <s className="tabular-nums">{formatUsd(THEMED_PACKS_TOTAL_USD)}</s> separately · save {savePct}%
                       </span>
                     </p>
-                    <span className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-opacity group-hover:opacity-90">
+                    <span className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-brand-foreground transition-colors group-hover:bg-brand/90">
                       Get the bundle
                       <ArrowUpRight className="h-4 w-4" aria-hidden />
                     </span>
@@ -130,7 +130,7 @@ export default function PacksPage() {
                   href={packHref(p, "packs-page")}
                   target="_blank"
                   rel="noopener"
-                  className="group flex h-full flex-col rounded-2xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+                  className="group flex h-full flex-col rounded-2xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <PackMosaic covers={p.covers} name={p.name} />
                   <div className="flex flex-1 flex-col px-1.5 pb-1.5 pt-4">
@@ -141,7 +141,7 @@ export default function PacksPage() {
                     </p>
                     <div className="mt-auto flex items-center justify-between pt-4">
                       <span className="text-lg font-semibold tabular-nums">{formatUsd(p.priceUsd)}</span>
-                      <span className="inline-flex items-center gap-1 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors group-hover:border-foreground/40">
+                      <span className="inline-flex items-center gap-1 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors group-hover:border-brand group-hover:text-foreground">
                         Get the pack
                         <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
                       </span>
@@ -157,13 +157,13 @@ export default function PacksPage() {
           <p>
             Packs are optional. Each design is also a free download on its own wallpaper page, and buying a pack helps
             keep the library free. Files are for personal use; see the{" "}
-            <Link href="/license" className="font-medium text-violet-600 underline-offset-4 hover:underline dark:text-violet-400">
+            <Link href="/license" className="font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground">
               wallpaper license
             </Link>
             . Portrait designs ship in phone and iPad portrait sizes, landscape designs in desktop and iPad landscape sizes.
           </p>
           <p className="mt-4">
-            <Link href="/" className="font-medium text-violet-600 underline-offset-4 hover:underline dark:text-violet-400">
+            <Link href="/" className="font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground">
               Browse free wallpapers &rarr;
             </Link>
           </p>

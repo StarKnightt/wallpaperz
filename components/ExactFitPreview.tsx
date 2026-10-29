@@ -201,7 +201,7 @@ export default function ExactFitPreview() {
         </div>
 
         {/* Fixed-height stage; the screen box resizes inside it, so nothing around it moves */}
-        <div className="relative h-[180px] shrink-0 rounded-xl bg-gradient-to-b from-muted/40 to-muted/80 sm:h-[240px] lg:h-[340px]">
+        <div className="relative h-[180px] shrink-0 rounded-xl bg-muted/60 sm:h-[240px] lg:h-[340px]">
           <div className="absolute inset-x-4 bottom-7 top-3 sm:inset-x-8 sm:bottom-11 sm:top-5" style={{ containerType: "size" }}>
             <div className="flex h-full w-full items-center justify-center">
               <div

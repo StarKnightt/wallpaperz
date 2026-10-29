@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 }
 
-const link = "font-medium text-violet-600 underline-offset-4 hover:underline dark:text-violet-400"
+const link = "font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
 
 const FAQ: { q: string; a: string; body?: React.ReactNode }[] = [
   {
@@ -70,7 +70,7 @@ const COMPARE: { label: string; cells: [Cell, Cell, Cell, Cell] }[] = [
   { label: "Expires", cells: ["Resets daily", "Never", "When you cancel", "Never"] },
 ]
 const COLUMNS = ["Free", "Credits", "Pro", "Lifetime"]
-const proCol = "bg-violet-500/[0.035] dark:bg-violet-400/[0.06]"
+const proCol = "bg-muted/50"
 
 function CompareCell({ value }: { value: Cell }) {
   if (value === true) return <Check className="h-4 w-4 text-foreground" strokeWidth={2} aria-label="Included" />
@@ -90,7 +90,7 @@ export default function PricingPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <header className="max-w-2xl">
-        <p className="text-sm font-medium text-violet-600 dark:text-violet-400">Pricing</p>
+        <p className="text-sm font-medium text-muted-foreground">Pricing</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-[-0.035em] text-foreground sm:text-5xl">
           Free every day.
           <span className="block text-balance text-muted-foreground">Pay when you want more.</span>
@@ -150,7 +150,7 @@ export default function PricingPage() {
         <div className="divide-y divide-border/70 border-y border-border/70 lg:col-span-8">
           {FAQ.map(({ q, a, body }) => (
             <details key={q} className="group [&_summary::-webkit-details-marker]:hidden">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-4 text-[15px] font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-4 text-[15px] font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 {q}
                 <span
                   className="relative h-3 w-3 shrink-0 text-muted-foreground before:absolute before:inset-x-0 before:top-1/2 before:h-px before:-translate-y-1/2 before:bg-current after:absolute after:inset-y-0 after:left-1/2 after:w-px after:-translate-x-1/2 after:bg-current after:transition-transform after:duration-200 group-open:after:scale-y-0"

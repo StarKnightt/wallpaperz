@@ -21,7 +21,7 @@ export default function AiLanding() {
     <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
       <section className="grid items-center gap-12 pb-20 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-10 lg:pb-28 lg:pt-20">
         <div className="min-w-0 lg:col-span-5">
-          <motion.p {...enter(0)} className="text-sm font-medium text-violet-600 dark:text-violet-400">
+          <motion.p {...enter(0)} className="text-sm font-medium text-muted-foreground">
             AI wallpaper generator
           </motion.p>
           <motion.h1
@@ -38,7 +38,7 @@ export default function AiLanding() {
             <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate" signUpFallbackRedirectUrl="/ai-generate">
               <button
                 type="button"
-                className="group inline-flex h-11 items-center gap-2 rounded-lg bg-foreground px-5 text-sm font-medium text-background transition-[transform,opacity] duration-150 ease-out hover:opacity-90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="group inline-flex h-11 items-center gap-2 rounded-lg bg-brand px-5 text-sm font-medium text-brand-foreground transition-[transform,background-color] duration-150 ease-out hover:bg-brand/90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 Start creating
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5" strokeWidth={1.75} />
@@ -80,7 +80,7 @@ export default function AiLanding() {
               <SignInButton mode="modal" fallbackRedirectUrl="/ai-generate" signUpFallbackRedirectUrl="/ai-generate">
                 <button type="button" className="group flex w-full flex-col text-left focus-visible:outline-none">
                   <div
-                    className={`relative overflow-hidden rounded-xl bg-muted ring-1 ring-black/5 transition-shadow duration-200 group-focus-visible:ring-2 group-focus-visible:ring-violet-500 dark:ring-white/10 ${
+                    className={`relative overflow-hidden rounded-xl bg-muted ring-1 ring-black/5 transition-shadow duration-200 group-focus-visible:ring-2 group-focus-visible:ring-ring dark:ring-white/10 ${
                       n === 0 ? "aspect-[16/10] lg:aspect-auto lg:min-h-0 lg:flex-1" : "aspect-[16/10]"
                     }`}
                   >
@@ -127,7 +127,7 @@ export default function AiLanding() {
             <dd className="mt-1.5 text-base font-medium text-foreground">Credits from ${PLANS.credits_50.priceUsd}</dd>
             <dd className="mt-1 text-sm text-muted-foreground">
               Or go Pro for a monthly allowance.{" "}
-              <Link href="/pricing" className="font-medium text-violet-600 underline-offset-4 hover:underline dark:text-violet-400">
+              <Link href="/pricing" className="font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground">
                 See pricing
               </Link>
             </dd>

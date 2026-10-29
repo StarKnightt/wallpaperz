@@ -61,8 +61,8 @@ export default function PostLayout({ slug, children }: { slug: string; children:
       </nav>
 
       <header className="mb-8">
-        <p className="text-sm font-medium text-primary mb-2">{post.cluster}</p>
-        <h1 className="text-3xl md:text-4xl font-bold leading-tight">{post.title}</h1>
+        <p className="text-sm font-medium text-muted-foreground mb-2">{post.cluster}</p>
+        <h1 className="text-3xl md:text-4xl font-semibold leading-tight tracking-[-0.025em]">{post.title}</h1>
         <div className="flex items-center gap-4 mt-4 text-sm text-muted-foreground">
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           <span className="inline-flex items-center gap-1">
@@ -86,7 +86,7 @@ export default function PostLayout({ slug, children }: { slug: string; children:
       <div className="mt-14 rounded-xl border bg-card p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="font-semibold text-lg flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Sparkles className="h-5 w-5 text-muted-foreground" />
             Free HD &amp; 4K wallpapers, zero watermarks
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -102,7 +102,7 @@ export default function PostLayout({ slug, children }: { slug: string; children:
           </Link>
           <Link
             href="/ai-generate"
-            className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-medium hover:bg-brand/90 transition-colors"
           >
             Generate with AI
           </Link>

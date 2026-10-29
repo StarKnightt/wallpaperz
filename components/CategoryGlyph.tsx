@@ -156,11 +156,10 @@ export default function CategoryGlyph({ slug }: { slug: string }) {
   if (!glyph) return null
   return (
     <span
-      className="glyph grid h-12 w-12 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
-      style={{ backgroundColor: `${glyph.color}1f`, color: glyph.color }}
+      className="glyph grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-muted text-foreground/80 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
       aria-hidden="true"
     >
-      <svg viewBox="0 0 48 48" className="h-8 w-8 overflow-visible">
+      <svg viewBox="0 0 48 48" className="h-8 w-8 overflow-visible grayscale">
         {glyph.svg}
       </svg>
     </span>
