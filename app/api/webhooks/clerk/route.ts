@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import { getDb } from '@/lib/server/d1'
 import { verifyWebhook } from '@/lib/server/dodo'
 import { handleClerkEvent, type ClerkEvent } from '@/lib/server/clerk-webhook'
+import { alreadyProcessed, markProcessed } from '@/lib/server/webhook-events'
 
 // Clerk delivers through Svix, which signs with the same Standard Webhooks
 // scheme as Dodo under svix-* header names.
@@ -14,13 +15,10 @@ export async function POST(req: NextRequest) {
   }
 
   const raw = await req.text()
+  const svixId = req.headers.get('svix-id')
   const ok = await verifyWebhook(
     raw,
-    {
-      id: req.headers.get('svix-id'),
-      timestamp: req.headers.get('svix-timestamp'),
-      signature: req.headers.get('svix-signature'),
-    },
+    { id: svixId, timestamp: req.headers.get('svix-timestamp'), signature: req.headers.get('svix-signature') },
     secret
   )
   if (!ok) return NextResponse.json({ error: 'invalid signature' }, { status: 401 })
@@ -38,8 +36,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'storage unavailable' }, { status: 503 })
   }
 
+  const dedupeId = `clerk:${svixId}`
+  if (await alreadyProcessed(db, dedupeId)) return NextResponse.json({ received: true, handled: false, note: 'duplicate delivery' })
+
   try {
     const result = await handleClerkEvent(db, event)
+    await markProcessed(db, dedupeId)
     console.log('[clerk-webhook]', event.type, result.note)
     return NextResponse.json({ received: true, ...result })
   } catch (err) {

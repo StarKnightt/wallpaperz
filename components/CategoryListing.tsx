@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld"
 import Link from "next/link"
 import { ArrowLeft, ArrowUpRight } from "lucide-react"
 import { Wallpaper } from "@/types/wallpaper"
@@ -59,8 +60,8 @@ export default function CategoryListing({ slug, slice, all }: Props) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(collectionData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }} />
       <PaginationHead currentPage={page} totalPages={totalPages} basePath={basePath} />
 
       <Link

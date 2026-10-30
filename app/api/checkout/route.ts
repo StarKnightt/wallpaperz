@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { isPlanKey } from '@/lib/pricing'
-import { DISCOUNT_CODE_RE, createCheckoutSession, productForPlan } from '@/lib/server/dodo'
+import { DISCOUNT_CODE_RE, allowedDiscountCode, createCheckoutSession, hasAllowedDiscountCodes, productForPlan } from '@/lib/server/dodo'
 import { getDb } from '@/lib/server/d1'
 import { getSubscription, subscriptionGrantsPro } from '@/lib/server/entitlements'
 
@@ -15,10 +15,17 @@ export async function POST(req: NextRequest) {
   if (!isPlanKey(plan)) return NextResponse.json({ error: 'Unknown plan' }, { status: 400 })
 
   const rawCode = typeof body?.discountCode === 'string' ? body.discountCode.trim() : ''
-  if (rawCode && !DISCOUNT_CODE_RE.test(rawCode)) {
-    return NextResponse.json({ error: "That discount code doesn't look right.", code: 'INVALID_DISCOUNT' }, { status: 400 })
+  let discountCode: string | undefined
+  // With no allowlist configured, client codes are ignored and checkout runs at full price.
+  if (rawCode && hasAllowedDiscountCodes()) {
+    discountCode = DISCOUNT_CODE_RE.test(rawCode) ? allowedDiscountCode(rawCode) ?? undefined : undefined
+    if (!discountCode) {
+      return NextResponse.json(
+        { error: "That discount code isn't valid for this purchase, or it has already been used.", code: 'INVALID_DISCOUNT' },
+        { status: 400 }
+      )
+    }
   }
-  const discountCode = rawCode || undefined
 
   const productId = productForPlan(plan)
   if (!productId || !process.env.DODO_PAYMENTS_API_KEY) {

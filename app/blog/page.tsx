@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Clock } from 'lucide-react'
@@ -48,7 +49,7 @@ export default function BlogIndexPage() {
     <div className="container mx-auto px-4 py-10">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(blogData) }}
       />
 
       <header className="max-w-2xl mb-12">

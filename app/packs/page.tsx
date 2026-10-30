@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowUpRight, Check } from "lucide-react"
@@ -68,7 +69,7 @@ export default function PacksPage() {
 
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
 
       <div className="container mx-auto max-w-6xl px-4 pb-20 pt-10 sm:pt-14">
         <header className="mx-auto max-w-2xl text-center">

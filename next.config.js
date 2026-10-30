@@ -53,6 +53,34 @@ async function legacyWallpaperRedirects() {
   }
 }
 
+// Report-only until the console shows no violations for a while; then it can
+// move to Content-Security-Policy. Only frame-ancestors is enforced today.
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://clerk.wallpaperz.in https://*.clerk.accounts.dev https://challenges.cloudflare.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.googletagservices.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.adtrafficquality.google https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://www.clarity.ms https://*.clarity.ms https://sponsoranysite.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "connect-src 'self' https://clerk.wallpaperz.in https://*.clerk.accounts.dev https://ik.imagekit.io https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.adtrafficquality.google https://fundingchoicesmessages.google.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com https://*.clarity.ms https://c.bing.com https://sponsoranysite.com https://api.github.com",
+  "frame-src 'self' https://challenges.cloudflare.com https://*.googlesyndication.com https://*.doubleclick.net https://www.google.com https://fundingchoicesmessages.google.com https://*.adtrafficquality.google https://peerlist.io",
+  "worker-src 'self' blob:",
+  "media-src 'self' https://ik.imagekit.io",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self' https://*.dodopayments.com https://clerk.wallpaperz.in https://accounts.wallpaperz.in",
+  "frame-ancestors 'self'",
+].join('; ')
+
+const SECURITY_HEADERS = [
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+  { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
+  { key: 'Content-Security-Policy-Report-Only', value: CSP_REPORT_ONLY },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+]
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -84,6 +112,7 @@ const nextConfig = {
   // change ships under a new filename), so mark them immutable.
   async headers() {
     return [
+      { source: '/:path*', headers: SECURITY_HEADERS },
       {
         source: '/:file(favicon.png|theimage.png|apple-touch-icon.png|web-app-manifest-192x192.png|web-app-manifest-512x512.png|web-app-manifest-192x192-maskable.png|web-app-manifest-512x512-maskable.png)',
         headers: [

@@ -19,7 +19,7 @@ const targets = [
 ]
 
 console.log(`Purging via POST /api/wallpapers/sync ...`)
-const purge = await fetch(`${BASE}/api/wallpapers/sync`, { method: 'POST' })
+const purge = await fetch(`${BASE}/api/wallpapers/sync`, { method: 'POST', headers: { Authorization: `Bearer ${process.env.WALLPAPER_SYNC_SECRET}` } })
 console.log(`Purge response: ${purge.status} ${JSON.stringify(await purge.json())}`)
 
 for (let wave = 1; wave <= 4; wave++) {

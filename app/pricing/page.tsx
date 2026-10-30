@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Check, Minus } from "lucide-react"
@@ -87,7 +88,7 @@ export default function PricingPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 sm:pt-16 lg:px-8">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqJsonLd) }} />
 
       <header className="max-w-2xl">
         <p className="text-sm font-medium text-muted-foreground">Pricing</p>

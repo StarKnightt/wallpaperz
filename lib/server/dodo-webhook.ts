@@ -15,6 +15,8 @@ import {
 
 export interface DodoEvent {
   type: string
+  /** ISO time Dodo created the event (stays the same across redeliveries). */
+  timestamp?: string
   data: Record<string, unknown> & {
     payment_id?: string
     subscription_id?: string | null
@@ -42,6 +44,8 @@ const toMs = (iso: unknown) => {
   return Number.isFinite(t) ? t : null
 }
 
+export const eventTimeMs = toMs
+
 async function resolveUser(db: D1Like, data: DodoEvent['data']): Promise<string | null> {
   const fromMeta = data.metadata?.clerk_user_id
   if (typeof fromMeta === 'string' && fromMeta) return fromMeta
@@ -53,7 +57,7 @@ function isDuplicateError(err: unknown) {
   return /UNIQUE constraint failed|SQLITE_CONSTRAINT/i.test(String((err as Error)?.message ?? err))
 }
 
-async function onPaymentSucceeded(db: D1Like, data: DodoEvent['data'], now: number): Promise<HandleResult> {
+async function onPaymentSucceeded(db: D1Like, data: DodoEvent['data'], now: number, eventAt: number): Promise<HandleResult> {
   const paymentId = data.payment_id
   if (!paymentId) return { handled: false, note: 'no payment_id' }
   const productId = data.product_cart?.[0]?.product_id ?? ''
@@ -97,6 +101,7 @@ async function onPaymentSucceeded(db: D1Like, data: DodoEvent['data'], now: numb
           current_period_end: null,
           dodo_subscription_id: plan === 'lifetime' ? null : data.subscription_id ?? null,
           dodo_customer_id: customerId,
+          last_event_at: eventAt,
         },
         now
       )
@@ -134,7 +139,7 @@ const SUB_EVENT_STATUS: Record<string, SubStatus> = {
   'subscription.on_hold': 'on_hold',
 }
 
-async function onSubscriptionEvent(db: D1Like, type: string, data: DodoEvent['data'], now: number): Promise<HandleResult> {
+async function onSubscriptionEvent(db: D1Like, type: string, data: DodoEvent['data'], now: number, eventAt: number): Promise<HandleResult> {
   const subId = data.subscription_id
   if (!subId) return { handled: false, note: 'no subscription_id' }
   const plan = planForProduct(data.product_id)
@@ -154,14 +159,21 @@ async function onSubscriptionEvent(db: D1Like, type: string, data: DodoEvent['da
     status === 'active'
       ? activatePlanStmt(
         db,
-        { user_id: userId, plan, current_period_end: periodEnd, dodo_subscription_id: subId, dodo_customer_id: customerId },
+        {
+          user_id: userId,
+          plan,
+          current_period_end: periodEnd,
+          dodo_subscription_id: subId,
+          dodo_customer_id: customerId,
+          last_event_at: eventAt,
+        },
         now
       )
       : null,
     customerId ? upsertCustomerStmt(db, userId, customerId, now) : null,
   ].filter((s) => s !== null)
   if (stmts.length) await db.batch(stmts)
-  if (status !== 'active') await setSubscriptionStatus(db, userId, subId, status, periodEnd, now)
+  if (status !== 'active') await setSubscriptionStatus(db, userId, subId, status, periodEnd, now, eventAt)
   await syncClerkPlanFromDb(db, userId)
   return { handled: true, note: `subscription ${status}` }
 }
@@ -247,11 +259,20 @@ async function onPaymentReversed(db: D1Like, type: string, data: DodoEvent['data
   return { handled: true, note: duplicate ? 'duplicate reversal' : 'reversed' }
 }
 
-export async function handleDodoEvent(db: D1Like, event: DodoEvent, now = Date.now()): Promise<HandleResult> {
+/**
+ * `eventAt` orders events for the same subscription: one older than the last
+ * applied event (a delayed or retried 'active' after 'cancelled') is skipped.
+ */
+export async function handleDodoEvent(
+  db: D1Like,
+  event: DodoEvent,
+  now = Date.now(),
+  eventAt = toMs(event.timestamp) ?? now
+): Promise<HandleResult> {
   const { type, data } = event
   if (!data || typeof data !== 'object') return { handled: false, note: 'no data' }
 
-  if (type === 'payment.succeeded') return onPaymentSucceeded(db, data, now)
+  if (type === 'payment.succeeded') return onPaymentSucceeded(db, data, now, eventAt)
   if (type === 'refund.succeeded' || type === 'dispute.lost') return onPaymentReversed(db, type, data, now)
   if (
     type === 'subscription.active' ||
@@ -260,7 +281,7 @@ export async function handleDodoEvent(db: D1Like, event: DodoEvent, now = Date.n
     type === 'subscription.updated' ||
     type in SUB_EVENT_STATUS
   ) {
-    return onSubscriptionEvent(db, type, data, now)
+    return onSubscriptionEvent(db, type, data, now, eventAt)
   }
   if (type === 'payment.failed' || type === 'dispute.opened') console.warn('[dodo-webhook]', type, data.payment_id)
   return { handled: false, note: `ignored ${type}` }

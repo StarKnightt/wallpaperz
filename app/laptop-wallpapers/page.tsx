@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllWallpapers } from '@/lib/server/wallpapers'
@@ -51,7 +52,7 @@ export default async function LaptopWallpapersPage() {
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemList) }} />
 
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">4K Laptop Wallpapers</h1>

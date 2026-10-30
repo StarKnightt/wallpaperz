@@ -72,10 +72,10 @@ For better titles and descriptions, add **Custom Metadata** in ImageKit:
 - Cache ensures fast loading for users
 
 **Option B: Clear Cache (Instant Update)**
-- Make a POST request to: `/api/wallpapers/sync`
+- Make a POST request to `/api/wallpapers/sync` with `Authorization: Bearer <WALLPAPER_SYNC_SECRET>`
 - Using curl:
   ```bash
-  curl -X POST http://localhost:3000/api/wallpapers/sync
+  curl -X POST -H "Authorization: Bearer $WALLPAPER_SYNC_SECRET" http://localhost:3000/api/wallpapers/sync
   ```
 - Or use Postman, Thunder Client, etc.
 - Next page load will fetch fresh data
@@ -149,7 +149,7 @@ Your filename becomes the default title if no custom metadata is set:
 
 4. **Clear cache**
    ```bash
-   curl -X POST http://localhost:3000/api/wallpapers/sync
+   curl -X POST -H "Authorization: Bearer $WALLPAPER_SYNC_SECRET" http://localhost:3000/api/wallpapers/sync
    ```
 
 ### **Images showing as broken?**
@@ -221,7 +221,7 @@ In ImageKit, add tags to images:
 If wallpapers aren't showing up:
 1. Check browser console for errors
 2. Verify ImageKit folder structure
-3. Test the API endpoint: `GET /api/wallpapers/sync`
+3. Test the API endpoint: `GET /api/wallpapers`
 4. Check that ImageKit credentials are in `.env.local`
 
 ---

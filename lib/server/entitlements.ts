@@ -11,6 +11,8 @@ export interface SubscriptionRow {
   current_period_end: number | null
   dodo_subscription_id: string | null
   dodo_customer_id: string | null
+  /** Epoch ms of the newest Dodo event applied (migration 0004). */
+  last_event_at?: number | null
   updated_at: number
 }
 
@@ -104,7 +106,8 @@ export async function consumeCredit(db: D1Like, userId: string, now = Date.now()
  * Grants or renews Pro. Never overwrites an active lifetime row with a
  * subscription; lifetime grants always win. A `revoked` row (refund / lost
  * dispute) is terminal for its Dodo subscription: later events for that same
- * subscription can't bring it back.
+ * subscription can't bring it back. Neither can an event for the same
+ * subscription that is older than the last one applied (`last_event_at`).
  */
 export function activatePlanStmt(
   db: D1Like,
@@ -117,17 +120,20 @@ export function activatePlanStmt(
       ? ''
       : `WHERE NOT (subscriptions.plan = 'lifetime' AND subscriptions.status = 'active')
            AND NOT (subscriptions.status = 'revoked' AND excluded.dodo_subscription_id IS NOT NULL
-                    AND subscriptions.dodo_subscription_id = excluded.dodo_subscription_id)`
+                    AND subscriptions.dodo_subscription_id = excluded.dodo_subscription_id)
+           AND NOT COALESCE(subscriptions.dodo_subscription_id = excluded.dodo_subscription_id
+                            AND excluded.last_event_at < subscriptions.last_event_at, 0)`
   return db
     .prepare(
-      `INSERT INTO subscriptions (user_id, plan, status, current_period_end, dodo_subscription_id, dodo_customer_id, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)
+      `INSERT INTO subscriptions (user_id, plan, status, current_period_end, dodo_subscription_id, dodo_customer_id, last_event_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(user_id) DO UPDATE SET
          plan = excluded.plan,
          status = excluded.status,
          current_period_end = COALESCE(excluded.current_period_end, subscriptions.current_period_end),
          dodo_subscription_id = COALESCE(excluded.dodo_subscription_id, subscriptions.dodo_subscription_id),
          dodo_customer_id = COALESCE(excluded.dodo_customer_id, subscriptions.dodo_customer_id),
+         last_event_at = COALESCE(excluded.last_event_at, subscriptions.last_event_at),
          updated_at = excluded.updated_at
        ${guard}`
     )
@@ -138,6 +144,7 @@ export function activatePlanStmt(
       row.plan === 'lifetime' ? null : row.current_period_end,
       row.dodo_subscription_id,
       row.dodo_customer_id,
+      row.last_event_at ?? null,
       now
     )
 }
@@ -149,7 +156,8 @@ export async function activatePlan(db: D1Like, row: Parameters<typeof activatePl
 /**
  * Moves a subscription to a non-active status. Only touches the row when it
  * still belongs to that Dodo subscription, so events for an old subscription
- * can't revoke a newer one (or a lifetime grant). A revoked row stays revoked.
+ * can't revoke a newer one (or a lifetime grant). A revoked row stays revoked,
+ * and an event older than the last one applied is skipped.
  */
 export async function setSubscriptionStatus(
   db: D1Like,
@@ -157,14 +165,17 @@ export async function setSubscriptionStatus(
   dodoSubscriptionId: string,
   status: SubStatus,
   periodEnd: number | null,
-  now = Date.now()
+  now = Date.now(),
+  eventAt: number | null = null
 ) {
   await db
     .prepare(
-      `UPDATE subscriptions SET status = ?, current_period_end = COALESCE(?, current_period_end), updated_at = ?
-       WHERE user_id = ? AND dodo_subscription_id = ? AND plan != 'lifetime' AND status != 'revoked'`
+      `UPDATE subscriptions SET status = ?, current_period_end = COALESCE(?, current_period_end),
+         last_event_at = COALESCE(?, last_event_at), updated_at = ?
+       WHERE user_id = ? AND dodo_subscription_id = ? AND plan != 'lifetime' AND status != 'revoked'
+         AND COALESCE(? >= last_event_at, 1)`
     )
-    .bind(status, periodEnd, now, userId, dodoSubscriptionId)
+    .bind(status, periodEnd, eventAt, now, userId, dodoSubscriptionId, eventAt)
     .run()
 }
 

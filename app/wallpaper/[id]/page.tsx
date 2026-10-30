@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld'
 import { Metadata } from 'next'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { getAllWallpapersDaily, getWallpaperById, getRelatedWallpapers, getHomePageNumberFor, isAiGenerated } from '@/lib/server/wallpapers'
@@ -144,11 +145,11 @@ export default async function WallpaperPage(props: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
       />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">

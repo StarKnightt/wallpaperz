@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld"
 import HomeClient from "./HomeClient"
 import HomeSeoSections from "@/components/HomeSeoSections"
 import PaginationHead from "@/components/PaginationHead"
@@ -59,15 +60,15 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(organizationData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(collectionData) }}
       />
       <PaginationHead currentPage={1} totalPages={slice.totalPages} basePath="/" />
 

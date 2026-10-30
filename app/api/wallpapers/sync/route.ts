@@ -1,101 +1,24 @@
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { revalidatePath, revalidateTag } from 'next/cache'
-import { imagekitServer } from '@/lib/server/imagekit'
-import { Wallpaper } from '@/types/wallpaper'
-import { toWallpaper } from '@/lib/server/wallpapers'
 
-let cache: {
-  data: Wallpaper[] | null
-  timestamp: number
-} = {
-  data: null,
-  timestamp: 0
+async function sha256(value: string): Promise<Uint8Array> {
+  return new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))
 }
 
-const CACHE_DURATION = 60 * 60 * 1000
-const WALLPAPERS_FOLDER = '/wallpapers'
-
-export async function GET() {
-  try {
-    const now = Date.now()
-    const isCacheValid = cache.data && (now - cache.timestamp) < CACHE_DURATION
-    
-    if (isCacheValid && cache.data) {
-      return NextResponse.json({
-        success: true,
-        wallpapers: cache.data,
-        source: 'cache',
-        cached: true,
-        cacheAge: Math.floor((now - cache.timestamp) / 1000),
-      })
-    }
-
-    const response = await imagekitServer.listFiles({
-      limit: 1000, 
-    })
-    
-    if (!response || response.length === 0) {
-      return NextResponse.json({
-        success: true,
-        wallpapers: [],
-        source: 'imagekit',
-        message: 'No wallpapers found. Upload images to ImageKit folder: ' + WALLPAPERS_FOLDER
-      })
-    }
-
-    const wallpapers: Wallpaper[] = response
-      .filter((file: any) => {
-        const pathParts = file.filePath.split('/')
-        const isDirectlyInWallpapers = pathParts.length === 3 && pathParts[1] === 'wallpapers'
-        const isImageFile = file.fileType === 'image'
-        
-        return isDirectlyInWallpapers && isImageFile
-      })
-      .map(toWallpaper)
-      .sort((a, b) => a.title.localeCompare(b.title))
-    
-    if (wallpapers.length === 0) {
-      return NextResponse.json({
-        success: true,
-        wallpapers: [],
-        source: 'imagekit',
-        message: 'No wallpapers found. Upload images to ImageKit folder: ' + WALLPAPERS_FOLDER
-      })
-    }
-
-    cache = {
-      data: wallpapers,
-      timestamp: now
-    }
-
-    return NextResponse.json({
-      success: true,
-      wallpapers,
-      source: 'imagekit',
-      count: wallpapers.length,
-      cached: false,
-    })
-
-  } catch (error) {
-    console.error('Error fetching wallpapers from ImageKit:', error)
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch wallpapers from ImageKit',
-        message: error instanceof Error ? error.message : 'Unknown error',
-        wallpapers: [],
-      },
-      { status: 500 }
-    )
-  }
+/** Constant-time check of `Authorization: Bearer <WALLPAPER_SYNC_SECRET>` (hashing evens out lengths). */
+async function authorized(req: NextRequest): Promise<boolean> {
+  const secret = process.env.WALLPAPER_SYNC_SECRET
+  const header = req.headers.get('authorization') ?? ''
+  if (!secret || !header.startsWith('Bearer ')) return false
+  const [a, b] = await Promise.all([sha256(header.slice(7)), sha256(secret)])
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i]
+  return diff === 0
 }
 
-export async function POST() {
-  cache = {
-    data: null,
-    timestamp: 0
-  }
+export async function POST(req: NextRequest) {
+  if (!(await authorized(req))) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
 
   // On Cloudflare Workers (free plan, 10ms CPU/request) a hard purge is fatal:
   // it invalidates every prerendered page at once, forcing foreground SSR
@@ -110,16 +33,21 @@ export async function POST() {
     })
   }
 
-  // Purge the shared data cache and every ISR page that renders wallpaper data,
-  // so new uploads show up immediately instead of waiting out the 1h revalidate.
-  revalidateTag('wallpapers', { expire: 0 })
-  revalidatePath('/')
-  revalidatePath('/api/wallpapers')
-  revalidatePath('/category/[slug]', 'page')
-  revalidatePath('/color/[slug]', 'page')
-  revalidatePath('/wallpaper/[id]', 'page')
-  revalidatePath('/sitemap.xml')
-  revalidatePath('/wallpapers-sitemap.xml')
+  try {
+    // Purge the shared data cache and every ISR page that renders wallpaper data,
+    // so new uploads show up immediately instead of waiting out the 1h revalidate.
+    revalidateTag('wallpapers', { expire: 0 })
+    revalidatePath('/')
+    revalidatePath('/api/wallpapers')
+    revalidatePath('/category/[slug]', 'page')
+    revalidatePath('/color/[slug]', 'page')
+    revalidatePath('/wallpaper/[id]', 'page')
+    revalidatePath('/sitemap.xml')
+    revalidatePath('/wallpapers-sitemap.xml')
+  } catch (error) {
+    console.error('[wallpapers-sync] purge failed', error)
+    return NextResponse.json({ success: false, error: 'Purge failed' }, { status: 500 })
+  }
 
   return NextResponse.json({
     success: true,
@@ -127,4 +55,3 @@ export async function POST() {
     message: 'Cache cleared successfully. Next request will fetch fresh data from ImageKit.'
   })
 }
-

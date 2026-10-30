@@ -131,67 +131,93 @@ export async function reserveGeneration(userId: string): Promise<LimitResult> {
   }
 
   await maybePruneGenerationLogs(db, now)
+  return reserveInDb(db, userId, now)
+}
+
+const USER_SOURCE_SINCE = 'SELECT COUNT(*) AS n FROM ai_generations WHERE user_id = ? AND source = ? AND created_at > ?'
+const FREE_GLOBAL_SINCE = "SELECT COUNT(*) AS n FROM ai_generations WHERE source = 'free' AND created_at > ?"
+const PAID_GLOBAL_SINCE = "SELECT COUNT(*) AS n FROM ai_generations WHERE source IN ('pro', 'credit') AND created_at > ?"
+
+/**
+ * D1 path of reserveGeneration. Every allowance is claimed with one
+ * conditional INSERT ... SELECT ... WHERE (count) < limit, so concurrent
+ * requests can't both pass a check made before either one inserted.
+ */
+export async function reserveInDb(db: D1Like, userId: string, now: number): Promise<LimitResult> {
   const usage = await loadUsage(db, userId, now)
   const isPro = subscriptionGrantsPro(usage.sub, now)
   let freeGlobalHit = false
   let paidGlobalHit = false
 
-  const insert = async (source: GenerationSource) => {
+  /** Inserts the usage row only while every [countSql, binds, limit] is under its limit. */
+  const insertIf = async (source: GenerationSource, limits: Array<[string, unknown[], number]>) => {
+    const where = limits.map(([sql]) => `(${sql}) < ?`).join(' AND ')
     const res = await db
-      .prepare('INSERT INTO ai_generations (user_id, created_at, source) VALUES (?, ?, ?)')
-      .bind(userId, now, source)
+      .prepare(`INSERT INTO ai_generations (user_id, created_at, source) SELECT ?, ?, ? WHERE ${where}`)
+      .bind(userId, now, source, ...limits.flatMap(([, binds, limit]) => [...binds, limit]))
       .run()
-    return res.meta?.last_row_id
+    return res.meta?.changes === 1 ? { rowId: res.meta.last_row_id } : null
   }
+  const count = async (sql: string, ...binds: unknown[]) =>
+    (await countSince(db, sql, ...binds)).n
   const deleteRow = (rowId: number | undefined) =>
     rowId != null ? db.prepare('DELETE FROM ai_generations WHERE id = ?').bind(rowId) : null
+  const paidGlobalLimit: [string, unknown[], number] = [PAID_GLOBAL_SINCE, [now - DAY], AI_LIMITS.paidGlobalPerDay]
 
   if (usage.freeUsed < AI_LIMITS.freePerDay) {
-    const global = await countSince(db, "SELECT COUNT(*) AS n, NULL AS oldest FROM ai_generations WHERE source = 'free' AND created_at > ?", now - DAY)
-    if (global.n < AI_LIMITS.freeGlobalPerDay) {
-      const rowId = await insert('free')
+    const claimed = await insertIf('free', [
+      [USER_SOURCE_SINCE, [userId, 'free', now - DAY], AI_LIMITS.freePerDay],
+      [FREE_GLOBAL_SINCE, [now - DAY], AI_LIMITS.freeGlobalPerDay],
+    ])
+    if (claimed) {
       usage.freeUsed++
       usage.freeOldest ??= now
       return {
         allowed: true,
         source: 'free',
         entitlements: summarize(usage, now),
-        release: async () => { await deleteRow(rowId)?.run() },
+        release: async () => { await deleteRow(claimed.rowId)?.run() },
       }
     }
-    freeGlobalHit = true
+    usage.freeUsed = await count(USER_SOURCE_SINCE, userId, 'free', now - DAY)
+    freeGlobalHit = usage.freeUsed < AI_LIMITS.freePerDay
   }
 
-  const hasPaidOption = (isPro && usage.proUsed < AI_LIMITS.proPerMonth) || usage.credits > 0
-  if (hasPaidOption) {
-    const paid = await countSince(db, "SELECT COUNT(*) AS n, NULL AS oldest FROM ai_generations WHERE source IN ('pro', 'credit') AND created_at > ?", now - DAY)
-    paidGlobalHit = paid.n >= AI_LIMITS.paidGlobalPerDay
-  }
-
-  if (!paidGlobalHit && isPro && usage.proUsed < AI_LIMITS.proPerMonth) {
-    const rowId = await insert('pro')
-    usage.proUsed++
-    usage.proOldest ??= now
-    return {
-      allowed: true,
-      source: 'pro',
-      entitlements: summarize(usage, now),
-      release: async () => { await deleteRow(rowId)?.run() },
+  if (isPro && usage.proUsed < AI_LIMITS.proPerMonth) {
+    const claimed = await insertIf('pro', [
+      [USER_SOURCE_SINCE, [userId, 'pro', now - PRO_WINDOW], AI_LIMITS.proPerMonth],
+      paidGlobalLimit,
+    ])
+    if (claimed) {
+      usage.proUsed++
+      usage.proOldest ??= now
+      return {
+        allowed: true,
+        source: 'pro',
+        entitlements: summarize(usage, now),
+        release: async () => { await deleteRow(claimed.rowId)?.run() },
+      }
     }
+    paidGlobalHit = (await count(PAID_GLOBAL_SINCE, now - DAY)) >= AI_LIMITS.paidGlobalPerDay
+    if (!paidGlobalHit) usage.proUsed = await count(USER_SOURCE_SINCE, userId, 'pro', now - PRO_WINDOW)
   }
 
   if (!paidGlobalHit && usage.credits > 0 && (await consumeCredit(db, userId, now))) {
-    const rowId = await insert('credit')
-    usage.credits--
-    return {
-      allowed: true,
-      source: 'credit',
-      entitlements: summarize(usage, now),
-      release: async () => {
-        const del = deleteRow(rowId)
-        await db.batch([...(del ? [del] : []), addCreditsStmt(db, userId, 1)])
-      },
+    const claimed = await insertIf('credit', [paidGlobalLimit])
+    if (claimed) {
+      usage.credits--
+      return {
+        allowed: true,
+        source: 'credit',
+        entitlements: summarize(usage, now),
+        release: async () => {
+          const del = deleteRow(claimed.rowId)
+          await db.batch([...(del ? [del] : []), addCreditsStmt(db, userId, 1)])
+        },
+      }
     }
+    await addCreditsStmt(db, userId, 1, now).run()
+    paidGlobalHit = true
   }
 
   if (paidGlobalHit) return deny('PAID_GLOBAL_LIMIT', usage, now)

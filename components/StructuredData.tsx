@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld'
 import React from 'react';
 
 interface StructuredDataProps {
@@ -8,7 +9,7 @@ export default function StructuredData({ data }: StructuredDataProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
     />
   );
 }

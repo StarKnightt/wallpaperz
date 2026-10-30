@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld'
 import Link from 'next/link'
 import { ChevronRight, Clock, Sparkles } from 'lucide-react'
 import { getPost, relatedPosts, coverUrl } from '@/lib/blog/registry'
@@ -45,11 +46,11 @@ export default function PostLayout({ slug, children }: { slug: string; children:
     <article className="container mx-auto px-4 py-10 max-w-3xl">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
       />
 
       <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-sm text-muted-foreground mb-6 flex-wrap">

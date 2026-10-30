@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getDb } from '@/lib/server/d1'
 import { verifyWebhook } from '@/lib/server/dodo'
-import { handleDodoEvent, type DodoEvent } from '@/lib/server/dodo-webhook'
+import { eventTimeMs, handleDodoEvent, type DodoEvent } from '@/lib/server/dodo-webhook'
+import { alreadyProcessed, markProcessed } from '@/lib/server/webhook-events'
 
 export async function POST(req: NextRequest) {
   const secret = process.env.DODO_WEBHOOK_SECRET
@@ -12,13 +13,11 @@ export async function POST(req: NextRequest) {
   }
 
   const raw = await req.text()
+  const webhookId = req.headers.get('webhook-id')
+  const webhookTimestamp = req.headers.get('webhook-timestamp')
   const ok = await verifyWebhook(
     raw,
-    {
-      id: req.headers.get('webhook-id'),
-      timestamp: req.headers.get('webhook-timestamp'),
-      signature: req.headers.get('webhook-signature'),
-    },
+    { id: webhookId, timestamp: webhookTimestamp, signature: req.headers.get('webhook-signature') },
     secret
   )
   if (!ok) return NextResponse.json({ error: 'invalid signature' }, { status: 401 })
@@ -36,8 +35,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'storage unavailable' }, { status: 503 })
   }
 
+  const dedupeId = `dodo:${webhookId}`
+  if (await alreadyProcessed(db, dedupeId)) return NextResponse.json({ received: true, handled: false, note: 'duplicate delivery' })
+
   try {
-    const result = await handleDodoEvent(db, event)
+    // The payload timestamp is when Dodo created the event; the header is the
+    // (re)send time and only stands in when the payload has none.
+    const now = Date.now()
+    const eventAt = eventTimeMs(event.timestamp) ?? Number(webhookTimestamp) * 1000
+    const result = await handleDodoEvent(db, event, now, eventAt)
+    await markProcessed(db, dedupeId, now)
     console.log('[dodo-webhook]', event.type, result.note)
     return NextResponse.json({ received: true, ...result })
   } catch (err) {

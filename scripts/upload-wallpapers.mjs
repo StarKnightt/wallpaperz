@@ -116,7 +116,7 @@ async function main() {
     console.log(`Uploaded ${entry.fileName} (${width}x${height}, ${sizeKb} KB) -> ${result.url}`)
   }
   console.log(`\nDone. ${entries.length} wallpapers uploaded to ${FOLDER}/`)
-  console.log('Clear the site cache so they appear: curl -X POST https://www.wallpaperz.in/api/wallpapers/sync')
+  console.log('Clear the site cache so they appear: curl -X POST -H "Authorization: Bearer $WALLPAPER_SYNC_SECRET" https://www.wallpaperz.in/api/wallpapers/sync')
 }
 
 main().catch((err) => {

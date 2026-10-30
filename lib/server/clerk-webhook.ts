@@ -37,6 +37,7 @@ export async function eraseUser(db: D1Like, userId: string): Promise<EraseResult
     db.prepare('DELETE FROM subscriptions WHERE user_id = ?').bind(userId),
     db.prepare('DELETE FROM customers WHERE user_id = ?').bind(userId),
     db.prepare('UPDATE payments SET user_id = ? WHERE user_id = ?').bind(DELETED_USER_ID, userId),
+    db.prepare('DELETE FROM clerk_plan_repairs WHERE user_id = ?').bind(userId),
   ])
   const changes = results.map((r) => r.meta?.changes ?? 0)
   return { handled: true, note: `erased generations=${changes[0]} credits=${changes[1]} subscriptions=${changes[2]} customers=${changes[3]} payments_anonymised=${changes[4]}` }

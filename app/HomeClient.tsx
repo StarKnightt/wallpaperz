@@ -177,11 +177,6 @@ export default function HomeClient({ wallpapers, page, totalPages, total, catego
 
   const handleRefresh = useCallback(async () => {
     toast.info('Refreshing wallpapers...')
-    try {
-      await fetch('/api/wallpapers/sync', { method: 'POST' })
-    } catch {
-      // best effort - the refresh below still re-renders from the server cache
-    }
     setLibrary(null)
     router.refresh()
     toast.success('Wallpapers refreshed!')

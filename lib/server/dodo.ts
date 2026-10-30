@@ -48,6 +48,24 @@ export async function dodoFetch(method: string, path: string, body?: unknown): P
 
 export const DISCOUNT_CODE_RE = /^[A-Za-z0-9_-]{3,40}$/
 
+/**
+ * Codes this app may attach to a checkout, from the comma-separated
+ * DODO_ALLOWED_DISCOUNT_CODES secret. The Dodo account is shared with other
+ * apps, so a code the client sends is only honoured when it is listed here.
+ */
+export function allowedDiscountCode(code: string): string | null {
+  const wanted = code.toUpperCase()
+  const allowed = (process.env.DODO_ALLOWED_DISCOUNT_CODES ?? '')
+    .split(',')
+    .map((c) => c.trim())
+    .filter((c) => DISCOUNT_CODE_RE.test(c))
+  return allowed.find((c) => c.toUpperCase() === wanted) ?? null
+}
+
+export function hasAllowedDiscountCodes(): boolean {
+  return (process.env.DODO_ALLOWED_DISCOUNT_CODES ?? '').split(',').some((c) => DISCOUNT_CODE_RE.test(c.trim()))
+}
+
 export type CheckoutError = 'timeout' | 'invalid_discount' | 'checkout_failed'
 
 export async function createCheckoutSession(opts: {
@@ -67,7 +85,8 @@ export async function createCheckoutSession(opts: {
       ...(opts.email ? { customer: { email: opts.email, ...(opts.name ? { name: opts.name } : {}) } } : {}),
       return_url: opts.returnUrl,
       cancel_url: opts.cancelUrl,
-      // The Dodo account is shared with other apps, so codes can only come from our own server.
+      // No code field on the Dodo page: the account is shared with other apps.
+      // A code is only attached when /api/checkout found it in the allowlist.
       feature_flags: { allow_discount_code: false },
       ...(opts.discountCode ? { discount_codes: [opts.discountCode] } : {}),
       // Webhooks map the payment back to the Clerk user through this.

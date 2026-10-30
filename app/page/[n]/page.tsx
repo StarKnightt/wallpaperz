@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld"
 import { Metadata } from "next"
 import { notFound, permanentRedirect } from "next/navigation"
 import HomeClient from "@/app/HomeClient"
@@ -69,7 +70,7 @@ export default async function HomePageN(props: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(collectionData) }}
       />
       <PaginationHead currentPage={page} totalPages={slice.totalPages} basePath="/" />
 
