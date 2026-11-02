@@ -1,5 +1,6 @@
 // Paid wallpaper packs sold on Gumroad. Every member wallpaper is also free on
-// the site; a pack is the curated set pre-cropped for every device size.
+// the site; a pack is the curated set pre-cropped for each design's orientation:
+// portrait designs for phone and iPad, landscape designs for desktop and iPad.
 // Member names are ImageKit file names under /wallpapers/ (read-only).
 
 const IK_WALLPAPERS = "https://ik.imagekit.io/starknight/wallpapers"

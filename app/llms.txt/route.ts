@@ -28,7 +28,7 @@ function body(): string {
     link('Pricing', '/pricing', 'Free, credit pack, Pro and Lifetime plans for the AI generator.'),
     link('Laptop wallpapers', '/laptop-wallpapers', 'Landscape 4K and QHD wallpapers for laptops and PCs.'),
     link('Devices', '/devices', 'Exact screen resolutions for popular phones, tablets, laptops and monitors, with wallpapers cropped to fit.'),
-    link('Wallpaper packs', '/packs', 'Curated packs with every design pre-cropped for phones, tablets and desktops.'),
+    link('Wallpaper packs', '/packs', 'Curated packs in one download: portrait designs sized for phones and tablets, landscape designs for tablets and desktops.'),
     link('Blog', '/blog', 'Guides on wallpaper resolutions, live wallpapers, multi-monitor setups and AI prompts.'),
     '',
     '## Categories',

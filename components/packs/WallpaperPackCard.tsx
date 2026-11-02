@@ -23,8 +23,8 @@ export default function WallpaperPackCard({ imageUrl, category }: Props) {
       ? `Like this? Get the ${pack.name}`
       : `Like this? Get the full ${pack.name} pack`
   const detail = isBundle
-    ? `All ${THEMED_PACKS.length} collections, ${pack.count} wallpapers pre-cropped for every device`
-    : `${pack.count} wallpapers pre-cropped for every device`
+    ? `All ${THEMED_PACKS.length} collections, ${pack.count} wallpapers`
+    : `${pack.count} wallpapers`
 
   return (
     <section aria-label="Wallpaper pack" className="mt-12">
@@ -41,7 +41,7 @@ export default function WallpaperPackCard({ imageUrl, category }: Props) {
           </p>
           <h2 className="mt-2 text-lg font-semibold tracking-tight sm:text-xl">{heading}</h2>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            {detail} · {pack.fileCount} files for iPhone, Android, iPad &amp; desktop in one download.
+            {detail} · {pack.fileCount} files across iPhone, Android, iPad &amp; desktop sizes in one download.
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3">
             <span className="text-2xl font-semibold tabular-nums">{formatUsd(pack.priceUsd)}</span>

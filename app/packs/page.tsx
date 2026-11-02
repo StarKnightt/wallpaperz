@@ -16,7 +16,7 @@ import {
 const BASE_URL = "https://www.wallpaperz.in"
 const TITLE = "Aesthetic Wallpaper Packs — Phone, Desktop & iPad Bundles"
 const DESCRIPTION =
-  "Curated wallpaper packs with every design pre-cropped for iPhone, Android, iPad and 1080p to 4K desktops, in one download. Every wallpaper on Wallpaperz stays free."
+  "Curated wallpaper packs in one download: portrait designs sized for iPhone, Android and iPad, landscape designs for iPad and 1080p to 4K desktops. Every wallpaper on Wallpaperz stays free."
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -75,11 +75,11 @@ export default function PacksPage() {
         <header className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium text-muted-foreground">Wallpaper Packs</p>
           <h1 className="mt-4 text-[2.25rem] font-semibold leading-[1.06] tracking-[-0.035em] text-foreground sm:text-5xl">
-            Curated sets, every size
+            Curated sets, phone to desktop
             <span className="block text-muted-foreground">in one download.</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Every wallpaper on Wallpaperz stays free. Packs are curated sets with every device size in one download.
+            Every wallpaper on Wallpaperz stays free. Packs are curated sets sized for phone, iPad and desktop in one download.
           </p>
           <ul className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
             {["iPhone, Android & iPad sizes", "1080p, 1440p & 4K desktop", "Instant download via Gumroad"].map((t) => (

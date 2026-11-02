@@ -166,7 +166,7 @@ export default function PricingPage() {
 
       <div className="mt-20 flex flex-col gap-2 border-t border-border/70 pt-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <p>
-          Want offline sets? Every device size in one download.{" "}
+          Want offline sets? Phone, iPad and desktop sizes in one download.{" "}
           <Link href="/packs" className={link}>See Wallpaper Packs →</Link>
         </p>
         <p className="text-xs">Prices in USD. Taxes may apply at checkout. The library stays free for everyone.</p>
