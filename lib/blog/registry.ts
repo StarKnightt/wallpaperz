@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-export type BlogCluster = 'How-To Guides' | 'Device Guides' | 'Inspiration'
+export type BlogCluster = 'How-To Guides' | 'Device Guides' | 'Inspiration' | 'Behind the Build'
 
 export interface BlogPost {
   slug: string
@@ -19,6 +19,18 @@ export interface BlogPost {
 }
 
 export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: 'nextjs-cloudflare-workers-free-plan',
+    title: 'Running Next.js 16 on the Cloudflare Workers Free Plan: What Broke and How We Fixed It',
+    metaTitle: 'Next.js on Cloudflare Workers Free Plan - 10ms CPU Lessons',
+    description:
+      'How Wallpaperz serves a Next.js 16 site from the Cloudflare Workers free plan with OpenNext: prerendering, R2 cache interception, why a cache purge took the site down, and the __name bug.',
+    date: '2026-11-04',
+    cluster: 'Behind the Build',
+    minutes: 8,
+    cover: '/wallpapers/circuit-board-city-data-streams-2k-wallpaperz.jpg',
+    coverAlt: 'Futuristic circuit board city with blue data streams',
+  },
   {
     slug: 'fall-aesthetic-wallpapers',
     title: 'Fall Aesthetic Wallpapers: Cozy Autumn Backgrounds for iPhone & Desktop (2026)',

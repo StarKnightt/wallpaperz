@@ -21,12 +21,13 @@ export const metadata: Metadata = {
   },
 }
 
-const CLUSTER_ORDER: BlogCluster[] = ['How-To Guides', 'Device Guides', 'Inspiration']
+const CLUSTER_ORDER: BlogCluster[] = ['How-To Guides', 'Device Guides', 'Inspiration', 'Behind the Build']
 
 const CLUSTER_TAGLINES: Record<BlogCluster, string> = {
   'How-To Guides': 'Step-by-step fixes and setups for every platform',
   'Device Guides': 'Get the exact right wallpaper for your screen',
   Inspiration: 'Styles, trends, and hand-picked collections',
+  'Behind the Build': 'How the site itself is built and run',
 }
 
 export default function BlogIndexPage() {
