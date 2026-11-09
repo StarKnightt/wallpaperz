@@ -103,7 +103,9 @@ async function onPaymentSucceeded(db: D1Like, data: DodoEvent['data'], now: numb
           dodo_customer_id: customerId,
           last_event_at: eventAt,
         },
-        now
+        now,
+        // Payments carry no period end; only subscription events move the clock.
+        { recordEventAt: plan === 'lifetime' }
       )
     )
   }

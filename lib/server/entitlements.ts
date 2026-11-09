@@ -108,13 +108,21 @@ export async function consumeCredit(db: D1Like, userId: string, now = Date.now()
  * dispute) is terminal for its Dodo subscription: later events for that same
  * subscription can't bring it back. Neither can an event for the same
  * subscription that is older than the last one applied (`last_event_at`).
+ *
+ * `recordEventAt: false` is for payment events: they are still skipped when
+ * older than the last subscription event, but they don't advance
+ * `last_event_at`. A renewal's payment is often stamped after its
+ * `subscription.renewed`, and letting it move the clock made the renewal (the
+ * only event carrying the new period end) look stale, so Pro lapsed.
  */
 export function activatePlanStmt(
   db: D1Like,
   row: Omit<SubscriptionRow, 'updated_at' | 'status'> & { status?: SubStatus },
-  now = Date.now()
+  now = Date.now(),
+  { recordEventAt = true }: { recordEventAt?: boolean } = {}
 ) {
   const status = row.status ?? 'active'
+  const eventAt = row.last_event_at ?? null
   const guard =
     row.plan === 'lifetime'
       ? ''
@@ -122,7 +130,18 @@ export function activatePlanStmt(
            AND NOT (subscriptions.status = 'revoked' AND excluded.dodo_subscription_id IS NOT NULL
                     AND subscriptions.dodo_subscription_id = excluded.dodo_subscription_id)
            AND NOT COALESCE(subscriptions.dodo_subscription_id = excluded.dodo_subscription_id
-                            AND excluded.last_event_at < subscriptions.last_event_at, 0)`
+                            AND ? < subscriptions.last_event_at, 0)`
+  const binds: unknown[] = [
+    row.user_id,
+    row.plan,
+    status,
+    row.plan === 'lifetime' ? null : row.current_period_end,
+    row.dodo_subscription_id,
+    row.dodo_customer_id,
+    recordEventAt ? eventAt : null,
+    now,
+  ]
+  if (guard) binds.push(eventAt)
   return db
     .prepare(
       `INSERT INTO subscriptions (user_id, plan, status, current_period_end, dodo_subscription_id, dodo_customer_id, last_event_at, updated_at)
@@ -137,16 +156,7 @@ export function activatePlanStmt(
          updated_at = excluded.updated_at
        ${guard}`
     )
-    .bind(
-      row.user_id,
-      row.plan,
-      status,
-      row.plan === 'lifetime' ? null : row.current_period_end,
-      row.dodo_subscription_id,
-      row.dodo_customer_id,
-      row.last_event_at ?? null,
-      now
-    )
+    .bind(...binds)
 }
 
 export async function activatePlan(db: D1Like, row: Parameters<typeof activatePlanStmt>[1], now = Date.now()) {
